@@ -53,7 +53,7 @@ CIcalAttachmentView.prototype.doAfterPopulatingMessage = function (oMessageProps
 	;
 	if ($.isFunction(App.getAttendee))
 	{
-		sAttendee = App.getAttendee(oMessageProps.aToEmails);
+		sAttendee = App.getAttendee(oMessageProps.aToEmails) || App.currentAccountEmail();
 	}
 
 	if (!oIcal)
