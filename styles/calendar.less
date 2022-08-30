@@ -526,7 +526,8 @@
 }
 
 .fc-event-repeat,
-.fc-event-appointment {
+.fc-event-appointment,
+.fc-event-private {
 	.fc-event {
 		padding-right: 23px;
 	}
@@ -551,8 +552,15 @@
 	}
 }
 
-.fc-event-repeat.fc-event-appointment .fc-content {
+.fc-event-repeat.fc-event-appointment .fc-content,
+.fc-event-repeat.fc-event-private .fc-content,
+.fc-event-appointment.fc-event-private .fc-content
+{
 	padding-right: 38px;
+}
+
+.fc-event-repeat.fc-event-appointment.fc-event-private .fc-content {
+	padding-right: 54px;
 }
 
 .fc-event-repeat:after {
@@ -563,9 +571,28 @@
 	content: "\e644";
 }
 
+.fc-event-private:after {
+	content: "\e91b";
+}
+
 .fc-event-repeat.fc-event-appointment:after {
 	content: "\e643\e644";
 	width: 32px;
+}
+
+.fc-event-repeat.fc-event-private:after {
+	content: "\e91b\e643";
+	width: 32px;
+}
+
+.fc-event-appointment.fc-event-private:after {
+	content: "\e91b\e644";
+	width: 32px;
+}
+
+.fc-event-repeat.fc-event-appointment.fc-event-private:after {
+	content: "\e91b\e643\e644";
+	width: 48px;
 }
 
 .fc-scroller.scroll-inner {

@@ -302,6 +302,13 @@ CCalendarModel.prototype.parseEvent = function (oEvent)
 	if (oEvent.isPrivate && App.getUserPublicId() !== oEvent.owner) {
 		oEvent.editable = false;
 	}
+	if (oEvent.isPrivate) {
+		oEvent.className.push('fc-event-private');
+	} else {
+		oEvent.className = _.filter(oEvent.className, function(sItem){ 
+			return sItem !== 'fc-event-private'; 
+		});
+	}
 	return oEvent;
 };
 
