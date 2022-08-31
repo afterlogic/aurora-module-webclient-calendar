@@ -389,10 +389,19 @@ CCalendarView.prototype.applyCalendarSettings = function ()
 	this.fullcalendarOptions.slotLabelFormat = this.sTimeFormat;
 	this.fullcalendarOptions.defaultView = this.defaultViewName();
 	this.fullcalendarOptions.lang = moment.locale();
-
+	// this.fullcalendarOptions.weekNumbers = true;
+	// this.fullcalendarOptions.weekText = 'short';
+	this.fullcalendarOptions.weekNumberCalculation = 'ISO';
+	
 	this.applyFirstDay();
 
+	var showWeekNumbers = Settings.WeekStartsOn == 1;
+	
+	this.$datePicker.datepicker('option', 'showWeek', showWeekNumbers);
+	this.fullcalendarOptions.weekNumbers = showWeekNumbers;
+	
 	this.$calendarGrid.fullCalendar('destroy');
+
 	this.$calendarGrid.fullCalendar(this.fullcalendarOptions);
 	this.changeView(this.defaultViewName());
 };
@@ -436,12 +445,16 @@ CCalendarView.prototype.initDatePicker = function ()
 		selectOtherMonths: true,
 		monthNames: this.aMonthNames,
 		dayNamesMin: TextUtils.i18n('COREWEBCLIENT/LIST_DAY_NAMES_MIN').split(' '),
+		showWeek: false,
+		weekHeader: 'W',
 		nextText: '',
 		prevText: '',
 		onChangeMonthYear: _.bind(this.changeMonthYearFromDatePicker, this),
 		onSelect: _.bind(this.selectDateFromDatePicker, this),
 		beforeShowDay: _.bind(this.getDayDescription, this)
 	});
+
+	this.$datePicker.on('click', 'td.ui-datepicker-week-col', _.bind(this.selectWeekFromDatePicker, this));
 };
 
 CCalendarView.prototype.onBind = function ()
@@ -854,6 +867,21 @@ CCalendarView.prototype.selectDateFromDatePicker = function (sDate, oInst)
 	this.$calendarGrid.fullCalendar('gotoDate', oDate);
 
 	_.defer(_.bind(this.highlightWeekInDayPicker, this));
+};
+
+CCalendarView.prototype.selectWeekFromDatePicker = function (event, oInst)
+{
+	var iWeek = parseInt($(event.currentTarget).text());
+	var sCurrentYear = this.execCommand('getDate').format('YYYY');
+	var sDate = sCurrentYear + '-W' + ('0' + iWeek).slice(-2);
+	var oDate = moment(sDate);
+	
+	if (oDate.isValid()) {
+		this.$calendarGrid.fullCalendar('gotoDate', oDate);
+		this.changeView('agendaWeek');
+	
+		_.defer(_.bind(this.highlightWeekInDayPicker, this));
+	}
 };
 
 CCalendarView.prototype.highlightWeekInDayPicker = function ()

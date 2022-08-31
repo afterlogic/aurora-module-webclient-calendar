@@ -351,6 +351,15 @@
 		table.ui-datepicker-calendar td a {
 			text-align: center;
 		}
+
+		.ui-datepicker-week-col {
+			text-align: center;
+			font-weight: bold;
+		}
+		td.ui-datepicker-week-col {
+			cursor: pointer;
+			border-right: 1px solid #ccc;
+		}
 	}
 }
 
@@ -639,11 +648,29 @@
 	-webkit-line-clamp: 1 !important;
 }
 
-.fc-day-header.fc-widget-header {
+.fc-day-header.fc-widget-header,
+.fc-widget-header.fc-week-number {
 	background: #f0f0f0;
 	border-top-width: 0 !important;
 	color: #828282;
 	padding: 14px 0px 12px !important;
+}
+
+.fc-widget-header.fc-week-number {
+	text-align: center !important;
+	padding-left: 6px !important;
+	padding-right: 6px !important;
+	
+}
+.fc-axis.fc-widget-header.fc-week-number {
+	padding-left: 4px !important;
+	padding-right: 4px !important;
+}
+
+.fc-basic-view td.fc-week-number {
+	padding-left: 6px;
+	padding-right: 6px;
+	font-weight: bold;
 }
 
 .fc div.fc-content {
