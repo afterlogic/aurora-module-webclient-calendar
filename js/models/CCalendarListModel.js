@@ -81,18 +81,26 @@ function CCalendarListModel(oParameters)
 	}, this);
 	this.search = ko.observable('');
 	this.filteredShared = ko.computed(function () {
-		if (this.search() === '') {
-			return this.shared();
-		}
-		return this.shared().filter(calendar => calendar.name().indexOf(this.search()) !== -1);
+		return this.getFilteredCalendars(this.shared());
 	}, this);
 	this.filteredSharedToAll = ko.computed(function () {
-		if (this.search() === '') {
-			return this.sharedToAll();
-		}
-		return this.sharedToAll().filter(calendar => calendar.name().indexOf(this.search()) !== -1);
+		return this.getFilteredCalendars(this.sharedToAll());
 	}, this);
 }
+
+CCalendarListModel.prototype.getFilteredCalendars = function (calendars) {
+	if (this.search() === '') {
+		return calendars;
+	}
+	return calendars.filter(calendar => {
+		const
+			name = calendar.name().toLowerCase(),
+			owner = calendar.owner().toLowerCase(),
+			search = this.search().toLowerCase()
+		;
+		return name.indexOf(search) !== -1 || owner.indexOf(search) !== -1;
+	});
+};
 
 /**
  * @param {Object=} oPickCalendar
