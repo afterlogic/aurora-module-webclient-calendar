@@ -97,6 +97,26 @@
 		}
 	}
 	
+	.expandable_calendar_list {
+		.section_title,
+		.item {
+			max-height: 40px;
+			-webkit-transition: max-height 300ms ease 0ms, opacity 200ms ease 0ms, padding 300ms ease 0ms;
+			-moz-transition: max-height 300ms ease 0ms, opacity 200ms ease 0ms, padding 300ms ease 0ms;
+			-o-transition: max-height 300ms ease 0ms, opacity 200ms ease 0ms, padding 300ms ease 0ms;
+			transition: max-height 300ms ease 0ms, opacity 200ms ease 0ms, padding 300ms ease 0ms;
+		}
+		&.collapsed .section_title,
+		&.collapsed .item {
+			max-height: 0px;
+			opacity: 0 !important;
+			overflow: hidden;
+			padding-bottom: 0px;
+			padding-top: 0px;
+			border: none !important;
+		}
+	}
+	
 	.calendars {
 		height: auto;
 		

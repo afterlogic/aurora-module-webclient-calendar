@@ -53,9 +53,6 @@ function CCalendarListModel(oParameters)
 		;
 		return calendars;
 	}, this);
-	this.sharedCount = ko.computed(function () {
-		return this.shared().length;
-	}, this);
 	this.sharedToAll = ko.computed(function () {
 		var 
 			calendars = _.filter(this.collection(), 
@@ -64,13 +61,33 @@ function CCalendarListModel(oParameters)
 		;
 		return calendars;
 	}, this);
-	this.sharedToAllCount = ko.computed(function () {
-		return this.sharedToAll().length;
-	}, this);
 	this.ids = ko.computed(function () {
 		return _.map(this.collection(), function (oCalendar){
 			return oCalendar.id;
 		}, this);
+	}, this);
+
+	this.hasSharedCalendars = ko.computed(function () {
+		return this.shared().length > 0 || this.sharedToAll().length > 0;
+	}, this);
+	this.showSharedCalendars = ko.observable(false);
+	this.hasSharedCalendars.subscribe(function () {
+		if (!this.hasSharedCalendars()) {
+			this.showSharedCalendars(false);
+		}
+	}, this);
+	this.search = ko.observable('');
+	this.filteredShared = ko.computed(function () {
+		if (this.search() === '') {
+			return this.shared();
+		}
+		return this.shared().filter(calendar => calendar.name().indexOf(this.search()) !== -1);
+	}, this);
+	this.filteredSharedToAll = ko.computed(function () {
+		if (this.search() === '') {
+			return this.sharedToAll();
+		}
+		return this.sharedToAll().filter(calendar => calendar.name().indexOf(this.search()) !== -1);
 	}, this);
 }
 
