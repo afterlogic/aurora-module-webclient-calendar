@@ -70,7 +70,10 @@ function CCalendarListModel(oParameters)
 	this.hasSharedCalendars = ko.computed(function () {
 		return this.shared().length > 0 || this.sharedToAll().length > 0;
 	}, this);
-	this.showSharedCalendars = ko.observable(false);
+	this.showSharedCalendars = ko.observable(Storage.getData('showSharedCalendars') === '1');
+	this.showSharedCalendars.subscribe(function () {
+		Storage.setData('showSharedCalendars', this.showSharedCalendars() === true ? '1' : '0');
+	}, this);
 	this.hasSharedCalendars.subscribe(function () {
 		if (!this.hasSharedCalendars()) {
 			this.showSharedCalendars(false);
