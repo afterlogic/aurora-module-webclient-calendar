@@ -22,7 +22,7 @@
 									<!-- ko template: {name: '%ModuleName%_CalendarItemView'} --><!-- /ko -->
 								<!-- /ko -->
 							</div>
-							<div data-bind="visible: bAllowShare && calendars.hasSharedCalendars()">
+							<div class="calendar_list_less_more_control" data-bind="visible: bAllowShare && calendars.hasSharedCalendars()">
 								<span class="link"
 									  data-bind="i18n: {'key': '%MODULENAME%/ACTION_MORE_CALENDARS'},
 									  visible: !calendars.showSharedCalendars(),
@@ -33,9 +33,9 @@
 									  visible: calendars.showSharedCalendars,
 									  click: function () { calendars.showSharedCalendars(false); }"
 								></span>
-								<input type="text" data-bind="value: calendars.search,
-									   valueUpdate: 'afterkeydown', visible: calendars.showSharedCalendars"
-								/>
+								<div class="calendar_list_search" data-bind="css: {'hidden': !calendars.showSharedCalendars()}">
+									<input type="text" data-bind="value: calendars.search, valueUpdate: 'afterkeydown'" />
+								</div>
 							</div>
 							<div class="expandable_calendar_list" data-bind="visible: bAllowShare,
 								 css: {'collapsed': !calendars.showSharedCalendars()}"
