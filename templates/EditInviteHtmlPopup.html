@@ -3,16 +3,11 @@
 	<div class="popup_panel">
 		<span class="close" data-bind="click: cancelPopup"></span>
 		<span class="popup_heading" data-bind="i18n: {'key': '%MODULENAME%/HEADING_MESSAGE_TO_ATTENDEE'}"></span>
-		<div class="fields">
-			<div class="fieldset">
-				<div class="row editor_row">
-					<div class="editor" data-bind="template: {name: oHtmlEditor.ViewTemplate, data: oHtmlEditor}"></div>
-				</div>
-			</div>
-
-			<div class="buttons">
-				<span class="button save" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}, click: save"></span>
-			</div>
+		
+		<div class="editor" data-bind="template: {name: oHtmlEditor.ViewTemplate, data: oHtmlEditor}"></div>
+	
+		<div class="buttons">
+			<span class="button save" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}, click: save"></span>
 		</div>
 	</div>
 	<span class="helper"></span>

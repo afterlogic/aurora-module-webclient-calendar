@@ -789,7 +789,33 @@ fc-month-view .fc-content,
 		height: 90%;
 		max-width: 1400px;
 		width: 90%;
+
+		display: inline-flex;
+		flex-direction: column;
+
+		.editor {
+			height: 100%;
+			overflow: hidden;
+			border-bottom: 1px solid #ccc;
+			padding-bottom: 10px;
+		}
+		.html_editor {
+			display: inline-flex;
+			flex-direction: column;
+			width: 100%;
+
+			.workarea {
+				height: calc(100% - 34px);
+			}
+
+			.toolbar {
+				background: #f1f1f1;	
+				border-radius: 5px;
+			}
+		}
 	}
+
+
 }
 
 .popup.calendar_popup {
@@ -1693,6 +1719,16 @@ fc-month-view .fc-content,
 				content: "\e647";
 				font-size: 12px;
 			}
+		}
+
+		.add_attender {
+			margin-bottom: 30px;
+		}
+
+		.customize_invitation_checkbox {
+			position: absolute;
+			bottom: 10px;
+			left: 465px;
 		}
 	}
 	
