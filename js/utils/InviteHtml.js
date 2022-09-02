@@ -2,6 +2,8 @@
 
 var
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
+	App = require('%PathToCoreWebclientModule%/js/App.js'),
+	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
 	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
 
 	EditInviteHtmlPopup = require('modules/%ModuleName%/js/popups/EditInviteHtmlPopup.js'),
@@ -9,10 +11,9 @@ var
 	InviteHtmlUtils = {}
 ;
 
-InviteHtmlUtils.needToSendMessage = function (oEventData)
+InviteHtmlUtils.needToSendMessage = function (oEventData, attendeesCountBeforeChanges)
 {
-	// TODO if update event rule is different
-	return Array.isArray(oEventData.attendees) && oEventData.attendees.length > 0;
+	return Array.isArray(oEventData.attendees) && oEventData.attendees.length > 0 && attendeesCountBeforeChanges === 0;
 };
 
 InviteHtmlUtils.prepareHtml = function (eventData, calendar, continueHandler, rejectHandler)
@@ -32,7 +33,13 @@ InviteHtmlUtils.prepareHtml = function (eventData, calendar, continueHandler, re
 
 	Ajax.send('CalendarMeetingsPlugin', 'GetMailMessageBodyForEvent', parameters, (response, request) => {
 		if (response && response.Result) {
-			Popups.showPopup(EditInviteHtmlPopup, [response.Result, continueHandler, rejectHandler]);
+			const
+				AccountList = ModulesManager.run('MailWebclient', 'getAccountList'),
+				defaultAccount = AccountList && AccountList.collection().find(account => account.email() === App.getUserPublicId()),
+				signature = defaultAccount && defaultAccount.useSignature() && defaultAccount.signature() || '',
+				inviteHtml = `${response.Result}<br /><br /><div>${signature}</div>`
+			;
+			Popups.showPopup(EditInviteHtmlPopup, [inviteHtml, continueHandler, rejectHandler]);
 		} else {
 			continueHandler();
 		}

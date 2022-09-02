@@ -141,6 +141,7 @@ function CEditEventPopup()
 
 	this.appointment = ko.observable(false);
 	this.attendees = ko.observableArray([]);
+	this.attendeesCountBeforeChanges = 0;
 	this.attenderStatus = ko.observable(0);
 	this.owner = ko.observable('');
 	this.ownerName = ko.observable('');
@@ -419,6 +420,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 	this.appointment(oParameters.Appointment);
 
 	this.attendees(oParameters.Attendees || []);
+	this.attendeesCountBeforeChanges = this.attendees().length;
 
 	if ($.isFunction(App.getAttendee))
 	{
@@ -513,7 +515,7 @@ CEditEventPopup.prototype.onSaveClick = function ()
 			this.isSaving(false);
 		},
 		prepareHtmlAndContinue = () => {
-			const needToSendMessage = InviteHtmlUtils.needToSendMessage(oEventData);
+			const needToSendMessage = InviteHtmlUtils.needToSendMessage(oEventData, this.attendeesCountBeforeChanges);
 			if (needToSendMessage) {
 				const calendar = this.calendars.getCalendarById(oEventData.calendarId);
 				InviteHtmlUtils.prepareHtml(oEventData, calendar, сontinueSaving, rejectSaving);
