@@ -8,6 +8,26 @@ var
 	CHtmlEditorView = require('modules/MailWebclient/js/views/CHtmlEditorView.js')
 ;
 
+function setCaretBeforeSignature()
+{
+	const
+		koEditable = $('div.crea-content-editable'),
+		editable = koEditable.length > 0 ? koEditable[0] : null,
+		thirdChild = editable.childNodes && editable.childNodes.length > 2 ? editable.childNodes[3] : null
+	;
+	if (thirdChild) {
+		const
+			range = document.createRange(),
+			sel = window.getSelection()
+		;
+		range.setStart(thirdChild, 0);
+		range.collapse(true);
+		sel.removeAllRanges();
+		sel.addRange(range);
+		editable.focus();
+	}
+}
+
 /**
  * @constructor
  */
@@ -35,6 +55,7 @@ CEditInviteHtmlPopup.prototype.onOpen = function (html, continueHandler, rejectH
 	this.rejectHandler = _.isFunction(rejectHandler) ? rejectHandler : () => {};
 
 	this.oHtmlEditor.init(html, false);
+	setCaretBeforeSignature();
 };
 
 CEditInviteHtmlPopup.prototype.onClose = function ()

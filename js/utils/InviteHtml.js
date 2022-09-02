@@ -37,7 +37,7 @@ InviteHtmlUtils.prepareHtml = function (eventData, calendar, continueHandler, re
 				AccountList = ModulesManager.run('MailWebclient', 'getAccountList'),
 				defaultAccount = AccountList && AccountList.collection().find(account => account.email() === App.getUserPublicId()),
 				signature = defaultAccount && defaultAccount.useSignature() && defaultAccount.signature() || '',
-				inviteHtml = `${response.Result}<br /><br /><div>${signature}</div>`
+				inviteHtml = `${response.Result}<br /><br /><br /><div>${signature}</div>`
 			;
 			Popups.showPopup(EditInviteHtmlPopup, [inviteHtml, continueHandler, rejectHandler]);
 		} else {

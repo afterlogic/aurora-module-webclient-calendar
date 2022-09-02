@@ -516,7 +516,6 @@ CEditEventPopup.prototype.onSaveClick = function ()
 			this.isSaving(false);
 		},
 		prepareHtmlAndContinue = () => {
-			console.log('oEventData', oEventData);
 			if (oEventData.modified && this.attendees().length > 0 && this.customizeInvitationMessage()) {
 				const calendar = this.calendars.getCalendarById(oEventData.calendarId);
 				InviteHtmlUtils.prepareHtml(oEventData, calendar, сontinueSaving, rejectSaving);
