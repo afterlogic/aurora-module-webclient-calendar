@@ -105,6 +105,8 @@ function CEditEventPopup()
 	this.allowSetPrivateEvent = ko.observable(false);
 	this.isPrivateEvent = ko.observable(false);
 
+	this.customizeInvitationMessage = ko.observable(false);
+
 	this.repeatPeriodOptions = ko.observableArray(this.getDisplayedPeriods());
 	this.repeatWeekIntervalOptions = ko.observableArray([1, 2, 3, 4]);
 	this.defaultAlarms = ko.observableArray([5, 10, 15, 30, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 1080, 1440, 2880, 4320, 5760, 10080, 20160]);
@@ -141,7 +143,6 @@ function CEditEventPopup()
 
 	this.appointment = ko.observable(false);
 	this.attendees = ko.observableArray([]);
-	this.attendeesCountBeforeChanges = 0;
 	this.attenderStatus = ko.observable(0);
 	this.owner = ko.observable('');
 	this.ownerName = ko.observable('');
@@ -420,7 +421,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 	this.appointment(oParameters.Appointment);
 
 	this.attendees(oParameters.Attendees || []);
-	this.attendeesCountBeforeChanges = this.attendees().length;
+	this.customizeInvitationMessage(true);
 
 	if ($.isFunction(App.getAttendee))
 	{
@@ -515,8 +516,8 @@ CEditEventPopup.prototype.onSaveClick = function ()
 			this.isSaving(false);
 		},
 		prepareHtmlAndContinue = () => {
-			const needToSendMessage = InviteHtmlUtils.needToSendMessage(oEventData, this.attendeesCountBeforeChanges);
-			if (needToSendMessage) {
+			console.log('oEventData', oEventData);
+			if (oEventData.modified && this.attendees().length > 0 && this.customizeInvitationMessage()) {
 				const calendar = this.calendars.getCalendarById(oEventData.calendarId);
 				InviteHtmlUtils.prepareHtml(oEventData, calendar, сontinueSaving, rejectSaving);
 			} else {

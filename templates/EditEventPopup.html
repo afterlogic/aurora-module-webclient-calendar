@@ -37,10 +37,17 @@
 							</span>
 						</div>
 					</div>
-						<div class="row add_attender" data-bind="visible: isEditable(), css: {'focused': guestEmailFocus()}">
+					<div class="row add_attender" data-bind="visible: isEditable(), css: {'focused': guestEmailFocus()}">
 						<span class="control add" data-bind="customTooltip: '%MODULENAME%/ACTION_ADD_GUESTS', click: onAddGuestClick"></span>
 						<label for="add_attender_input" class="label placeholder" data-i18n="%MODULENAME%/LABEL_EMAIL_OR_NAME" data-bind="i18n: 'text', visible: guestAutocomplete() === ''"></label>
 						<input id="add_attender_input" class="value input" spellcheck="false"  type="text" autocomplete="on" data-bind="value: guestAutocomplete, hasfocus: guestEmailFocus, valueUpdate: ['blur', 'afterkeydown'], autocompleteSimple: {callback: autocompleteCallback.bind($data), dataAccessor: guestAutocompleteItem}" />
+					</div>
+					<div class="row">
+						<label data-bind="css: {'checked': customizeInvitationMessage}" class="custom_checkbox">
+							<span class="icon"></span>
+							<input type="checkbox" data-bind="checked: customizeInvitationMessage" id="customizeInvitationMessage">
+						</label>
+						<label style="vertical-align: bottom;" for="customizeInvitationMessage" data-bind="i18n: {'key': '%MODULENAME%/ACTION_CUSTOMIZE_INVITATION_MESSAGE'}"></label>
 					</div>
 					<div class="row appointment" data-bind="visible: isAppointmentButtonsVisible">
 						<div class="buttons">
