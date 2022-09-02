@@ -1820,16 +1820,20 @@ CCalendarView.prototype.openEventPopup = function (oCalendar, oStart, oEnd, bAll
 
 /**
  * @param {Object} oEventData
+ * @param {string} inviteHtml
  */
-CCalendarView.prototype.createEvent = function (oEventData)
+CCalendarView.prototype.createEvent = function (oEventData, inviteHtml)
 {
-	var aParameters = this.getParamsFromEventData(oEventData);
+	var aParameters = this.getParamsFromEventData(oEventData, inviteHtml);
 	
 	if (!this.isPublic)
 	{
 		aParameters.calendarId = oEventData.newCalendarId;
 		aParameters.selectStart = this.getDateFromCurrentView('start');
 		aParameters.selectEnd = this.getDateFromCurrentView('end');
+		if (inviteHtml) {
+			aParameters.appointmentMailBody = inviteHtml;
+		}
 		Ajax.send('CreateEvent', aParameters, this.onEventActionResponseWithSubThrottle, this);
 	}
 };

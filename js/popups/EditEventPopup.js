@@ -24,7 +24,8 @@ var
 	
 	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js'),
 	EventsOverlapUtils = require('modules/%ModuleName%/js/utils/EventsOverlap.js'),
-	
+	InviteHtmlUtils = require('modules/%ModuleName%/js/utils/InviteHtml.js'),
+
 	Ajax = require('modules/%ModuleName%/js/Ajax.js'),
 	CalendarCache = require('modules/%ModuleName%/js/Cache.js'),
 	Settings = require('modules/%ModuleName%/js/Settings.js')
@@ -503,21 +504,31 @@ CEditEventPopup.prototype.onSaveClick = function ()
 		oEventData = this.getEventData(),
 		bNewEvent = oEventData.id === null,
 		bCheckOverlap = bNewEvent ? true : this.hasDatetimeChanges(oEventData),
-		fContinueCallback = function () {
+		сontinueSaving = (inviteHtml) => {
 			this.isSaving(false);
-			this.callbackSave(oEventData);
+			this.callbackSave(oEventData, inviteHtml);
 			this.closePopup();
-		}.bind(this),
-		fRejectCallback = function () {
+		},
+		rejectSaving = () => {
 			this.isSaving(false);
-		}.bind(this)
+		},
+		prepareHtmlAndContinue = () => {
+			const needToSendMessage = InviteHtmlUtils.needToSendMessage(oEventData);
+			if (needToSendMessage) {
+				const calendar = this.calendars.getCalendarById(oEventData.calendarId);
+				InviteHtmlUtils.prepareHtml(oEventData, calendar, сontinueSaving, rejectSaving);
+			} else {
+				сontinueSaving();
+			}
+		}
 	;
 
 	if (bCheckOverlap) {
 		this.isSaving(true);
-		EventsOverlapUtils.check(EventsOverlapUtils.getCheckParameters(oEventData), bNewEvent, fContinueCallback, fRejectCallback);
+		const params = EventsOverlapUtils.getCheckParameters(oEventData);
+		EventsOverlapUtils.check(params, bNewEvent, prepareHtmlAndContinue, rejectSaving);
 	} else {
-		fContinueCallback();
+		prepareHtmlAndContinue();
 	}
 };
 
