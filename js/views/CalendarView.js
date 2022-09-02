@@ -1728,7 +1728,7 @@ CCalendarView.prototype.createEventToday = function (oCalendar)
 /**
  * @param {Object} oEventData
  */
-CCalendarView.prototype.getParamsFromEventData = function (oEventData)
+CCalendarView.prototype.getParamsFromEventData = function (oEventData, inviteHtml)
 {
 	var
 		sBrowserTimezone = moment.tz.guess(),
@@ -1736,8 +1736,8 @@ CCalendarView.prototype.getParamsFromEventData = function (oEventData)
 		oStart = moment.tz(oEventData.start.format('YYYY-MM-DD HH:mm:ss'), sServerTimezone || sBrowserTimezone),
 		oEnd = moment.tz(oEventData.end.format('YYYY-MM-DD HH:mm:ss'), sServerTimezone || sBrowserTimezone)
 	;
-	
-	return {
+
+	const params = {
 		id: oEventData.id,
 		uid: oEventData.uid,
 		calendarId: oEventData.calendarId,
@@ -1763,6 +1763,12 @@ CCalendarView.prototype.getParamsFromEventData = function (oEventData)
 		withDate: oEventData.withDate,
 		isPrivate: oEventData.isPrivate
 	};
+
+	if (inviteHtml) {
+		params.appointmentMailBody = inviteHtml;
+	}
+
+	return params;
 };
 
 /**
@@ -1824,17 +1830,13 @@ CCalendarView.prototype.openEventPopup = function (oCalendar, oStart, oEnd, bAll
  */
 CCalendarView.prototype.createEvent = function (oEventData, inviteHtml)
 {
-	var aParameters = this.getParamsFromEventData(oEventData, inviteHtml);
-	
 	if (!this.isPublic)
 	{
-		aParameters.calendarId = oEventData.newCalendarId;
-		aParameters.selectStart = this.getDateFromCurrentView('start');
-		aParameters.selectEnd = this.getDateFromCurrentView('end');
-		if (inviteHtml) {
-			aParameters.appointmentMailBody = inviteHtml;
-		}
-		Ajax.send('CreateEvent', aParameters, this.onEventActionResponseWithSubThrottle, this);
+		const params = this.getParamsFromEventData(oEventData, inviteHtml);
+		params.calendarId = oEventData.newCalendarId;
+		params.selectStart = this.getDateFromCurrentView('start');
+		params.selectEnd = this.getDateFromCurrentView('end');
+		Ajax.send('CreateEvent', params, this.onEventActionResponseWithSubThrottle, this);
 	}
 };
 
@@ -1953,18 +1955,17 @@ CCalendarView.prototype.eventAction = function (sMethod, oParameters, fRevertFun
 
 /**
  * @param {Object} oEventData
+ * @param {string} inviteHtml
  */
-CCalendarView.prototype.updateEvent = function (oEventData)
+CCalendarView.prototype.updateEvent = function (oEventData, inviteHtml)
 {
-	var oParameters = this.getParamsFromEventData(oEventData);
-
-	oParameters.selectStart = this.getDateFromCurrentView('start');
-	oParameters.selectEnd = this.getDateFromCurrentView('end');
-	
 	if (oEventData.modified)
 	{
+		const params = this.getParamsFromEventData(oEventData, inviteHtml);
+		params.selectStart = this.getDateFromCurrentView('start');
+		params.selectEnd = this.getDateFromCurrentView('end');
 		this.calendars.setDefault(oEventData.newCalendarId);
-		this.eventAction('UpdateEvent', oParameters);
+		this.eventAction('UpdateEvent', params);
 	}
 };
 
