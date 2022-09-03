@@ -42,9 +42,7 @@
 						<label for="add_attender_input" class="label placeholder" data-i18n="%MODULENAME%/LABEL_EMAIL_OR_NAME" data-bind="i18n: 'text', visible: guestAutocomplete() === ''"></label>
 						<input id="add_attender_input" class="value input" spellcheck="false"  type="text" autocomplete="on" data-bind="value: guestAutocomplete, hasfocus: guestEmailFocus, valueUpdate: ['blur', 'afterkeydown'], autocompleteSimple: {callback: autocompleteCallback.bind($data), dataAccessor: guestAutocompleteItem}" />
 					</div>
-					<div class="row customize_invitation_checkbox" style="position: absolute;
-					bottom: 10px;
-					left: 465px;">
+					<div class="row customize_invitation_checkbox" data-bind="visible: isEditable()">
 						<label data-bind="css: {'checked': customizeInvitationMessage}" class="custom_checkbox">
 							<span class="icon"></span>
 							<input type="checkbox" data-bind="checked: customizeInvitationMessage" id="customizeInvitationMessage">
@@ -260,7 +258,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="row private_event" data-bind="visible: allowSetPrivateEvent">
+						<div class="row private_event" data-bind="visible: allowSetPrivateEvent() && isEditable()">
 							<label data-bind="css: {'checked': isPrivateEvent}" class="custom_checkbox">
 								<span class="icon"></span>
 								<input type="checkbox" data-bind="checked: isPrivateEvent" id="isPrivateEvent">

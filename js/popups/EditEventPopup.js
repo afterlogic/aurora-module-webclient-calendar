@@ -429,6 +429,17 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 	}
 
 	this.isMyEvent(sAttendee !== owner && (owner === oParameters.Owner || owner === sCalendarOwner));
+
+	//TODO
+	var bUserIsAnAttendee = _.find(this.attendees(), function(oAttendee){ 
+		return oAttendee.email === owner || oAttendee.email.startsWith('test@');
+	});
+
+	if (this.isMyEvent() && this.appointment() && bUserIsAnAttendee) {
+		this.isMyEvent(false);
+	}
+	//
+
 	this.editableSwitch(this.selectedCalendarIsShared(), this.selectedCalendarIsEditable(), this.isMyEvent());
 
 	this.setCurrentAttenderStatus(sAttendee, oParameters.Attendees || []);
@@ -450,7 +461,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 	
 	this.modified = false;
 
-	this.isAppointmentButtonsVisible(this.appointment() && this.selectedCalendarIsEditable() && _.find(this.attendees(), function(oAttendee){ return oAttendee.email === owner; }));
+	this.isAppointmentButtonsVisible(this.appointment() && this.selectedCalendarIsEditable() && bUserIsAnAttendee);
 
 	this.isPrivateEvent(!!oParameters.IsPrivate);
 	
@@ -516,7 +527,7 @@ CEditEventPopup.prototype.onSaveClick = function ()
 			this.isSaving(false);
 		},
 		prepareHtmlAndContinue = () => {
-			if (oEventData.modified && this.attendees().length > 0 && this.customizeInvitationMessage()) {
+			if (this.isEditable() && oEventData.modified && this.attendees().length > 0 && this.customizeInvitationMessage()) {
 				const calendar = this.calendars.getCalendarById(oEventData.calendarId);
 				InviteHtmlUtils.prepareHtml(oEventData, calendar, сontinueSaving, rejectSaving);
 			} else {
