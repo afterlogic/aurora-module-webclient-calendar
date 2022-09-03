@@ -430,9 +430,9 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 
 	this.isMyEvent(sAttendee !== owner && (owner === oParameters.Owner || owner === sCalendarOwner));
 
-	//TODO
+	//TODO improve detection if central account
 	var bUserIsAnAttendee = _.find(this.attendees(), function(oAttendee){ 
-		return oAttendee.email === owner || oAttendee.email.startsWith('test@');
+		return oAttendee.email === owner || oAttendee.email.startsWith('info@');
 	});
 
 	if (this.isMyEvent() && this.appointment() && bUserIsAnAttendee) {
@@ -1411,7 +1411,7 @@ CEditEventPopup.prototype.editableSwitch = function (bShared, bEditable, bMyEven
 CEditEventPopup.prototype.setCurrentAttenderStatus = function (sCurrentEmail, aAttendees)
 {
 	var oCurrentAttender = _.find(aAttendees, function(oAttender){ 
-		return oAttender.email === sCurrentEmail; 
+		return oAttender.email === sCurrentEmail;
 	});
 
 	this.attenderStatus(oCurrentAttender ? oCurrentAttender.status : 0);
