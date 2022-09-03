@@ -1411,9 +1411,8 @@ CEditEventPopup.prototype.editableSwitch = function (bShared, bEditable, bMyEven
 CEditEventPopup.prototype.setCurrentAttenderStatus = function (sCurrentEmail, aAttendees)
 {
 	var oCurrentAttender = _.find(aAttendees, function(oAttender){ 
-		return oAttender.email === sCurrentEmail;
+		return oAttender.email === sCurrentEmail || oAttender.email.startsWith('info@');
 	});
-
 	this.attenderStatus(oCurrentAttender ? oCurrentAttender.status : 0);
 };
 
