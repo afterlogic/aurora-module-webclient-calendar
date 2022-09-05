@@ -6,6 +6,7 @@ var
 	ko = require('knockout'),
 	moment = require('moment'),
 	
+	AddressUtils = require('%PathToCoreWebclientModule%/js/utils/Address.js'),
 	DateUtils = require('%PathToCoreWebclientModule%/js/utils/Date.js'),
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
@@ -21,7 +22,9 @@ var
 	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js'),
 	AlertPopup = require('%PathToCoreWebclientModule%/js/popups/AlertPopup.js'),
 	ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js'),
-	
+
+	InformatikSettings = require('modules/InformatikProjects/js/Settings.js'),
+
 	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js'),
 	EventsOverlapUtils = require('modules/%ModuleName%/js/utils/EventsOverlap.js'),
 	InviteHtmlUtils = require('modules/%ModuleName%/js/utils/InviteHtml.js'),
@@ -31,13 +34,20 @@ var
 	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
 
+function getCentralAccountEmail () {
+	const emailParts = AddressUtils.getEmailParts(InformatikSettings.SenderForExternalRecipients);
+	return emailParts.email;
+}
+
 /**
  * @constructor
  */
 function CEditEventPopup()
 {
 	CAbstractPopup.call(this);
-	
+
+	this.centralAccountEmail = getCentralAccountEmail();
+
 	this.modified = false;
 	this.isPublic = App.isPublic();
 	this.isEditable = ko.observable(false);
@@ -143,7 +153,7 @@ function CEditEventPopup()
 
 	this.appointment = ko.observable(false);
 	this.attendees = ko.observableArray([]);
-	this.attenderStatus = ko.observable(0);
+	this.attendeeStatus = ko.observable(0);
 	this.owner = ko.observable('');
 	this.ownerName = ko.observable('');
 
@@ -303,10 +313,8 @@ CEditEventPopup.prototype.initializeDatePickers = function ()
 CEditEventPopup.prototype.onOpen = function (oParameters)
 {
 	var
-		owner = App.getUserPublicId(),
 		oEndMomentDate = null,
 		oStartMomentDate = null,
-		sAttendee = '',
 		oCalendar = null,
 		sCalendarOwner = '',
 		oToday = moment()
@@ -423,26 +431,20 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 	this.attendees(oParameters.Attendees || []);
 	this.customizeInvitationMessage(true);
 
-	if ($.isFunction(App.getAttendee))
-	{
-		sAttendee = App.getAttendee(this.attendees());
-	}
+	const userAttendeeEmail = $.isFunction(App.getAttendee) ? App.getAttendee(this.attendees()) : '';
+	const owner = App.getUserPublicId();
+	this.isMyEvent(userAttendeeEmail !== owner && (owner === oParameters.Owner || owner === sCalendarOwner));
 
-	this.isMyEvent(sAttendee !== owner && (owner === oParameters.Owner || owner === sCalendarOwner));
-
-	//TODO improve detection if central account
-	var bUserIsAnAttendee = _.find(this.attendees(), function(oAttendee){ 
-		return oAttendee.email === owner || oAttendee.email.startsWith('info@');
+	const isUserAttendee = this.attendees().find(attendee => {
+		return attendee.email === owner || attendee.email === this.centralAccountEmail;
 	});
-
-	if (this.isMyEvent() && this.appointment() && bUserIsAnAttendee) {
+	if (this.isMyEvent() && this.appointment() && isUserAttendee) {
 		this.isMyEvent(false);
 	}
-	//
 
 	this.editableSwitch(this.selectedCalendarIsShared(), this.selectedCalendarIsEditable(), this.isMyEvent());
 
-	this.setCurrentAttenderStatus(sAttendee, oParameters.Attendees || []);
+	this.setCurrentAttendeeStatus(userAttendeeEmail, oParameters.Attendees || []);
 
 	this.owner(oParameters.Owner || owner);
 	
@@ -461,7 +463,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 	
 	this.modified = false;
 
-	this.isAppointmentButtonsVisible(this.appointment() && this.selectedCalendarIsEditable() && bUserIsAnAttendee);
+	this.isAppointmentButtonsVisible(this.appointment() && this.selectedCalendarIsEditable() && isUserAttendee);
 
 	this.isPrivateEvent(!!oParameters.IsPrivate);
 	
@@ -845,7 +847,7 @@ CEditEventPopup.prototype.onAddGuestClick = function ()
 	{
 		this.attendees.push(
 			{
-				status: 0,
+				status: Enums.IcalConfigInt.NeedsAction,
 				name: oItem.name,
 				email: oItem.email
 			}
@@ -1348,20 +1350,12 @@ CEditEventPopup.prototype.setAppointmentAction = function (sDecision)
 	var
 		iDecision = Enums.IcalConfigInt.NeedsAction,
 		aAttendees = this.attendees(),
-		sEmail = App.getAttendee ?	App.getAttendee(this.attendees()) :	'',
-		oAttendee = _.find(this.attendees(), function(oAttendee){
-			return oAttendee.email === sEmail; 
-		}, this),
-		oCalendar = this.calendars.getCalendarById(this.selectedCalendarId()),
-		oParameters = {
-			'AppointmentAction': sDecision,
-			'CalendarId': this.selectedCalendarId(),
-			'EventId': this.uid(),
-			'Attendee': sEmail
-		}
+		userAttendeeEmail = App.getAttendee ?	App.getAttendee(this.attendees()) :	'',
+		currentAttendee = this.attendees().find(attendee => attendee.email === userAttendeeEmail) ||
+						  this.attendees().find(attendee => attendee.email === this.centralAccountEmail)
 	;
 
-	if (oAttendee)
+	if (currentAttendee)
 	{
 		switch (sDecision)
 		{
@@ -1378,12 +1372,19 @@ CEditEventPopup.prototype.setAppointmentAction = function (sDecision)
 				CalendarCache.markIcalNonexistent(this.uid());
 				break;
 		}
-		Ajax.send('SetAppointmentAction', oParameters, this.onSetAppointmentActionResponse, this, 'CalendarMeetingsPlugin');
+		const parameters = {
+			'AppointmentAction': sDecision,
+			'CalendarId': this.selectedCalendarId(),
+			'EventId': this.uid(),
+			'Attendee': currentAttendee ? currentAttendee.email : ''
+		};
+		Ajax.send('SetAppointmentAction', parameters, this.onSetAppointmentActionResponse, this, 'CalendarMeetingsPlugin');
 
-		oAttendee.status = iDecision;
+		currentAttendee.status = iDecision;
 		this.attendees([]);
 		this.attendees(aAttendees);
-		this.setCurrentAttenderStatus(oAttendee.email, this.attendees());
+		this.setCurrentAttendeeStatus(currentAttendee.email, this.attendees());
+		const oCalendar = this.calendars.getCalendarById(this.selectedCalendarId());
 		if (sDecision === Enums.IcalConfig.Declined && oCalendar && 
 				this.callbackAttendeeActionDecline && $.isFunction(this.callbackAttendeeActionDecline))
 		{
@@ -1408,15 +1409,14 @@ CEditEventPopup.prototype.editableSwitch = function (bShared, bEditable, bMyEven
  * @param {string} sCurrentEmail
  * @param {Array} aAttendees
  */
-CEditEventPopup.prototype.setCurrentAttenderStatus = function (sCurrentEmail, aAttendees)
+CEditEventPopup.prototype.setCurrentAttendeeStatus = function (sCurrentEmail, aAttendees)
 {
-	var oCurrentAttender = _.find(aAttendees, function(oAttender){ 
-		return oAttender.email === sCurrentEmail || oAttender.email.startsWith('info@');
-	});
-	this.attenderStatus(oCurrentAttender ? oCurrentAttender.status : 0);
+	const currentAttendee = this.attendees().find(attendee => attendee.email === sCurrentEmail) ||
+							this.attendees().find(attendee => attendee.email === this.centralAccountEmail);
+	this.attendeeStatus(currentAttendee ? currentAttendee.status : Enums.IcalConfigInt.NeedsAction);
 };
 
-CEditEventPopup.prototype.getAttenderTextStatus = function (sStatus)
+CEditEventPopup.prototype.getAttendeeTextStatus = function (sStatus)
 {
 	switch (sStatus)
 	{

@@ -24,14 +24,14 @@
 					</div>
 					<div class="row attendees" data-bind="foreach: attendees">
 						<div class="attender" data-bind="css: {
-								'pending': status === 0,
-								'accepted': status === 1,
-								'declined': status === 2,
-								'tentative': status === 3
+								'pending': status === Enums.IcalConfigInt.NeedsAction,
+								'accepted': status === Enums.IcalConfigInt.Accepted,
+								'declined': status === Enums.IcalConfigInt.Declined,
+								'tentative': status === Enums.IcalConfigInt.Tentative
 							 }">
 							<span class="control remove" data-bind="visible: $parent.isEditable(), click: $parent.removeGuest.bind($parent), customTooltip: 'COREWEBCLIENT/ACTION_REMOVE'"></span>
 							<span class="name" data-bind="css: {'recivedAnim': $parent.recivedAnim() && email === $parent.whomAnimate()}">
-								<span class="icon status" data-bind="customTooltip: function () { return $parent.getAttenderTextStatus(status); }"></span>
+								<span class="icon status" data-bind="customTooltip: function () { return $parent.getAttendeeTextStatus(status); }"></span>
 								<span class="text" data-bind="customTooltip: email, text: name, visible: name !== ''"></span>
 								<span class="text" data-bind="text: email, visible: name === ''"></span>
 							</span>
@@ -51,11 +51,11 @@
 					</div>
 					<div class="row appointment" data-bind="visible: isAppointmentButtonsVisible">
 						<div class="buttons">
-							<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_ACCEPT_APPOINTMENT'}, css: {'selected_button': attenderStatus() === Enums.IcalConfigInt.Accepted},
+							<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_ACCEPT_APPOINTMENT'}, css: {'selected_button': attendeeStatus() === Enums.IcalConfigInt.Accepted},
 									click: function(){ setAppointmentAction(Enums.IcalConfig.Accepted); }"></span>
-							<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_TENTATIVE_APPOINTMENT'}, css: {'selected_button': attenderStatus() === Enums.IcalConfigInt.Tentative},
+							<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_TENTATIVE_APPOINTMENT'}, css: {'selected_button': attendeeStatus() === Enums.IcalConfigInt.Tentative},
 									click: function(){ setAppointmentAction(Enums.IcalConfig.Tentative); }"></span>
-							<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_DECLINE_APPOINTMENT'}, css: {'selected_button': attenderStatus() === Enums.IcalConfigInt.Declined},
+							<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_DECLINE_APPOINTMENT'}, css: {'selected_button': attendeeStatus() === Enums.IcalConfigInt.Declined},
 									click: function(){ setAppointmentAction(Enums.IcalConfig.Declined); }"></span>
 						</div>
 					</div>
