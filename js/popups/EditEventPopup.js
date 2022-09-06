@@ -121,11 +121,11 @@ function CEditEventPopup()
 	this.repeatWeekIntervalOptions = ko.observableArray([1, 2, 3, 4]);
 	this.repeatMonthIntervalOptions = ko.observableArray(Array.from(Array(12), (e,i)=>i+1));
 	this.repeatMonthlyByDayOptions = ko.observableArray([
-		{ value: '1', text: TextUtils.i18n('%MODULENAME%/LABEL_FIRST') },
-		{ value: '2', text: TextUtils.i18n('%MODULENAME%/LABEL_SECOND') },
-		{ value: '3', text: TextUtils.i18n('%MODULENAME%/LABEL_THIRD') },
-		{ value: '4', text: TextUtils.i18n('%MODULENAME%/LABEL_FOURTH') },
-		{ value: '-1', text: TextUtils.i18n('%MODULENAME%/LABEL_LAST') }
+		{ value: '0', text: TextUtils.i18n('%MODULENAME%/LABEL_FIRST') },
+		{ value: '1', text: TextUtils.i18n('%MODULENAME%/LABEL_SECOND') },
+		{ value: '2', text: TextUtils.i18n('%MODULENAME%/LABEL_THIRD') },
+		{ value: '3', text: TextUtils.i18n('%MODULENAME%/LABEL_FOURTH') },
+		{ value: '4', text: TextUtils.i18n('%MODULENAME%/LABEL_LAST') }
 	]);
 	this.defaultAlarms = ko.observableArray([5, 10, 15, 30, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 1080, 1440, 2880, 4320, 5760, 10080, 20160]);
 	this.alarmOptions = ko.observableArray([]);
@@ -657,7 +657,7 @@ CEditEventPopup.prototype.getEventData = function ()
 				interval: iInterval,
 				period: Enums.CalendarRepeatPeriod.Monthly,
 				until: iUnixDate,
-				weekNum: null
+				weekNum: this.repeatMonthlyByDay()
 			};
 		}
 		else if (iPeriod === Enums.CalendarRepeatPeriod.Monthly)
@@ -1148,18 +1148,14 @@ CEditEventPopup.prototype.repeatRuleParse = function (oRepeatRule)
 CEditEventPopup.prototype.getDays = function ()
 {
 	var aDays = [];
-	let prefix = '';
-	if (this.repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly) {
-		prefix = this.repeatMonthlyByDay();
-	}
 
-	if (this.weekMO()) { aDays.push(`${prefix}MO`); }
-	if (this.weekTU()) { aDays.push(`${prefix}TU`); }
-	if (this.weekWE()) { aDays.push(`${prefix}WE`); }
-	if (this.weekTH()) { aDays.push(`${prefix}TH`); }
-	if (this.weekFR()) { aDays.push(`${prefix}FR`); }
-	if (this.weekSA()) { aDays.push(`${prefix}SA`); }
-	if (this.weekSU()) { aDays.push(`${prefix}SU`); }
+	if (this.weekMO()) { aDays.push('MO'); }
+	if (this.weekTU()) { aDays.push('TU'); }
+	if (this.weekWE()) { aDays.push('WE'); }
+	if (this.weekTH()) { aDays.push('TH'); }
+	if (this.weekFR()) { aDays.push('FR'); }
+	if (this.weekSA()) { aDays.push('SA'); }
+	if (this.weekSU()) { aDays.push('SU'); }
 
 	return aDays;
 };
