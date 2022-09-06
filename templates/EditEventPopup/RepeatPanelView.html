@@ -1,0 +1,48 @@
+<div class="repeat_panel" data-bind="visible: allEvents() === Enums.CalendarEditRecurrenceEvent.AllEvents">
+	<div class="row" data-bind="visible: true">
+		<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEATS'}"></span>
+		<select class="value input" data-bind="options: repeatPeriodOptions, optionsText: 'label', optionsValue: 'value', value: repeatPeriod"></select>
+
+		<span data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly">
+			<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_WEEKLY_ON_DAYS'}"></span>
+			<!-- ko template: {name: '%ModuleName%_EditEventPopup_WeekSwitcherView'} --><!-- /ko -->
+		</span>
+
+		<span data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly">
+			<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_WEEKLY_ON_DAYS'}"></span>
+			<select class="value input" data-bind="options: repeatMonthlyByDayOptions, value: repeatMonthlyByDay,
+					optionsText: 'text', optionsValue: 'value'"
+			></select>
+			<!-- ko template: {name: '%ModuleName%_EditEventPopup_WeekSwitcherView'} --><!-- /ko -->
+		</span>
+
+		<span data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Daily
+			  || repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly
+			  || repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly,
+			  css: {'row_weeks': repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly
+			  || repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly}"
+		>
+			<span data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly">
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_EVERY'}"></span>
+				<select class="value input" data-bind="options: repeatWeekIntervalOptions, value: repeatInterval"></select>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_WEEK'}"></span>
+			</span>
+
+			<span data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly">
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_EVERY'}"></span>
+				<select class="value input" data-bind="options: repeatMonthIntervalOptions, value: repeatInterval"></select>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_MONTH'}"></span>
+			</span>
+
+			<!-- ko template: {name: '%ModuleName%_EditEventPopup_RepeatUntilRadioView'} --><!-- /ko -->
+		</span>
+
+		<span data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Monthly && !allDay()">
+			<span class="value" data-bind="text: monthlyDayText()"></span>
+		</span>
+
+		<span data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Yearly && !allDay()">
+			<span class="value" data-bind="text: yearlyDayText()"></span>
+		</span>
+	</div>
+</div>

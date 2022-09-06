@@ -119,6 +119,14 @@ function CEditEventPopup()
 
 	this.repeatPeriodOptions = ko.observableArray(this.getDisplayedPeriods());
 	this.repeatWeekIntervalOptions = ko.observableArray([1, 2, 3, 4]);
+	this.repeatMonthIntervalOptions = ko.observableArray(Array.from(Array(12), (e,i)=>i+1));
+	this.repeatMonthlyByDayOptions = ko.observableArray([
+		{ value: '1', text: TextUtils.i18n('%MODULENAME%/LABEL_FIRST') },
+		{ value: '2', text: TextUtils.i18n('%MODULENAME%/LABEL_SECOND') },
+		{ value: '3', text: TextUtils.i18n('%MODULENAME%/LABEL_THIRD') },
+		{ value: '4', text: TextUtils.i18n('%MODULENAME%/LABEL_FOURTH') },
+		{ value: '-1', text: TextUtils.i18n('%MODULENAME%/LABEL_LAST') }
+	]);
 	this.defaultAlarms = ko.observableArray([5, 10, 15, 30, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 1080, 1440, 2880, 4320, 5760, 10080, 20160]);
 	this.alarmOptions = ko.observableArray([]);
 	this.timeOptions = ko.observableArray(CalendarUtils.getTimeListStepHalfHour((UserSettings.timeFormat() !== Enums.TimeFormat.F24) ? 'hh:mm A' : 'HH:mm'));
@@ -138,6 +146,7 @@ function CEditEventPopup()
 		this.isRepeat(!!iRepeatPeriod);
 	}, this);
 	this.repeatInterval = ko.observable(1);
+	this.repeatMonthlyByDay = ko.observable('');
 	this.repeatCount = ko.observable(null);
 	this.repeatWeekNum = ko.observable(null);
 
@@ -230,6 +239,7 @@ function CEditEventPopup()
 		this.allDay();
 		this.repeatPeriod();
 		this.repeatInterval();
+		this.repeatMonthlyByDay(),
 		this.repeatCount();
 		this.repeatWeekNum();
 		this.startDate();
@@ -637,6 +647,19 @@ CEditEventPopup.prototype.getEventData = function ()
 				weekNum: null
 			};
 		}
+		else if (iPeriod === Enums.CalendarRepeatPeriod.XMonthly)
+		{
+			this.setDayOfWeek();
+			oEventData.rrule = {
+				byDays: this.getDays(),
+				count: null,
+				end: iAlways === Enums.CalendarAlways.Disable ? 2 : 3,
+				interval: iInterval,
+				period: Enums.CalendarRepeatPeriod.Monthly,
+				until: iUnixDate,
+				weekNum: null
+			};
+		}
 		else if (iPeriod === Enums.CalendarRepeatPeriod.Monthly)
 		{
 			oEventData.rrule = {
@@ -932,23 +955,27 @@ CEditEventPopup.prototype.getDisplayedPeriods = function ()
 	return [
 		{
 			label: TextUtils.i18n('%MODULENAME%/LABEL_REPEAT_NEVER'),
-			value: 0
+			value: Enums.CalendarRepeatPeriod.None
 		},
 		{
 			label: TextUtils.i18n('%MODULENAME%/LABEL_REPEAT_DAILY'),
-			value: 1
+			value: Enums.CalendarRepeatPeriod.Daily
 		},
 		{
 			label: TextUtils.i18n('%MODULENAME%/LABEL_REPEAT_WEEKLY'),
-			value: 2
+			value: Enums.CalendarRepeatPeriod.Weekly
+		},
+		{
+			label: TextUtils.i18n('%MODULENAME%/LABEL_REPEAT_XMONTH'),
+			value: Enums.CalendarRepeatPeriod.XMonthly
 		},
 		{
 			label: TextUtils.i18n('%MODULENAME%/LABEL_REPEAT_MONTHLY'),
-			value: 3
+			value: Enums.CalendarRepeatPeriod.Monthly
 		},
 		{
 			label: TextUtils.i18n('%MODULENAME%/LABEL_REPEAT_YEARLY'),
-			value: 4
+			value: Enums.CalendarRepeatPeriod.Yearly
 		}
 	];
 };
@@ -1089,13 +1116,28 @@ CEditEventPopup.prototype.repeatRuleParse = function (oRepeatRule)
 			this.repeatEndDom().datepicker('setDate', new Date(oRepeatRule.until * 1000));
 		}
 
+		let repeatPeriod = oRepeatRule.period;
 		if (oRepeatRule.byDays.length)
 		{
-			_.each(oRepeatRule.byDays, function (sItem) {
-				this['week' + sItem](true);
-			}, this);
+			if (repeatPeriod === Enums.CalendarRepeatPeriod.Monthly) {
+				repeatPeriod = Enums.CalendarRepeatPeriod.XMonthly;
+			}
+			if (repeatPeriod === Enums.CalendarRepeatPeriod.Weekly || repeatPeriod === Enums.CalendarRepeatPeriod.XMonthly) {
+				_.each(oRepeatRule.byDays, function (sItem) {
+					const regex = /(-1|1|2|3|4)?(MO|TU|WE|TH|FR|SA|SU)/gm;
+					const m = regex.exec(sItem);
+					if (m.length === 3) {
+						if (m[2]) {
+							this['week' + m[2]](true);
+						}
+						if (m[1]) {
+							this.repeatMonthlyByDay(m[1]);
+						}
+					}
+				}, this);
+			}
 		}
-		this.repeatPeriod(oRepeatRule.period);
+		this.repeatPeriod(repeatPeriod);
 		this.repeatInterval(oRepeatRule.interval);
 		this.repeatCount(oRepeatRule.count);
 		this.repeatWeekNum(oRepeatRule.weekNum);
@@ -1106,14 +1148,18 @@ CEditEventPopup.prototype.repeatRuleParse = function (oRepeatRule)
 CEditEventPopup.prototype.getDays = function ()
 {
 	var aDays = [];
+	let prefix = '';
+	if (this.repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly) {
+		prefix = this.repeatMonthlyByDay();
+	}
 
-	if (this.weekMO()) {aDays.push('MO');}
-	if (this.weekTU()) {aDays.push('TU');}
-	if (this.weekWE()) {aDays.push('WE');}
-	if (this.weekTH()) {aDays.push('TH');}
-	if (this.weekFR()) {aDays.push('FR');}
-	if (this.weekSA()) {aDays.push('SA');}
-	if (this.weekSU()) {aDays.push('SU');}
+	if (this.weekMO()) { aDays.push(`${prefix}MO`); }
+	if (this.weekTU()) { aDays.push(`${prefix}TU`); }
+	if (this.weekWE()) { aDays.push(`${prefix}WE`); }
+	if (this.weekTH()) { aDays.push(`${prefix}TH`); }
+	if (this.weekFR()) { aDays.push(`${prefix}FR`); }
+	if (this.weekSA()) { aDays.push(`${prefix}SA`); }
+	if (this.weekSU()) { aDays.push(`${prefix}SU`); }
 
 	return aDays;
 };
@@ -1438,7 +1484,9 @@ CEditEventPopup.prototype.getAttendeeTextStatus = function (sStatus)
 
 CEditEventPopup.prototype.setDayOfWeek = function ()
 {
-	if (this.repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly && !this.getDays().length)
+	const needDayOfWeek = this.repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly
+			|| this.repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly;
+	if (needDayOfWeek && !this.getDays().length)
 	{
 		var iDayOfWeek = this.getDateTime(this.startDom()).getUTCDay();
 		

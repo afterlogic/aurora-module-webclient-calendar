@@ -30,6 +30,7 @@ Enums.CalendarRepeatPeriod = {
 	'None': 0,
 	'Daily': 1,
 	'Weekly': 2,
+	'XMonthly': 33,
 	'Monthly': 3,
 	'Yearly': 4
 };

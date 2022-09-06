@@ -1,0 +1,10 @@
+<label>
+	<input type="radio" name="always" data-bind="checkedValue: 1, checked: always" />
+	<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_ALWAYS'}"></span>
+</label>
+
+<label>
+	<input type="radio" name="always" data-bind="checkedValue: 0, checked: always" />
+	<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_UNTIL'}"></span>
+	<input class="date input" spellcheck="false" type="text" readonly="readonly" data-bind="initDom: repeatEndDom, value: repeatEndDate" />
+</label>
