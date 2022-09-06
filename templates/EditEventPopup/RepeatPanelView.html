@@ -1,4 +1,10 @@
-<div class="repeat_panel" data-bind="visible: allEvents() === Enums.CalendarEditRecurrenceEvent.AllEvents, css: {'repeat-period-xmonth': repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly}">
+<div class="repeat_panel" data-bind="visible: allEvents() === Enums.CalendarEditRecurrenceEvent.AllEvents, 
+	css: {
+		'repeat-period-daily': repeatPeriod() === Enums.CalendarRepeatPeriod.Daily,
+		'repeat-period-weekly': repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly,
+		'repeat-period-xmonthly': repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly,
+		'repeat-period-monthly': repeatPeriod() === Enums.CalendarRepeatPeriod.Monthly
+	}">
 	<div class="row" data-bind="visible: true">
 		<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEATS'}"></span>
 		<select class="value input" data-bind="options: repeatPeriodOptions, optionsText: 'label', optionsValue: 'value', value: repeatPeriod"></select>

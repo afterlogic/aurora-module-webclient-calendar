@@ -104,28 +104,30 @@
 							<div class="dates_form">
 								<div class="form_content" data-bind="initDom: datesFormDom">
 									<div class="row" data-bind="css: {'ampm_time': ampmTimeFormat()}">
-										<input class="date input" type="text"  spellcheck="false" readonly="readonly" data-bind="initDom: startDom" />
-										<!--<input class="time input" type="text" spellcheck="false"  data-bind="value: startTime, visible: !allDay()" />-->
-										<span class="custom_selector" data-bind="visible: !allDay(), customSelect: {'control': false, 'selected': 'selected', 'input': true, 'options': timeOptions(), 'timeOptions': timeOptions, value: startTime, optionsText: 'text', optionsValue: 'value'}">
-											<input class="value time input"  spellcheck="false" type="text" data-bind="value: startTime" />
-											<span class="dropdown">
-												<span class="dropdown_helper">
-													<span class="dropdown_arrow"><span></span></span>
-													<span class="dropdown_content">
-													<!--<span class="dropdown_content" data-bind="customScrollbar: {x: false}">-->
-														<!--<span class="scroll-inner"></span>-->
+										<span class="date_from_input">
+											<input class="date input" type="text"  spellcheck="false" readonly="readonly" data-bind="initDom: startDom" />
+											<span class="custom_selector" data-bind="visible: !allDay(), customSelect: {'control': false, 'selected': 'selected', 'input': true, 'options': timeOptions(), 'timeOptions': timeOptions, value: startTime, optionsText: 'text', optionsValue: 'value'}">
+												<input class="value time input"  spellcheck="false" type="text" data-bind="value: startTime" />
+												<span class="dropdown">
+													<span class="dropdown_helper">
+														<span class="dropdown_arrow"><span></span></span>
+														<span class="dropdown_content">
+														<!--<span class="dropdown_content" data-bind="customScrollbar: {x: false}">-->
+															<!--<span class="scroll-inner"></span>-->
+														</span>
 													</span>
 												</span>
 											</span>
 										</span>
-										<input class="date input" type="text" spellcheck="false"  readonly="readonly" data-bind="initDom: endDom" />
-										<!--<input class="time input" type="text" spellcheck="false"  data-bind="value: endTime, visible: !allDay()" />-->
-										<span class="custom_selector" data-bind="visible: !allDay(), customSelect: {'control': false, 'selected': 'selected', 'input': true, 'options': timeOptions(), 'timeOptions': timeOptions, value: endTime, optionsText: 'text', optionsValue: 'value'}">
-											<input class="value time input" spellcheck="false"  type="text" data-bind="value: endTime" />
-											<span class="dropdown">
-												<span class="dropdown_helper">
-													<span class="dropdown_arrow"><span></span></span>
-													<span class="dropdown_content"></span>
+										<span class="date_till_input">
+											<input class="date input" type="text" spellcheck="false"  readonly="readonly" data-bind="initDom: endDom" />
+											<span class="custom_selector" data-bind="visible: !allDay(), customSelect: {'control': false, 'selected': 'selected', 'input': true, 'options': timeOptions(), 'timeOptions': timeOptions, value: endTime, optionsText: 'text', optionsValue: 'value'}">
+												<input class="value time input" spellcheck="false"  type="text" data-bind="value: endTime" />
+												<span class="dropdown">
+													<span class="dropdown_helper">
+														<span class="dropdown_arrow"><span></span></span>
+														<span class="dropdown_content"></span>
+													</span>
 												</span>
 											</span>
 										</span>

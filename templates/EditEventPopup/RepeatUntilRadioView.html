@@ -1,4 +1,24 @@
-<label>
+<span class="repeat_always">
+	<label class="custom_radio" data-bind="css: {'checked': always() == 1}">
+		<span class="icon"></span>
+		<input type="radio" id="repeat_always" data-bind="checked: always" value="1">
+	</label>
+	<label for="repeat_always" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_ALWAYS'}"></label>
+</span>
+
+<span class="repeat_untill">
+	<label class="custom_radio" data-bind="css: {'checked': always() == 0}">
+		<span class="icon"></span>
+		<input type="radio" id="repeat_untill" data-bind="checked: always" value="0"">
+	</label>
+	<label for="repeat_untill" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_UNTIL'}"></label>
+</span>
+<span class="repeat_untill_datepicker" data-bind="css: {'disabled': always() == 1}">
+	<input class="date input" spellcheck="false" type="text" readonly="readonly" data-bind="initDom: repeatEndDom, value: repeatEndDate, attr: {'disabled': always() == 1}" />
+</span>
+
+
+<!-- <label>
 	<input type="radio" name="always" data-bind="checkedValue: 1, checked: always" />
 	<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_ALWAYS'}"></span>
 </label>
@@ -7,4 +27,4 @@
 	<input type="radio" name="always" data-bind="checkedValue: 0, checked: always" />
 	<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_UNTIL'}"></span>
 	<input class="date input" spellcheck="false" type="text" readonly="readonly" data-bind="initDom: repeatEndDom, value: repeatEndDate" />
-</label>
+</label> -->

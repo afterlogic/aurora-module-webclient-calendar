@@ -1429,6 +1429,12 @@ fc-month-view .fc-content,
 				min-width: 460px;
 			}
 
+			.date_from_input,
+			.date_till_input {
+				display: inline-block;
+				margin-right: 13px;
+			}
+
 			.date {
 				border: 1px solid #cccccc;
 				cursor: pointer;
@@ -1451,7 +1457,7 @@ fc-month-view .fc-content,
 
 			.time {
 				border: 1px solid #cccccc;
-				margin-right: 13px;
+				margin-right: 0px;
 				vertical-align: middle;
 				width: 50px;
 			}
@@ -1475,6 +1481,10 @@ fc-month-view .fc-content,
 
 			.allday {
 				margin-top: 10px;
+
+				label {
+					vertical-align: middle;
+				}
 			}
 
 			.form_arrow {
@@ -1488,8 +1498,33 @@ fc-month-view .fc-content,
 			border: 1px solid #cccccc;
 		}
 
-		.repeat_panel.repeat-period-xmonth {
-			min-width: 630px;
+		.repeat_panel.repeat-period-daily,
+		.repeat_panel.repeat-period-xmonthly {
+			min-width: 640px;
+		}
+
+		.repeat-period-weekly {
+			min-width: 650px;
+		}
+
+		.repeat_always,
+		.repeat_untill {
+			display: inline-block;
+			margin-right: 13px;
+		}
+
+		.repeat_untill_datepicker {
+			display: inline-block;
+			&.disabled {
+				opacity: 0.5;
+				position: relative;
+				&::after {
+					content: "";
+					width: 100%;
+					height: 100%;
+					position: absolute;
+				}
+			}
 		}
 
 		.alarm_form .item {
