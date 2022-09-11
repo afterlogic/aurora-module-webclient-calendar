@@ -1,0 +1,31 @@
+.theme-small-calendar() {
+	@current-day-background: #d3d1ca;
+	@today-background: #fff4cf;
+}
+
+.theme-toolbar-pressed-button() {
+	background-color: #f0f0f0;
+	border-radius: 3px;
+}
+
+.popup.calendar_event {
+	.scrollable_field.value {
+		border: 1px solid transparent !important;
+		background: none;
+
+		.input {
+			background: none;
+		}
+	}
+	
+	.editable .scrollable_field {
+		border: 1px solid @border-color !important;
+		.input {
+			background: @background-color-1;
+		}
+	}
+
+	.editable .focused .scrollable_field {
+		box-shadow: none !important;
+	}
+}
