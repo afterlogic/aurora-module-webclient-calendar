@@ -390,7 +390,7 @@ CCalendarView.prototype.applyCalendarSettings = function ()
 	this.fullcalendarOptions.defaultView = this.defaultViewName();
 	this.fullcalendarOptions.lang = moment.locale();
 	this.fullcalendarOptions.weekNumbers = true;
-	this.fullcalendarOptions.weekNumberTitle = TextUtils.i18n('CALENDARWEBCLIENT/LABEL_WEEK_SHORT');
+	this.fullcalendarOptions.weekNumberTitle = TextUtils.i18n('CALENDARWEBCLIENT/LABEL_WEEK_SHORT') + ' ';
 	this.fullcalendarOptions.weekNumberCalculation = 'ISO';
 	
 	this.applyFirstDay();
