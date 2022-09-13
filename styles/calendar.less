@@ -809,12 +809,30 @@ fc-month-view .fc-content,
 
 			.workarea {
 				height: calc(100% - 34px);
+
+				.invitation_event_details {
+					a {
+						cursor: pointer;
+						pointer-events: none;
+					}
+
+					.reaction_links {
+						display: none;
+					}
+				} 
 			}
 
 			.toolbar {
 				background: #f1f1f1;	
 				border-radius: 5px;
 			}
+		}
+
+		.buttons {
+			margin-left: 0;
+			.back {
+			   float: left;
+		   	}
 		}
 	}
 }
