@@ -58,7 +58,7 @@ CImportCalendarPopup.prototype.onOpen = function (fCallback, oCalendar)
 	{
 		this.color(oCalendar.color ? oCalendar.color() : '');
 		this.calendarId(oCalendar.id ? oCalendar.id : '');
-		this.isPrivateEvent(false);
+		this.isPrivateEvent(true);
 	}
 };
 
