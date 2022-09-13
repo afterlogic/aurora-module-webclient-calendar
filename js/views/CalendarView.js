@@ -389,8 +389,8 @@ CCalendarView.prototype.applyCalendarSettings = function ()
 	this.fullcalendarOptions.slotLabelFormat = this.sTimeFormat;
 	this.fullcalendarOptions.defaultView = this.defaultViewName();
 	this.fullcalendarOptions.lang = moment.locale();
-	// this.fullcalendarOptions.weekNumbers = true;
-	// this.fullcalendarOptions.weekText = 'short';
+	this.fullcalendarOptions.weekNumbers = true;
+	this.fullcalendarOptions.weekNumberTitle = TextUtils.i18n('CALENDARWEBCLIENT/LABEL_WEEK_SHORT');
 	this.fullcalendarOptions.weekNumberCalculation = 'ISO';
 	
 	this.applyFirstDay();
@@ -446,7 +446,7 @@ CCalendarView.prototype.initDatePicker = function ()
 		monthNames: this.aMonthNames,
 		dayNamesMin: TextUtils.i18n('COREWEBCLIENT/LIST_DAY_NAMES_MIN').split(' '),
 		showWeek: false,
-		weekHeader: 'W',
+		weekHeader: TextUtils.i18n('CALENDARWEBCLIENT/LABEL_WEEK_SHORT'),
 		nextText: '',
 		prevText: '',
 		onChangeMonthYear: _.bind(this.changeMonthYearFromDatePicker, this),
