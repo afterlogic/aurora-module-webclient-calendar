@@ -18,23 +18,27 @@
 			<div class="side_panel fields">
 				<div class="fieldset">
 					<div class="row owner">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_HOST'}"></span>:
+						<span class="label"><span data-bind="i18n: {'key': '%MODULENAME%/LABEL_HOST'}"></span>:</span>
 						<span class="value" data-bind="customTooltip: owner, text: ownerName, visible: ownerName !== '', css: {'recivedAnim': recivedAnim() && owner() === whomAnimate()}"></span>
 						<span class="value" data-bind="text: owner, visible: ownerName() === '', css: {'recivedAnim': recivedAnim() && owner() === whomAnimate()}"></span>
 					</div>
-					<div class="row attendees" data-bind="foreach: attendees">
-						<div class="attender" data-bind="css: {
-								'pending': status === Enums.IcalConfigInt.NeedsAction,
-								'accepted': status === Enums.IcalConfigInt.Accepted,
-								'declined': status === Enums.IcalConfigInt.Declined,
-								'tentative': status === Enums.IcalConfigInt.Tentative
-							 }">
-							<span class="control remove" data-bind="visible: $parent.isEditable(), click: $parent.removeGuest.bind($parent), customTooltip: 'COREWEBCLIENT/ACTION_REMOVE'"></span>
-							<span class="name" data-bind="css: {'recivedAnim': $parent.recivedAnim() && email === $parent.whomAnimate()}">
-								<span class="icon status" data-bind="customTooltip: function () { return $parent.getAttendeeTextStatus(status); }"></span>
-								<span class="text" data-bind="customTooltip: email, text: name, visible: name !== ''"></span>
-								<span class="text" data-bind="text: email, visible: name === ''"></span>
-							</span>
+					<div class="row attendees">
+						<span class="label"><span data-bind="i18n: {'key': '%MODULENAME%/LABEL_ATTENDEES'}"></span>:</span>
+						<div data-bind="foreach: attendees">
+
+							<div class="attender" data-bind="css: {
+									'pending': status === Enums.IcalConfigInt.NeedsAction,
+									'accepted': status === Enums.IcalConfigInt.Accepted,
+									'declined': status === Enums.IcalConfigInt.Declined,
+									'tentative': status === Enums.IcalConfigInt.Tentative
+								}">
+								<span class="control remove" data-bind="visible: $parent.isEditable(), click: $parent.removeGuest.bind($parent), customTooltip: 'COREWEBCLIENT/ACTION_REMOVE'"></span>
+								<span class="name" data-bind="css: {'recivedAnim': $parent.recivedAnim() && email === $parent.whomAnimate()}">
+									<span class="icon status" data-bind="customTooltip: function () { return $parent.getAttendeeTextStatus(status); }"></span>
+									<span class="text" data-bind="customTooltip: email, text: name, visible: name !== ''"></span>
+									<span class="text" data-bind="text: email, visible: name === ''"></span>
+								</span>
+							</div>
 						</div>
 					</div>
 					<div class="row add_attender" data-bind="visible: isEditable(), css: {'focused': guestEmailFocus()}">

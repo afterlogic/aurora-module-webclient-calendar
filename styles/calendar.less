@@ -1689,8 +1689,20 @@ fc-month-view .fc-content,
 			}
 		}
 
-		.owner .value {
-			cursor: default;
+		.owner {
+			.label {
+				display: block;
+			}
+
+			.value {
+				font-weight: bold;
+				cursor: default;
+				color: #777;
+			}
+		}
+
+		.row.attendees {
+			margin-top: 10px;
 		}
 		
 		.attender {
@@ -1737,6 +1749,7 @@ fc-month-view .fc-content,
 				.text {
 					cursor: default;
 					display: inline-block;
+					color: #444;
 				}
 			}
 
