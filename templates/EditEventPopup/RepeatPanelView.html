@@ -28,13 +28,13 @@
 			  css: {'row_weeks': repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly
 			  || repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly}"
 		>
-			<span data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly">
+			<span data-bind="if: repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly">
 				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_EVERY'}"></span>
 				<select class="value input" data-bind="options: repeatWeekIntervalOptions, value: repeatInterval"></select>
 				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_WEEK'}"></span>
 			</span>
 
-			<span data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly">
+			<span data-bind="if: repeatPeriod() === Enums.CalendarRepeatPeriod.XMonthly">
 				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_EVERY'}"></span>
 				<select class="value input" data-bind="options: repeatMonthIntervalOptions, value: repeatInterval"></select>
 				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_MONTH'}"></span>
