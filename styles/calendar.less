@@ -1546,12 +1546,54 @@ fc-month-view .fc-content,
 			}
 		}
 
-		.alarm_form .item {
-			display: block;
-		}
+		.alarm_form {
+			.item.alarm {
+				display: block;
+    			clear: both;
+				margin-bottom: 6px;
+			}
 
-		.alarm_form .remove {
-			float: right;
+			.remove {
+				float: right; 
+			}
+
+			.link.add {
+				margin-top: 10px;
+			}
+
+			.link.remove {
+				margin-left: 12px;
+			}
+			.link.value {
+				color: #2c80c8;
+
+			}
+			.link.remove,
+			.link.add {
+				.button_mixin(@theme-buttons-primary-background);
+				padding: 0px 4px 1px;
+				border-radius: 3px;
+				display: inline-block;
+
+				&:hover {
+					text-decoration: none;
+				}
+			}
+
+			.dropdown .dropdown_content {
+				background: #ffffff;
+				border: 1px solid #cbc8c0;
+				color: #626262;
+				padding: 0;
+
+				.item {
+					padding: 6px 8px;
+					font-size: 12px;
+					&:hover {
+						color: #fff;
+					}
+				}
+			}
 		}
 	}
 	
