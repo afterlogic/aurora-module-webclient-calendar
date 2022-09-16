@@ -171,6 +171,7 @@ function CCalendarView()
 		isRTL: UserSettings.IsRTL,
 		scrollTime: moment.duration(8, 'hours'),
 		forceEventDuration: true,
+		listDayFormat: 'D. MMMM',
 		views: {
 			month: {
 				columnFormat: 'dddd' // Monday
@@ -389,7 +390,6 @@ CCalendarView.prototype.applyCalendarSettings = function ()
 	this.fullcalendarOptions.slotLabelFormat = this.sTimeFormat;
 	this.fullcalendarOptions.defaultView = this.defaultViewName();
 	this.fullcalendarOptions.lang = moment.locale();
-	this.fullcalendarOptions.weekNumbers = true;
 	this.fullcalendarOptions.weekNumberTitle = TextUtils.i18n('CALENDARWEBCLIENT/LABEL_WEEK_SHORT') + ' ';
 	this.fullcalendarOptions.weekNumberCalculation = 'ISO';
 	
@@ -922,15 +922,19 @@ CCalendarView.prototype.changeDateTitle = function ()
 	switch (oView.name)
 	{
 		case 'agendaDay':
-			sTitle = oDate.format('MMMM D, YYYY');
+			// sTitle = oDate.format('MMMM D, YYYY');
+			sTitle = oDate.format('D. MMMM YYYY');
 			break;
 		case 'agendaWeek':
 			if (oStart && oEnd)
 			{
-				sTitle = oStart.format('MMMM D, YYYY') + ' - ' + oEnd.format('MMMM D, YYYY');
+				// sTitle = oStart.format('MMMM D, YYYY') + ' - ' + oEnd.format('MMMM D, YYYY');
+				sTitle = oStart.format('D. MMMM YYYY') + ' - ' + oEnd.format('D. MMMM YYYY');
 			}
 			break;
 	}
+
+	console.log('locale',moment.locale());
 	
 	this.dateTitle(sTitle);
 };
