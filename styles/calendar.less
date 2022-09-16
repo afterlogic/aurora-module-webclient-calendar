@@ -490,18 +490,21 @@
 	opacity: 0.8;
 }
 
-a.fc-event-repeat,
-tr.fc-event-repeat td:last-child a,
-.fc-event-appointment {
+.fc-event-repeat,
+.fc-event-appointment,
+.fc-event-private {
+	
 	.fc-event {
 		padding-right: 23px;
 	}
 
+	.fc-content,
 	.fc-list-item-title {
         position: relative;
         .init-icon-font(after);
 		
 		&:after {
+			content: "";
 			display: block;
 			font-size: 18px;
 			height: 12px;
@@ -514,38 +517,45 @@ tr.fc-event-repeat td:last-child a,
 		}
 	}
 	
-	.fc-content{
+	.fc-content {
 		padding-right: 19px;
 	}
 }
 
+.fc-event-repeat .fc-content:after,
 .fc-event-repeat .fc-list-item-title:after {
 	content: "\e643";
 }
 
+.fc-event-appointment .fc-content:after,
 .fc-event-appointment .fc-list-item-title:after {
 	content: "\e644";
 }
 
+.fc-event-private .fc-content:after,
 .fc-event-private .fc-list-item-title:after {
 	content: "\e91b";
 }
 
+.fc-event-repeat.fc-event-appointment .fc-content:after,
 .fc-event-repeat.fc-event-appointment .fc-list-item-title:after {
 	content: "\e643\e644";
 	width: 32px;
 }
 
+.fc-event-repeat.fc-event-private .fc-content:after,
 .fc-event-repeat.fc-event-private .fc-list-item-title:after {
 	content: "\e91b\e643";
 	width: 32px;
 }
 
+.fc-event-appointment.fc-event-private .fc-content:after,
 .fc-event-appointment.fc-event-private .fc-list-item-title:after {
 	content: "\e91b\e644";
 	width: 32px;
 }
 
+.fc-event-repeat.fc-event-appointment.fc-event-private .fc-content:after,
 .fc-event-repeat.fc-event-appointment.fc-event-private .fc-list-item-title:after {
 	content: "\e91b\e643\e644";
 	width: 48px;
