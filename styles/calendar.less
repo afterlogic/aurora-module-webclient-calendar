@@ -497,18 +497,21 @@ tr.fc-event-repeat td:last-child a,
 		padding-right: 23px;
 	}
 
-	.init-icon-font(after);
-	
-	&:after {
-		display: block;
-		font-size: 18px;
-		height: 12px;
-		position: absolute;
-		right: 8px;
-		top: 5px;
-		width: 16px;
+	.fc-list-item-title {
+        position: relative;
+        .init-icon-font(after);
 		
-		.opacity(0.6);
+		&:after {
+			display: block;
+			font-size: 18px;
+			height: 12px;
+			position: absolute;
+			right: 8px;
+			top: 5px;
+			width: 16px;
+			
+			.opacity(0.6);
+		}
 	}
 	
 	.fc-content{
@@ -516,29 +519,36 @@ tr.fc-event-repeat td:last-child a,
 	}
 }
 
-.fc-event-repeat.fc-event-appointment .fc-content {
-	padding-right: 38px;
-}
-
-a.fc-event-repeat:after,
-tr.fc-event-repeat td:last-child a:after {
+.fc-event-repeat .fc-list-item-title:after {
 	content: "\e643";
 }
 
-.fc-event-appointment:after {
+.fc-event-appointment .fc-list-item-title:after {
 	content: "\e644";
 }
-tr.fc-event-repeat td:last-child {
-	position: relative;
-	a:after {
-		right: 15px;
-		top: 6px;
-	}
+
+.fc-event-private .fc-list-item-title:after {
+	content: "\e91b";
 }
 
-.fc-event-repeat.fc-event-appointment:after {
+.fc-event-repeat.fc-event-appointment .fc-list-item-title:after {
 	content: "\e643\e644";
 	width: 32px;
+}
+
+.fc-event-repeat.fc-event-private .fc-list-item-title:after {
+	content: "\e91b\e643";
+	width: 32px;
+}
+
+.fc-event-appointment.fc-event-private .fc-list-item-title:after {
+	content: "\e91b\e644";
+	width: 32px;
+}
+
+.fc-event-repeat.fc-event-appointment.fc-event-private .fc-list-item-title:after {
+	content: "\e91b\e643\e644";
+	width: 48px;
 }
 
 .fc-scroller.scroll-inner {
