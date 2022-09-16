@@ -608,20 +608,26 @@
 		padding-right: 23px;
 	}
 
-	.init-icon-font(after);
 	
-	&:after {
-		display: block;
-		font-size: 18px;
-		height: 12px;
-		margin-top: -2px;
-		position: absolute;
-		right: 4px;
-		top: 6px;
-		width: 16px;
+	
+	.fc-list-item-title {
+		position: relative;
+		.init-icon-font(after);
 		
-		.opacity(0.6);
+		&:after {
+			display: block;
+			font-size: 18px;
+			height: 12px;
+			margin-top: -2px;
+			position: absolute;
+			right: 4px;
+			top: 6px;
+			width: 16px;
+			
+			.opacity(0.6);
+		}
 	}
+
 	
 	.fc-content{
 		padding-right: 19px;
@@ -639,34 +645,34 @@
 	padding-right: 54px;
 }
 
-.fc-event-repeat:after {
+.fc-event-repeat .fc-list-item-title:after {
 	content: "\e643";
 }
 
-.fc-event-appointment:after {
+.fc-event-appointment .fc-list-item-title:after {
 	content: "\e644";
 }
 
-.fc-event-private:after {
+.fc-event-private .fc-list-item-title:after {
 	content: "\e91b";
 }
 
-.fc-event-repeat.fc-event-appointment:after {
+.fc-event-repeat.fc-event-appointment .fc-list-item-title:after {
 	content: "\e643\e644";
 	width: 32px;
 }
 
-.fc-event-repeat.fc-event-private:after {
+.fc-event-repeat.fc-event-private .fc-list-item-title:after {
 	content: "\e91b\e643";
 	width: 32px;
 }
 
-.fc-event-appointment.fc-event-private:after {
+.fc-event-appointment.fc-event-private .fc-list-item-title:after {
 	content: "\e91b\e644";
 	width: 32px;
 }
 
-.fc-event-repeat.fc-event-appointment.fc-event-private:after {
+.fc-event-repeat.fc-event-appointment.fc-event-private .fc-list-item-title:after {
 	content: "\e91b\e643\e644";
 	width: 48px;
 }
