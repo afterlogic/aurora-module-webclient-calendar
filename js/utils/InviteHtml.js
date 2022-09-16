@@ -20,14 +20,14 @@ InviteHtmlUtils.prepareHtml = function (eventData, calendar, continueHandler, re
 {
 	const
 		attendee = eventData.attendees.length === 1 ? eventData.attendees[0].email : '',
-		dateFormat = eventData.allDay ? 'ddd, MMMM D, YYYY' : 'ddd, MMMM D, YYYY, h:mm',
+		dateFormat = eventData.allDay ? 'ddd, D. MMMM, YYYY' : 'ddd, D. MMMM, YYYY, h:mm',
 		parameters = {
 			CalendarId: calendar.id,
 			Location: eventData.location,
 			Description: eventData.description,
 			Attendee: attendee,
 			CalendarDisplayName: calendar.name(),
-			StartDate: eventData.start.format(dateFormat)
+			StartDate: eventData.start.format(dateFormat) + (eventData.allDay ? '' : ' Uhr')
 		}
 	;
 
