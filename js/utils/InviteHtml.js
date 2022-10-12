@@ -5,6 +5,7 @@ var
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
 	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
+	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 
 	EditInviteHtmlPopup = require('modules/%ModuleName%/js/popups/EditInviteHtmlPopup.js'),
 
@@ -28,6 +29,7 @@ InviteHtmlUtils.prepareHtml = function (eventData, calendar, continueHandler, re
 			Attendee: attendee,
 			CalendarDisplayName: calendar.name(),
 			StartDate: eventData.start.format(dateFormat) + (eventData.allDay ? '' : ' Uhr')
+				+ ' (' + TextUtils.i18n('%MODULENAME%/LABEL_WEEK_SHORT') + eventData.start.format('w') + ')'
 		}
 	;
 
