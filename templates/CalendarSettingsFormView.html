@@ -69,6 +69,24 @@
 					<label for="tab_month" data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_MONTH'}"></label>
 				</span>
 			</div>
+
+			<div class="row default_reminders" data-bind="if: bAllowDefaultReminders">
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_DEFAULT_REMINDERS'}"></span>
+				<span class="value">
+					<span class="value reminder_list items_list simple_list" data-bind="foreach: selectedReminderOptions, visible: selectedReminderOptions().length > 0">
+						<label class="item reminder_item">
+							<span class="title name" data-bind="text: $data.label"></span>
+							<span class="link delete" data-bind="click: $parent.removeReminder, i18n: {'key': 'COREWEBCLIENT/ACTION_REMOVE'}">X</span>
+						</label>
+					</span>
+					<select class="input" data-bind="value: selectedReminder, visible: displayReminderSelector">
+						<option value="" data-bind="i18n: {'key': '%MODULENAME%/LABEL_DEFAULT_REMINDERS_SELECT_OPTION'}"></option>
+						<!-- ko foreach: reminderOptions -->
+						<option data-bind="attr: {'value': $data.value}, text: $data.label, visible: !$data.selected(), click: $parent.removeReminder"></option>
+						<!-- /ko -->
+					</select>
+				</span>
+			</div>
 		</div>
 		<div class="buttons">
 			<span class="button" data-bind="click: save, visible: !isSaving()">

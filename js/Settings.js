@@ -13,6 +13,7 @@ module.exports = {
 	ServerMeetingsPluginName: 'CalendarMeetingsPlugin',
 	ServerCorporateCalendarName: 'CorporateCalendar',
 	
+	ReminderValuesInMinutes: [5, 10, 15, 30, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 1080, 1440, 2880, 4320, 5760, 10080, 20160],
 	AddDescriptionToTitle: false,
 	AllowAppointments: true,
 	AllowShare: false,
@@ -26,6 +27,7 @@ module.exports = {
 	WorkdayStarts: '9',
 	AllowSubscribedCalendars: false,
 	AllowPrivateEvents: true,
+	DefaultReminders: [],
 	
 	/**
 	 * Initializes settings from AppData object sections.
@@ -61,6 +63,9 @@ module.exports = {
 			this.WorkdayStarts = Types.pString(oAppDataSection.WorkdayStarts, this.WorkdayStarts);
 			this.AllowSubscribedCalendars = Types.pBool(oAppDataSection.AllowSubscribedCalendars, this.AllowSubscribedCalendars);
 			this.AllowPrivateEvents = Types.pBool(oAppDataSection.AllowPrivateEvents, this.AllowPrivateEvents);
+			this.AllowDefaultReminders = Types.pBool(oAppDataSection.AllowDefaultReminders, this.AllowDefaultReminders);
+			this.DefaultReminders = oAppDataSection.DefaultReminders, this.DefaultReminders;
+			
 		}
 		if (!_.isEmpty(oAppMeetingsDataSection))
 		{
@@ -78,7 +83,7 @@ module.exports = {
 	 * @param {number} iWeekStartsOn
 	 * @param {number} iDefaultTab
 	 */
-	update: function (bHighlightWorkingDays, bHighlightWorkingHours, iWorkDayStarts, iWorkDayEnds, iWeekStartsOn, iDefaultTab)
+	update: function (bHighlightWorkingDays, bHighlightWorkingHours, iWorkDayStarts, iWorkDayEnds, iWeekStartsOn, iDefaultTab, aDefaultReminders)
 	{
 		this.DefaultTab = iDefaultTab.toString();
 		this.HighlightWorkingDays = bHighlightWorkingDays;
@@ -86,5 +91,6 @@ module.exports = {
 		this.WeekStartsOn = iWeekStartsOn.toString();
 		this.WorkdayEnds = iWorkDayEnds.toString();
 		this.WorkdayStarts = iWorkDayStarts.toString();
+		this.DefaultReminders = aDefaultReminders;
 	}
 };

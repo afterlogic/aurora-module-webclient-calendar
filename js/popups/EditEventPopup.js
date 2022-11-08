@@ -120,7 +120,7 @@ function CEditEventPopup()
 
 	this.repeatPeriodOptions = ko.observableArray(this.getDisplayedPeriods());
 	this.repeatWeekIntervalOptions = ko.observableArray([1, 2, 3, 4]);
-	this.defaultAlarms = ko.observableArray([5, 10, 15, 30, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 1080, 1440, 2880, 4320, 5760, 10080, 20160]);
+	this.defaultAlarms = ko.observableArray(Settings.ReminderValuesInMinutes);
 	this.alarmOptions = ko.observableArray([]);
 	this.timeOptions = ko.observableArray(CalendarUtils.getTimeListStepHalfHour((UserSettings.timeFormat() !== Enums.TimeFormat.F24) ? 'hh:mm A' : 'HH:mm'));
 	UserSettings.timeFormat.subscribe(function () {
@@ -411,6 +411,11 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 			)
 		);
 	}
+
+	if (!oParameters.Alarms && Settings.AllowDefaultReminders) {
+		oParameters.Alarms = Settings.DefaultReminders;
+	}
+
 	this.selectedCalendarId(oParameters.SelectedCalendar);
 	this.selectedCalendarId.valueHasMutated();
 
@@ -827,10 +832,10 @@ CEditEventPopup.prototype.getDisplayedAlarms = function (aMinutes)
 
 	if (aMinutes)
 	{
-		_.each(aMinutes, function (iMinutes, iIdx) {
+		_.each(aMinutes, function (iMinutes) {
 			var
 				koAlarm = this['alarm' + iMinutes] = ko.observable(iMinutes),
-				sText = ''
+				sText = CalendarUtils.getReminderFiendlyTitle(iMinutes)
 			;
 			
 			koAlarm.subscribe(function () {
@@ -838,23 +843,6 @@ CEditEventPopup.prototype.getDisplayedAlarms = function (aMinutes)
 				this.disableAlarms();
 				this.modified = true;
 			}, this);
-
-			if (iMinutes > 0 && iMinutes < 60)
-			{
-				sText = (TextUtils.i18n('COREWEBCLIENT/LABEL_MINUTES_PLURAL', {'COUNT': iMinutes}, null, iMinutes));
-			}
-			else if (iMinutes >= 60 && iMinutes < 1440)
-			{
-				sText = (TextUtils.i18n('%MODULENAME%/LABEL_HOURS_PLURAL', {'COUNT': iMinutes / 60}, null, iMinutes / 60));
-			}
-			else if (iMinutes >= 1440 && iMinutes < 10080)
-			{
-				sText = (TextUtils.i18n('%MODULENAME%/LABEL_DAYS_PLURAL', {'COUNT': iMinutes / 1440}, null, iMinutes / 1440));
-			}
-			else
-			{
-				sText = (TextUtils.i18n('%MODULENAME%/LABEL_WEEKS_PLURAL', {'COUNT': iMinutes / 10080}, null, iMinutes / 10080));
-			}
 
 			aDisplayedAlarms.push({
 				'value': iMinutes,
