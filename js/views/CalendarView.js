@@ -16,6 +16,7 @@ var
 	CJua = require('%PathToCoreWebclientModule%/js/CJua.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	UserSettings = require('%PathToCoreWebclientModule%/js/Settings.js'),
+	Pulse = require('%PathToCoreWebclientModule%/js/Pulse.js'),
 
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
 
@@ -28,6 +29,8 @@ var
 	ImportCalendarPopup = require('modules/%ModuleName%/js/popups/ImportCalendarPopup.js'),
 	SelectCalendarPopup = require('modules/%ModuleName%/js/popups/SelectCalendarPopup.js'),
 	CalendarSharePopup = require('modules/%ModuleName%/js/popups/CalendarSharePopup.js'),
+
+	FullCalendarUtils = require('modules/%ModuleName%/js/utils/FullCalendar.js'),
 
 	Ajax = require('modules/%ModuleName%/js/Ajax.js'),
 	CalendarCache = require('modules/%ModuleName%/js/Cache.js'),
@@ -59,7 +62,6 @@ function CCalendarView()
 		return this.bDragActive();
 	}, this);
 
-	this.todayDate = new Date();
 	this.aDayNames = TextUtils.i18n('COREWEBCLIENT/LIST_DAY_NAMES').split(' ');
 
 	this.popUpStatus = false;
@@ -367,6 +369,17 @@ CCalendarView.prototype.eventsSource = function (oStart, oEnd, mTimezone, fCallb
 	fCallback(this.calendars.getEvents(oStart, oEnd));
 };
 
+CCalendarView.prototype.recreateFullCalendar = function ()
+{
+	this.$calendarGrid.fullCalendar('destroy');
+	this.$calendarGrid.fullCalendar(this.fullcalendarOptions);
+	this.selectedView(this.defaultViewName());
+	if (this.defaultViewName() === 'month') {
+		this.loadOnce = false;
+	}
+	this.$calendarGrid.fullCalendar('changeView', this.defaultViewName());
+};
+
 CCalendarView.prototype.applyCalendarSettings = function ()
 {
 	this.sTimeFormat = (UserSettings.timeFormat() === Enums.TimeFormat.F24) ? 'HH:mm' : 'hh:mm A';
@@ -384,9 +397,7 @@ CCalendarView.prototype.applyCalendarSettings = function ()
 
 	this.applyFirstDay();
 
-	this.$calendarGrid.fullCalendar('destroy');
-	this.$calendarGrid.fullCalendar(this.fullcalendarOptions);
-	this.changeView(this.defaultViewName());
+	this.recreateFullCalendar();
 };
 
 CCalendarView.prototype.applyFirstDay = function ()
@@ -522,6 +533,7 @@ CCalendarView.prototype.onShow = function ()
 	else if (this.isPublic)
 	{
 		this.$calendarGrid.fullCalendar("render");
+		this.applyDateTime();
 	}
 
 	this.$calendarGrid.fullCalendar();
@@ -556,7 +568,7 @@ CCalendarView.prototype.onRoute = function (aParams)
 			'EventId': sEventId
 		};
 	}
-}
+};
 
 CCalendarView.prototype.getClientEvent = function (sCalendarId, sEventId)
 {
@@ -584,49 +596,12 @@ CCalendarView.prototype.getClientEvent = function (sCalendarId, sEventId)
 	}
 
 	return oEventResult;
-}
+};
 
-CCalendarView.prototype.setTimeline = function ()
+CCalendarView.prototype.applyDateTime = function ()
 {
-	var
-		now = new Date(),
-		nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-		todayDate = new Date(this.todayDate.getFullYear(), this.todayDate.getMonth(), this.todayDate.getDate()),
-		parentDiv = null,
-		timeline = null,
-		curSeconds = 0,
-		percentOfDay = 0,
-		topLoc = 0
-	;
-
-	if (todayDate < nowDate)
-	{ // the day has changed
-		this.execCommand('gotoDate', now);
-		this.todayDate = this.execCommand('getDate').toDate();
-		var view = this.execCommand('getView');
-		view.unrenderDates();
-		view.renderDates();		
-		this.execCommand('rerenderEvents');
-	}
-
-	// render timeline
-	parentDiv = $(".fc-slats:visible").parent();
-	timeline = parentDiv.children(".timeline");
-
-	if (timeline.length === 0)
-	{ //if timeline isn't there, add it
-		timeline = $("<hr>").addClass("timeline");
-		parentDiv.prepend(timeline);
-	}
-	timeline.css('left', $("td .fc-axis").width() + 10);
-
-	timeline.show();
-
-	curSeconds = (now.getHours() * 60 * 60) + (now.getMinutes() * 60) + now.getSeconds();
-	percentOfDay = curSeconds / 86400; //24 * 60 * 60 = 86400, % of seconds in a day
-	topLoc = Math.floor(parentDiv.height() * percentOfDay);
-
-	timeline.css("top", topLoc + "px");
+	FullCalendarUtils.recreateIfDateChanged(this.$calendarGrid, this.recreateFullCalendar.bind(this));
+	FullCalendarUtils.setTimeline();
 };
 
 /**
@@ -662,8 +637,7 @@ CCalendarView.prototype.viewRenderCallback = function (oView, oElement)
 {
 	var
 		prevDate = null,
-		constDate = "01/01/1971 ",
-		timelineInterval
+		constDate = "01/01/1971 "
 	;
 
 	this.changeDate();
@@ -672,21 +646,6 @@ CCalendarView.prototype.viewRenderCallback = function (oView, oElement)
 	{
 		this.initResizing();
 	}
-
-	if(typeof(timelineInterval) !== "undefined")
-	{
-		window.clearInterval(timelineInterval);
-	}
-
-	timelineInterval = window.setInterval(_.bind(function () {
-		this.setTimeline();
-	}, this), 60000);
-
-	try
-	{
-		this.setTimeline();
-	}
-	catch(err) { }
 
 	if (oView.name !== 'month' && Settings.HighlightWorkingHours)
 	{
@@ -945,50 +904,19 @@ CCalendarView.prototype.activateCustomScrollInDayAndWeekView = function ()
 	this.domScrollWrapper = oScrollWrapper;
 };
 
-/**
- * @param {string} sCmd
- * @param {string=} sParam = ''
- */
-CCalendarView.prototype.execCommand = function (sCmd, sParam)
-{
-	var 
-		result = null
-	;
-	if (sParam)
-	{
-		result = this.$calendarGrid.fullCalendar(sCmd, sParam);
-	}
-	else
-	{
-		result = this.$calendarGrid.fullCalendar(sCmd);
-	}
-	return result;
-};
-
 CCalendarView.prototype.displayToday = function ()
 {
-	this.execCommand('today');
+	this.$calendarGrid.fullCalendar('today');
 };
 
 CCalendarView.prototype.displayPrev = function ()
 {
-	this.execCommand('prev');
+	this.$calendarGrid.fullCalendar('prev');
 };
 
 CCalendarView.prototype.displayNext = function ()
 {
-	this.execCommand('next');
-};
-
-CCalendarView.prototype.changeView = function (viewName)
-{
-	this.selectedView(viewName);
-	if (viewName === 'month')
-	{
-		this.loadOnce = false;
-	}
-	this.$calendarGrid.fullCalendar('changeView', viewName);
-
+	this.$calendarGrid.fullCalendar('next');
 };
 
 CCalendarView.prototype.setAutoReloadTimer = function ()
@@ -2194,4 +2122,10 @@ CCalendarView.prototype.restoreScroll = function (iScrollTop)
 	}
 };
 
-module.exports = new CCalendarView();
+const calendarView = new CCalendarView();
+
+Pulse.registerEveryMinuteFunction(() => {
+	calendarView.applyDateTime();
+});
+
+module.exports = calendarView;
