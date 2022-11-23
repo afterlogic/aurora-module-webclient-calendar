@@ -10,7 +10,8 @@ var
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	UserSettings = require('%PathToCoreWebclientModule%/js/Settings.js'),
 	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
-	CAbstractSettingsFormView = App.getUserRole() === Enums.UserRole.SuperAdmin ? ModulesManager.run('AdminPanelWebclient', 'getAbstractSettingsFormViewClass') : ModulesManager.run('SettingsWebclient', 'getAbstractSettingsFormViewClass'),
+	// CAbstractSettingsFormView = App.getUserRole() === Enums.UserRole.SuperAdmin ? ModulesManager.run('AdminPanelWebclient', 'getAbstractSettingsFormViewClass') : ModulesManager.run('SettingsWebclient', 'getAbstractSettingsFormViewClass'),
+	CAbstractSettingsFormView = ModulesManager.run('SettingsWebclient', 'getAbstractSettingsFormViewClass'),
 	
 	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js'),
 	
