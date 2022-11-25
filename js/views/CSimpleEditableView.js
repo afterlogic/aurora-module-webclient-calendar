@@ -3,9 +3,8 @@
 const
 	ko = require('knockout'),
 
-	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
-
-	HtmlUtils = require('modules/%ModuleName%/js/utils/Html.js')
+	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js')
 ;
 
 function CSimpleEditableView({isEditableObservable, autosizeTriggerObservable, linkPopupEditableView,
@@ -29,7 +28,7 @@ function CSimpleEditableView({isEditableObservable, autosizeTriggerObservable, l
 				const clipboardData = event.clipboardData || window.clipboardData;
 				if (clipboardData) {
 					const text = Types.pString(clipboardData.getData('text'));
-					const html = HtmlUtils.plainToHtml(text);
+					const html = TextUtils.plainToHtml(text, true);
 					window.document.execCommand('insertHTML', false, html);
 					event.preventDefault();
 				}
@@ -49,7 +48,7 @@ CSimpleEditableView.prototype.getHtml = function ()
 
 CSimpleEditableView.prototype.getPlain = function ()
 {
-	return HtmlUtils.htmlToPlain(this.dataHtml());
+	return TextUtils.htmlToPlain(this.dataHtml());
 };
 
 CSimpleEditableView.prototype.setHtml = function (data)
@@ -60,7 +59,7 @@ CSimpleEditableView.prototype.setHtml = function (data)
 
 CSimpleEditableView.prototype.setPlain = function (data)
 {
-	this.dataHtml(HtmlUtils.plainToHtml(Types.pString(data)));
+	this.dataHtml(TextUtils.plainToHtml(Types.pString(data), true));
 	this.dataDom().html(this.dataHtml());};
 
 module.exports = CSimpleEditableView;
