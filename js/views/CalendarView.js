@@ -381,7 +381,6 @@ CCalendarView.prototype.changeView = function (viewName)
 
 CCalendarView.prototype.recreateFullCalendar = function (viewName)
 {
-	console.log('recreateFullCalendar', viewName);
 	this.$calendarGrid.fullCalendar('destroy');
 	this.$calendarGrid.fullCalendar(this.fullcalendarOptions);
 	this.changeView(viewName);
