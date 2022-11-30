@@ -11,7 +11,8 @@ module.exports = {
 		if (isDateChanged) {
 			currentDate = nowDate;
 			const todayDate = calendarGrid.fullCalendar('getDate').toDate();
-			recreateFullCalendar();
+			const viewName = calendarGrid.fullCalendar('getView').name;
+			recreateFullCalendar(viewName);
 			calendarGrid.fullCalendar('gotoDate', todayDate);
 		}
 	},

@@ -369,15 +369,22 @@ CCalendarView.prototype.eventsSource = function (oStart, oEnd, mTimezone, fCallb
 	fCallback(this.calendars.getEvents(oStart, oEnd));
 };
 
-CCalendarView.prototype.recreateFullCalendar = function ()
+CCalendarView.prototype.changeView = function (viewName)
 {
-	this.$calendarGrid.fullCalendar('destroy');
-	this.$calendarGrid.fullCalendar(this.fullcalendarOptions);
-	this.selectedView(this.defaultViewName());
-	if (this.defaultViewName() === 'month') {
+	this.selectedView(viewName);
+	if (viewName === 'month') {
 		this.loadOnce = false;
 	}
-	this.$calendarGrid.fullCalendar('changeView', this.defaultViewName());
+	this.$calendarGrid.fullCalendar('changeView', viewName);
+
+};
+
+CCalendarView.prototype.recreateFullCalendar = function (viewName)
+{
+	console.log('recreateFullCalendar', viewName);
+	this.$calendarGrid.fullCalendar('destroy');
+	this.$calendarGrid.fullCalendar(this.fullcalendarOptions);
+	this.changeView(viewName);
 };
 
 CCalendarView.prototype.applyCalendarSettings = function ()
@@ -397,7 +404,7 @@ CCalendarView.prototype.applyCalendarSettings = function ()
 
 	this.applyFirstDay();
 
-	this.recreateFullCalendar();
+	this.recreateFullCalendar(this.defaultViewName());
 };
 
 CCalendarView.prototype.applyFirstDay = function ()
