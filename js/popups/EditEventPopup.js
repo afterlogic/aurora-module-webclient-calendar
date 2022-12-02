@@ -21,11 +21,11 @@ var
 	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js'),
 	AlertPopup = require('%PathToCoreWebclientModule%/js/popups/AlertPopup.js'),
 	ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js'),
-	
+
+	AppointmentUtils = require('modules/%ModuleName%/js/utils/Appointment.js'),
 	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js'),
-	
+
 	Ajax = require('modules/%ModuleName%/js/Ajax.js'),
-	CalendarCache = require('modules/%ModuleName%/js/Cache.js'),
 	Settings = require('modules/%ModuleName%/js/Settings.js'),
 
 	CSimpleEditableView = require('modules/%ModuleName%/js/views/CSimpleEditableView.js'),
@@ -1289,8 +1289,12 @@ CEditEventPopup.prototype.onSetAppointmentActionResponse = function (oResponse, 
  */
 CEditEventPopup.prototype.setAppointmentAction = function (sDecision)
 {
+	const iDecision = AppointmentUtils.getIntDecision(sDecision);
+	if (iDecision === this.attenderStatus()) {
+		return;
+	}
+
 	var
-		iDecision = Enums.IcalConfigInt.NeedsAction,
 		aAttendees = this.attendees(),
 		sEmail = App.getAttendee ?	App.getAttendee(this.attendees()) :	'',
 		oAttendee = _.find(this.attendees(), function(oAttendee){
@@ -1307,21 +1311,7 @@ CEditEventPopup.prototype.setAppointmentAction = function (sDecision)
 
 	if (oAttendee)
 	{
-		switch (sDecision)
-		{
-			case Enums.IcalConfig.Accepted:
-				iDecision = Enums.IcalConfigInt.Accepted;
-				CalendarCache.markIcalAccepted(this.uid());
-				break;
-			case Enums.IcalConfig.Tentative:
-				iDecision = Enums.IcalConfigInt.Tentative;
-				CalendarCache.markIcalTentative(this.uid());
-				break;
-			case Enums.IcalConfig.Declined:
-				iDecision = Enums.IcalConfigInt.Declined;
-				CalendarCache.markIcalNonexistent(this.uid());
-				break;
-		}
+		AppointmentUtils.markIcalInCache(sDecision, this.uid());
 		Ajax.send('SetAppointmentAction', oParameters, this.onSetAppointmentActionResponse, this, 'CalendarMeetingsPlugin');
 
 		oAttendee.status = iDecision;
