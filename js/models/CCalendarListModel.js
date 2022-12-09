@@ -3,9 +3,7 @@
 var
 	_ = require('underscore'),
 	ko = require('knockout'),
-	
-	Storage = require('%PathToCoreWebclientModule%/js/Storage.js'),
-	
+
 	CCalendarModel = require('modules/%ModuleName%/js/models/CCalendarModel.js')
 ;
 
@@ -167,7 +165,6 @@ CCalendarListModel.prototype.parseAndAddCalendar = function (oCalendarData)
 		this.parentOnCalendarActiveChange(oCalendar);
 		var oPickCalendar = oCalendar.active() ? oCalendar : this.defaultCal();
 		this.pickCurrentCalendar(oPickCalendar);
-		Storage.setData(oCalendar.id, value);
 	}, this);
 	
 	if (oCalendar.isDefault)

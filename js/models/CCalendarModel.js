@@ -102,6 +102,20 @@ CCalendarModel.prototype.parseCssColor = function (sColor)
 	return sCssColor;
 };
 
+CCalendarModel.prototype.getIsActiveFromStorage = function ()
+{
+	if (Storage.hasData(this.id)) {
+		const isActive = Storage.getData(this.id);
+		Storage.removeData(this.id);
+		Storage.setData(`aurora_calendar_${this.id}_is-active`, isActive);
+		return isActive;
+	}
+	if (Storage.hasData(`aurora_calendar_${this.id}_is-active`)) {
+		return Storage.getData(`aurora_calendar_${this.id}_is-active`);
+	}
+	return true;
+};
+
 /**
  * @param {Object} oData
  */
@@ -112,7 +126,10 @@ CCalendarModel.prototype.parse = function (oData)
 	this.name(Types.pString(oData.Name));
 	this.description(Types.pString(oData.Description));
 	this.owner(Types.pString(oData.Owner));
-	this.active(Storage.hasData(this.id) ? Storage.getData(this.id) : true);
+	this.active(this.getIsActiveFromStorage());
+	this.active.subscribe(() => {
+		Storage.setData(`aurora_calendar_${this.id}_is-active`, this.active());
+	});
 	this.isDefault = !!oData.IsDefault;
 	this.isShared(!!oData.Shared);
 	this.isSharedToAll(!!oData.SharedToAll);
