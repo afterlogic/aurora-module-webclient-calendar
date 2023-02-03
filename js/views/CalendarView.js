@@ -295,15 +295,6 @@ function CCalendarView()
 	this.delayOnEventResultData = [];
 
 	this.refreshView = _.throttle(_.bind(this.refreshViewSingle, this), 100);
-	this.defaultCalendarId = ko.computed(function () {
-		var
-			defaultCalendar = this.calendars.defaultCal()
-		;
-		if (defaultCalendar)
-		{
-			return defaultCalendar.id;
-		}
-	}, this);
 	this.uploadCalendarId = ko.observable('');
 	this.changeFullCalendarDate = true;
 	this.domScrollWrapper = null;
@@ -2067,25 +2058,23 @@ CCalendarView.prototype.initUploader = function ()
 
 CCalendarView.prototype.onFileDrop = function (oFile, oEvent, fProceedUploading) {
 
-	var aEditableCalendars = _.filter(
-		this.calendars.collection(),
-		function(oItem){
-			return oItem.isEditable();
-		}
-	);
+	const editableCalendars = this.calendars.collection().filter((calendar) => calendar.isEditable());
+	const calendarToSelect = editableCalendars.find((calendar) => calendar.isDefault) || editableCalendars[0];
+	if (!calendarToSelect) {
+		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_NO_EDITABLE_CALENDAR'));
+		return;
+	}
 
-	if (aEditableCalendars.length > 1) {
+	if (editableCalendars.length > 1) {
 		Popups.showPopup(SelectCalendarPopup, [{
 			CallbackSave: _.bind(this.uploadToSelectedCalendar, this),
 			ProceedUploading: fProceedUploading,
 			Calendars: this.calendars,
-			EditableCalendars: aEditableCalendars,
-			DefaultCalendarId: this.defaultCalendarId()
+			EditableCalendars: editableCalendars,
+			DefaultCalendarId: calendarToSelect.id
 		}]);
-	}
-	else
-	{
-		this.uploadToSelectedCalendar(this.defaultCalendarId(), fProceedUploading);
+	} else {
+		this.uploadToSelectedCalendar(calendarToSelect.id, fProceedUploading);
 	}
 };
 
