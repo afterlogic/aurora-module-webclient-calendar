@@ -10,6 +10,8 @@ var
 	Api = require('%PathToCoreWebclientModule%/js/Api.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 
+	DataFromServer = require('modules/%ModuleName%/js/utils/DataFromServer.js'),
+
 	Ajax = require('modules/%ModuleName%/js/Ajax.js'),
 	CalendarCache = require('modules/%ModuleName%/js/Cache.js'),
 
@@ -17,17 +19,6 @@ var
 
 	MainTab = App.isNewTab() && window.opener ? window.opener.MainTabCalendarMethods : null
 ;
-
-function prepareDescription(description) {
-	description = description.replace(/\\n/g, '\n').replace(/\r/g, '');
-	if (TextUtils.isHtml(description)) {
-		const $desc = $(`<div>${description.replace(/\n/g, '<br />')}</div>`);
-		$desc.find('a').attr('target', '_blank');
-		return $desc.html();
-	} else {
-		return TextUtils.plainToHtml(description);
-	}
-}
 
 /**
  * @constructor
@@ -53,9 +44,8 @@ function CIcalModel(oRawIcal, sAttendee)
 	}, this);
 	this.summary = ko.observable(Types.pString(oRawIcal.Summary));
 	this.type = ko.observable(Types.pString(oRawIcal.Type));
-	this.location = ko.observable(Types.pString(oRawIcal.Location));
-	// description shouldn't be HTML encoded because it prepared as HTML on server side
-	this.description = ko.observable(prepareDescription(Types.pString(oRawIcal.Description)));
+	this.location = ko.observable(DataFromServer.parseDescriptionLocation(oRawIcal.Location));
+	this.description = ko.observable(DataFromServer.parseDescriptionLocation(oRawIcal.Description));
 	this.when = ko.observable(Types.pString(oRawIcal.When));
 	this.calendarId = ko.observable(Types.pString(oRawIcal.CalendarId));
 	this.calendarId.subscribe(function () {
@@ -108,7 +98,7 @@ function CIcalModel(oRawIcal, sAttendee)
 	this.getCalendars = function () {
 		return _.filter(CalendarCache.calendars(), function (oCalendar) {
 			return !oCalendar.readonly;
-		})
+		});
 	};
 
 	this.calendars = ko.observableArray(this.getCalendars());

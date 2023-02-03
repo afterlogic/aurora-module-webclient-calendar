@@ -4,14 +4,16 @@ var
 	_ = require('underscore'),
 	ko = require('knockout'),
 	moment = require('moment'),
-	
+
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	UrlUtils = require('%PathToCoreWebclientModule%/js/utils/Url.js'),
-	
+
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	Storage = require('%PathToCoreWebclientModule%/js/Storage.js'),
-	
+
 	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js'),
+	DataFromServer = require('modules/%ModuleName%/js/utils/DataFromServer.js'),
+
 	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
 
@@ -283,6 +285,8 @@ CCalendarModel.prototype.isOwner = function ()
 
 CCalendarModel.prototype.parseEvent = function (oEvent)
 {
+	oEvent.description = DataFromServer.parseDescriptionLocation(oEvent.description);
+	oEvent.location = DataFromServer.parseDescriptionLocation(oEvent.location);
 	oEvent.title = CalendarUtils.getTitleForEvent(oEvent.subject, oEvent.description);
 	oEvent.editable = oEvent.appointment ? false : true;
 	oEvent.backgroundColor = oEvent.borderColor = this.color();

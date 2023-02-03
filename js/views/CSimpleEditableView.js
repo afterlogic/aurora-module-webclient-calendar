@@ -54,12 +54,17 @@ CSimpleEditableView.prototype.getPlain = function ()
 CSimpleEditableView.prototype.setHtml = function (data)
 {
 	this.dataHtml(Types.pString(data).replace(/\r/g, '').replace(/\n/g, '<br />'));
-	this.dataDom().html(this.dataHtml());
+	if (this.dataDom()) {
+		this.dataDom().html(this.dataHtml());
+	}
 };
 
 CSimpleEditableView.prototype.setPlain = function (data)
 {
 	this.dataHtml(TextUtils.plainToHtml(Types.pString(data), true));
-	this.dataDom().html(this.dataHtml());};
+	if (this.dataDom()) {
+		this.dataDom().html(this.dataHtml());
+	}
+};
 
 module.exports = CSimpleEditableView;

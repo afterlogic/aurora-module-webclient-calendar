@@ -2099,7 +2099,7 @@ CCalendarView.prototype.onFileUploadComplete = function (sFileUid, bResponseRece
 	}
 	else
 	{
-		if (oResponse.ErrorCode && oResponse.ErrorCode === Enums.Errors.IncorrectFileExtension)
+		if (oResponse && oResponse.ErrorCode && oResponse.ErrorCode === Enums.Errors.IncorrectFileExtension)
 		{
 			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_FILE_NOT_ICS'));
 		}

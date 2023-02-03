@@ -9,12 +9,16 @@
 				   click: function () { dataFocus(true); },
 				   visible: isEditable()"
 			></label>
+			<!-- ko if: !isEditable() -->
 			<span class="input" data-bind="html: dataHtml, visible: !isEditable()"></span>
+			<!-- /ko -->
+			<!-- ko if: isEditable() -->
 			<div contenteditable="true" class="input autosize" data-bind="
 				 autosize: {minHeight: 26, autosizeTrigger: autosizeTrigger, scrollableHeight: 150},
 				 initDom: dataDom, valueUpdate: 'afterkeydown',
 				 hasfocus: dataFocus, visible: isEditable()"
 			></div>
+			<!-- /ko -->
 		</div>
 	</div>
 </div>
