@@ -147,7 +147,7 @@ CEditCalendarPopup.prototype.onCreateCalendarResponse = function (oResponse, oRe
 	if (oResponse.Result)
 	{
 		if (_.isFunction(this.fCallback)) {
-			this.fCallback(oResponse.Result);
+			this.fCallback(oResponse, oRequest);
 			this.closePopup();
 		}
 	} else {
@@ -164,7 +164,7 @@ CEditCalendarPopup.prototype.onCreateCalendarResponse = function (oResponse, oRe
 	 if (oResponse.Result)
 	 {
 		if (_.isFunction(this.fCallback)) {
-			this.fCallback(oRequest.Parameters);
+			this.fCallback(oResponse, oRequest);
 			this.closePopup();
 		}
 	 } else {
