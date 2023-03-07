@@ -54,6 +54,7 @@ function CEditEventPopup()
 	this.isEditableReminders = ko.observable(false);
 	this.selectedCalendarIsShared = ko.observable(false);
 	this.selectedCalendarIsEditable = ko.observable(false);
+	this.selectedCalendarIsSubscribed = ko.observable(false);
 
 	this.callbackSave = null;
 	this.callbackDelete = null;
@@ -194,7 +195,8 @@ function CEditEventPopup()
 		{
 			this.selectedCalendarName(oCalendar.name());
 			this.selectedCalendarIsShared(oCalendar.isShared());
-			this.selectedCalendarIsEditable(oCalendar.isEditable());
+			this.selectedCalendarIsEditable(oCalendar.isEditable() && !oCalendar.subscribed());
+			this.selectedCalendarIsSubscribed(oCalendar.subscribed());
 			this.changeCalendarColor(sValue);
 
 			// isShared - only if shared to me
@@ -410,7 +412,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 			_.filter(
 				this.calendars.collection(),
 				function(oItem){ 
-					return oItem.isEditable(); 
+					return oItem.isEditable() && !oItem.subscribed(); 
 				}
 			)
 		);
@@ -452,7 +454,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 		this.isMyEvent(false);
 	}
 
-	this.editableSwitch(this.selectedCalendarIsShared(), this.selectedCalendarIsEditable(), this.isMyEvent());
+	this.editableSwitch(this.selectedCalendarIsShared(), this.selectedCalendarIsEditable(), this.isMyEvent(), this.selectedCalendarIsSubscribed());
 
 	this.setCurrentAttendeeStatus(userAttendeeEmail, oParameters.Attendees || []);
 
@@ -1440,10 +1442,11 @@ CEditEventPopup.prototype.setAppointmentAction = function (sDecision)
  * @param {boolean} bShared
  * @param {boolean} bEditable
  * @param {boolean} bMyEvent
+ * @param {boolean} bSubscrubed
  */
-CEditEventPopup.prototype.editableSwitch = function (bShared, bEditable, bMyEvent)
+CEditEventPopup.prototype.editableSwitch = function (bShared, bEditable, bMyEvent, bSubscrubed = false)
 {
-	this.isEditable(bShared && bEditable || bMyEvent);
+	this.isEditable((bShared && bEditable || bMyEvent) && !bSubscrubed);
 	this.isEditableReminders(bEditable);
 };
 

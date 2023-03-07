@@ -85,7 +85,11 @@ CCalendarCache.prototype.onGetCalendarsResponse = function (oResponse, oRequest)
 			})
 		;
 		this.calendars(_.map(aEditableCalendars, function (oCalendar) {
-			return {'name': oCalendar.Name + ' <' + oCalendar.Owner + '>', 'id': oCalendar.Id};
+			return {
+				'name': oCalendar.Name + ' <' + oCalendar.Owner + '>', 
+				'id': oCalendar.Id,
+				'readonly': oCalendar.Subscribed
+			};
 		}));
 	}
 	

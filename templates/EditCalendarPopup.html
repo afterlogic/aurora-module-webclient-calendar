@@ -11,7 +11,18 @@
 				</div>
 				<div class="row description" data-bind="css: {'focused': calendarDescriptionFocus(), 'filled': (calendarDescription()) ? calendarDescription().length : false}">
 					<label for="calendar_description" class="label placeholder" data-bind="i18n: {'key': '%MODULENAME%/LABEL_CALENDAR_DESCRIPTION'}"></label>
-					<input id="calendar_description" class="value input" spellcheck="false"  type="text" maxlength="200" data-bind="value: calendarDescription, hasfocus: calendarDescriptionFocus, valueUpdate: 'afterkeydown', onEnter: save" />
+					<input id="calendar_description" class="value input" spellcheck="false"  type="text" maxlength="200" data-bind="value: calendarDescription, hasfocus: calendarDescriptionFocus, valueUpdate: 'afterkeydown', onEnter: save, disable: calendarSubscribed()" />
+				</div>
+				<div class="row checkbox" data-bind="visible: calendarId() == null && allowSubscribedCalendars()">
+					<label class="custom_checkbox" data-bind="css: {'checked': calendarSubscribed()}">
+						<span class="icon"></span>
+						<input type="checkbox" data-bind="checked: calendarSubscribed" id="calendar_subscribed"/>
+					</label>
+					<label for="calendar_subscribed" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SUBSCRIBED'}"></label>
+				</div>
+				<div class="row source" data-bind="css: {'focused': calendarSourceFocus(), 'filled': (calendarSource()) ? calendarSource().length : false}, visible: calendarSubscribed()">
+					<label for="calendar_source" class="label placeholder" data-bind="i18n: {'key': '%MODULENAME%/LABEL_CALENDAR_SOURCE'}"></label>
+					<input id="calendar_source" class="value input" spellcheck="false"  type="text" maxlength="200" data-bind="value: calendarSource, hasfocus: calendarSourceFocus, valueUpdate: 'afterkeydown', onEnter: save" />
 				</div>
 			</div>
 

@@ -238,9 +238,9 @@
 							</div>
 						</div>
 
-						<div class="additional_buttons">
+						<div class="additional_buttons" data-bind="visible: !selectedCalendarIsSubscribed()">
 							<span class="item task"  data-bind="
-									visible: !isTaskApp() && bAllowTasks && attendees().length === 0,
+									visible: isEditable() && !isTaskApp() && bAllowTasks && attendees().length === 0,
 									css: {'selected' : isTask()}, 
 									customTooltip: '%MODULENAME%/LABEL_THIS_IS_A_TASK',
 									click: switchTask(!isTask())">
@@ -254,7 +254,7 @@
 								<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_ADD_FIRST_ALARM'}"></span>
 							</span>
 							<span class="item guests" data-bind="
-									visible: bAllowAppointments && !isTask(),
+									visible: isEditable() && bAllowAppointments && !isTask(),
 									customTooltip: '%MODULENAME%/ACTION_EDIT_GUESTS',
 									click: isEditable() ? showGuests : '',">
 								<span class="icon"></span>

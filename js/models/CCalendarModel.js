@@ -67,6 +67,9 @@ function CCalendarModel()
 	);
 	this.bAllowShare = Settings.AllowShare;
 	this.bAllowAppointments = Settings.AllowAppointments;
+	
+	this.subscribed = ko.observable(false);
+	this.source = ko.observable('');
 }
 
 /**
@@ -126,6 +129,9 @@ CCalendarModel.prototype.parse = function (oData)
 	_.each(oData.Events, function (oEvent) {
 		this.addEvent(oEvent);
 	}, this);
+
+	this.subscribed(!!oData.Subscribed);
+	this.source(oData.Source);
 };
 
 /**
@@ -278,6 +284,9 @@ CCalendarModel.prototype.parseEvent = function (oEvent)
 		oEvent.className = _.filter(oEvent.className, function(sItem){ 
 			return sItem !== 'fc-event-readonly'; 
 		});
+		if (this.subscribed()) {
+			oEvent.editable = false;
+		}
 	}
 	if (oEvent.rrule && !oEvent.excluded)
 	{

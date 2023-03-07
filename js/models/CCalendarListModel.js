@@ -103,29 +103,24 @@ CCalendarListModel.prototype.getFilteredCalendars = function (calendars) {
 };
 
 /**
- * @param {Object=} oPickCalendar
+ * @param {Object=} pickedCalendar
  */
-CCalendarListModel.prototype.pickCurrentCalendar = function (oPickCalendar)
+CCalendarListModel.prototype.pickCurrentCalendar = function (pickedCalendar)
 {
-	var
-		oFirstActiveCal = _.find(this.collection(), function (oCalendar) {
-			return oCalendar.active() && oCalendar.isEditable();
-		}, this)
-	;
-	
-	if (!this.currentCal() || !this.currentCal().active())
-	{
-		if (oPickCalendar && oPickCalendar.active() && oPickCalendar.isEditable())
-		{
-			this.currentCal(oPickCalendar);
-		}
-		else if (this.defaultCal() && (this.defaultCal().active() && this.defaultCal().isEditable() || !oFirstActiveCal))
-		{
+	const isCalendarEditableAndActive = cal => cal.active() && cal.isEditable() && !cal.subscribed();
+	if (!this.currentCal() || !isCalendarEditableAndActive(this.currentCal())) {
+		if (pickedCalendar && isCalendarEditableAndActive(pickedCalendar)) {
+			this.currentCal(pickedCalendar);
+		} else if (this.defaultCal() && isCalendarEditableAndActive(this.defaultCal())) {
 			this.currentCal(this.defaultCal());
-		}
-		else if (oFirstActiveCal)
-		{
-			this.currentCal(oFirstActiveCal);
+		} else {
+			let firstEditableCalendar = this.collection().find(isCalendarEditableAndActive);
+			if (!firstEditableCalendar) {
+				firstEditableCalendar = this.collection().find(cal => cal.isEditable() && !cal.subscribed());
+			}
+			if (firstEditableCalendar) {
+				this.currentCal(firstEditableCalendar);
+			}
 		}
 	}
 };

@@ -1903,10 +1903,11 @@ CCalendarView.prototype.eventClickCallback = function (oEventData)
 				}
 				Popups.showPopup(EditEventPopup, [oParams]);
 			}
-		}, this)
+		}, this),
+		oCalendar = this.calendars.getCalendarById(oEventData.calendarId)
 	;
 
-	if (oEventData.rrule)
+	if (oEventData.rrule && !oCalendar.subscribed())
 	{
 		if (oEventData.excluded)
 		{
