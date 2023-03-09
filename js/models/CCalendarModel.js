@@ -318,6 +318,9 @@ CCalendarModel.prototype.parseEvent = function (oEvent)
 			return sItem !== 'fc-event-private'; 
 		});
 	}
+	if (this.subscribed()) {
+		oEvent.className.push('fc-event-subscribed');
+	}
 	return oEvent;
 };
 

@@ -648,6 +648,40 @@
 	content: "\e91b";
 }
 
+.fc-event-subscribed {
+    border-color: transparent !important;
+    -webkit-background-clip: text;
+    background-clip: text;
+    box-shadow: none !important;
+
+	.fc-content {
+		background-color: inherit;
+		-webkit-background-clip: text;
+		background-clip: text;
+		padding-left: 2px;
+	}
+	.fc-title {
+		background-color: inherit;
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	.fc-content::after {
+		font-size: 13px;
+		height: 15px;
+		right: 2px;
+		top: 7px;
+		width: 16px;
+		opacity: 0.8;
+		filter: alpha(opacity=80);
+		border-radius: 3px;
+		text-align: center;
+		line-height: 15px;
+		background-color: inherit;
+	}
+}
+
 .fc-event-repeat.fc-event-appointment .fc-content:after,
 .fc-event-repeat.fc-event-appointment .fc-list-item-title:after {
 	content: "\e643\e644";
