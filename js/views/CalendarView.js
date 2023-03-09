@@ -1861,13 +1861,14 @@ CCalendarView.prototype.eventClickCallback = function (oEventData)
 					oParams.End = oEventData.end.clone();
 					oParams.End = oParams.End.local();
 				}
+
 				Popups.showPopup(EditEventPopup, [oParams]);
 			}
 		}, this),
 		oCalendar = this.calendars.getCalendarById(oEventData.calendarId)
 	;
 
-	if (oEventData.rrule && !oCalendar.subscribed())
+	if (oEventData.rrule && !oCalendar.subscribed() && !oCalendar.holidays())
 	{
 		if (oEventData.excluded)
 		{

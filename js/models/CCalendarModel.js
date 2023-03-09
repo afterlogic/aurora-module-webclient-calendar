@@ -70,6 +70,8 @@ function CCalendarModel()
 	
 	this.subscribed = ko.observable(false);
 	this.source = ko.observable('');
+
+	this.holidays = ko.observable(false);
 }
 
 /**
@@ -132,6 +134,8 @@ CCalendarModel.prototype.parse = function (oData)
 
 	this.subscribed(!!oData.Subscribed);
 	this.source(oData.Source);
+
+	this.holidays(this.description() === "@holidays");
 };
 
 /**
@@ -318,8 +322,8 @@ CCalendarModel.prototype.parseEvent = function (oEvent)
 			return sItem !== 'fc-event-private'; 
 		});
 	}
-	if (this.subscribed()) {
-		oEvent.className.push('fc-event-subscribed');
+	if (this.holidays()) {
+		oEvent.className.push('fc-event-holidays');
 	}
 	return oEvent;
 };

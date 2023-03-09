@@ -648,7 +648,7 @@
 	content: "\e91b";
 }
 
-.fc-event-subscribed {
+.fc-event-holidays {
     border-color: transparent !important;
     -webkit-background-clip: text;
     background-clip: text;
@@ -1366,8 +1366,12 @@ fc-month-view .fc-content,
 	.scrollable_field {
 		border: 1px solid #ffffff;
 		border-radius: 4px;
+		box-sizing: content-box;
 	}
 	
+	.editable .scrollable_field {
+		box-sizing: border-box;
+	}
 	.editable .scrollable_field:hover {
 		border-color: #cccccc;
 	}
