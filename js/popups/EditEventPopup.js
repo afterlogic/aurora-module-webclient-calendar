@@ -52,6 +52,7 @@ function CEditEventPopup()
 	this.isPublic = App.isPublic();
 	this.isEditable = ko.observable(false);
 	this.isEditableReminders = ko.observable(false);
+	this.isDeletable = ko.observable(false);
 	this.selectedCalendarIsShared = ko.observable(false);
 	this.selectedCalendarIsEditable = ko.observable(false);
 	this.selectedCalendarIsSubscribed = ko.observable(false);
@@ -1447,6 +1448,7 @@ CEditEventPopup.prototype.setAppointmentAction = function (sDecision)
 CEditEventPopup.prototype.editableSwitch = function (bShared, bEditable, bMyEvent, bSubscrubed = false)
 {
 	this.isEditable((bShared && bEditable || bMyEvent) && !bSubscrubed);
+	this.isDeletable(bEditable && !bSubscrubed);
 	this.isEditableReminders(bEditable);
 };
 
