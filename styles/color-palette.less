@@ -1,0 +1,63 @@
+.colors {
+	font-size: 0;
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	gap: 6px;
+
+	.item {
+		border: 1px solid rgba(0, 0, 0, 0.2) !important;
+		border-radius: 4px !important;
+		cursor: pointer !important;
+		text-align: center;
+
+		.init-icon-font();
+
+		&:before {
+			content: "\e61c";
+			display: inline-block;
+			visibility: hidden;
+		}
+
+		&.selected:before {
+			visibility: visible;
+		}
+	}
+}
+
+.popup.calendar_popup.calendar_create {
+	.buttons .button {
+		margin-right: 18px;
+	}
+
+	.colors {
+		border-left: 2px solid #e2e2e2;
+		margin: -11px 0 0;
+		padding: 4px 0 4px 4px;
+
+		.item {
+			color: #ffffff;
+			height: 34px;
+			width: 48px;
+
+			&:before {
+				font-size: 15px;
+				margin: 10px 0 0 0;
+			}
+		}
+	}
+}
+
+.panel.calendars_panel .dropdowns .colors {
+	padding: 8px 17px 16px;
+
+	.item {
+		height: 13px;
+		padding: 0px;
+		width: 19px;
+
+		&:before {
+			font-size: 11px;
+			margin: 1px 0 0 0;
+		}
+	}
+}

@@ -78,23 +78,6 @@
 				}
 			}
 		}
-		
-		.colors {
-			display: block;
-			font-size: 0;
-			line-height: 100%;
-			padding: 8px 17px 16px;
-			white-space: normal;
-			
-			.item {
-				border: 1px solid rgba(0, 0, 0, 0.2);
-				display: inline-block;
-				height: 13px;
-				margin: 0px 6px 6px 0px;
-				padding: 0px;
-				width: 13px;
-			}
-		}
 	}
 	
 	.expandable_calendar_list {
@@ -541,54 +524,6 @@
 	}
 }
 
-.colors {
-	font-size: 0px;
-	
-	.item {
-		border: 1px solid rgba(0, 0, 0, 0.2);
-		color: #ffffff;
-		cursor: pointer;
-		display: inline-block;
-		float: none;
-		height: 13px;
-		margin: 0px 6px 6px 0px;
-		padding: 0px;
-		text-align: left;
-		vertical-align: middle;
-		width: 13px;
-		
-		&:last-child {
-			margin-right: 0px;
-		}
-
-		html.rtl & {
-			margin: 0px 0px 6px 6px;
-			text-align: right;
-			
-			&:last-child {
-				margin-left: 0px;
-			}
-		}
-		
-		.init-icon-font();
-		
-		&:before {
-			content: "\e61c";
-			display: inline-block;
-			font-size: 11px;
-			height: 100%;
-			margin: 1px 0 0 1px;
-			vertical-align: middle;
-			visibility: hidden;
-			width: 100%;
-		}
-		
-		&.selected:before {
-			visibility: visible;
-		}
-	}
-}
-
 .fc-time-grid-event .fc-bg {/* to avoid change the color of events in the weekly mode */
 	height: 0;
 	width: 0;
@@ -889,8 +824,6 @@ fc-month-view .fc-content,
 	}
 	
 	.popup_panel {
-		max-width: 445px;
-		min-width: 445px;
 		overflow: visible;
 		box-sizing: content-box;
 
