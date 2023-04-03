@@ -24,14 +24,17 @@
 					<label for="calendar_source" class="label placeholder" data-bind="i18n: {'key': '%MODULENAME%/LABEL_CALENDAR_SOURCE'}"></label>
 					<input id="calendar_source" class="value input" spellcheck="false"  type="text" maxlength="200" data-bind="value: calendarSource, hasfocus: calendarSourceFocus, valueUpdate: 'afterkeydown', onEnter: save" />
 				</div>
+
+				<div class="row source">
+					<span class="colors" data-bind="foreach: colors">
+						<span class="item color_pick" data-bind="style: {backgroundColor: $data}, css: {'selected': $parent.selectedColor() === $data},
+							 click: function () {$parent.selectedColor($data)}"></span>
+					</span>
+				</div>
 			</div>
 
 			<div class="buttons">
 				<span class="button save" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}, click: save"></span>
-				<span class="colors" data-bind="foreach: colors">
-					<span class="item color_pick" data-bind="style: {backgroundColor: $data}, css: {'selected': $parent.selectedColor() === $data},
-						 click: function () {$parent.selectedColor($data)}"></span>
-				</span>
 			</div>
 		</div>
 	</div>

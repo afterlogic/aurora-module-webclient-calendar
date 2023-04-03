@@ -9,7 +9,7 @@
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHARE_AND_PUBLISH'}, visible: (canShare() && bAllowShare && !subscribed()), click: function (oItem) {$parent.openShareCalendarForm(oItem);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_REMOVE_CALENDAR'}, visible: isOwner() && !isSharedToAll(), click: function () {$parent.deleteCalendar(id);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_UNSUBSCRIBE_CALENDAR'}, visible: !isOwner() && !isSharedToAll(), click: function () {$parent.deleteCalendar(id, true);}"></span>
-				<span class="separator" data-bind="visible: (!isShared() || isOwner())"></span>
+				<!-- <span class="separator" data-bind="visible: (!isShared() || isOwner())"></span> -->
 				<span class="colors" data-bind="visible: isEditable(), foreach: $parent.colors">
 					<span class="item color_pick" data-bind="style: {backgroundColor: $data}, css: {'selected': $parent.color() === $data},
 						 click: function () {$root.updateCalendarColor($data, $parent.id);}"></span>
