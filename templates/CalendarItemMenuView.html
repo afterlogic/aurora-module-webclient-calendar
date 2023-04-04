@@ -3,7 +3,7 @@
 		<span class="dropdown_helper">
 			<span class="dropdown_arrow"><span></span></span>
 			<span class="dropdown_content" data-bind="style: {backgroundColor: color}">
-				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_EDIT_CALENDAR'}, visible: isEditable(), click: function (oItem) {$parent.openUpdateCalendarForm(oItem);}"></span>
+				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_EDIT_CALENDAR'}, visible: isEditable() && (!isSharedToAll() || isOwner()), click: function (oItem) {$parent.openUpdateCalendarForm(oItem);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_IMPORT_CALENDAR'}, visible: isEditable() && !subscribed(), click: function (oItem) {$parent.openImportCalendarForm(oItem);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_GET_CALENDAR_LINK'}, visible: !subscribed(), click: function (oItem, eEvent) {$parent.openGetLinkCalendarForm(oItem, eEvent);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHARE_AND_PUBLISH'}, visible: (canShare() && bAllowShare && !subscribed()), click: function (oItem) {$parent.openShareCalendarForm(oItem);}"></span>
