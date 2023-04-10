@@ -967,11 +967,11 @@ CCalendarView.prototype.getCalendars = function ()
 	this.checkStarted(true);
 	this.setCalendarGridVisibility();
 
-	Ajax.send('GetCalendars', {
-			'IsPublic': this.isPublic,
-			'PublicCalendarId': Settings.PublicCalendarId
-		}, this.onGetCalendarsResponse, this
-	);
+	if (this.isPublic) {
+		Ajax.send('GetPublicCalendar', {'PublicCalendarId': Settings.PublicCalendarId}, this.onGetCalendarsResponse, this);
+	} else {
+		Ajax.send('GetCalendars', null, this.onGetCalendarsResponse, this);
+	}
 };
 
 /**

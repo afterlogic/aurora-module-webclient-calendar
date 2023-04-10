@@ -19,6 +19,8 @@ Ajax.registerAbortRequestHandler(Settings.ServerModuleName, function (oRequest, 
 					oOpenedParameters.uid === oParameters.uid;
 		case 'GetCalendars':
 			return oOpenedRequest.Method === 'GetCalendars';
+		case 'GetPublicCalendar':
+			return oOpenedRequest.Method === 'GetPublicCalendar';
 		case 'GetEvents':
 			return oOpenedRequest.Method === 'GetEvents';
 	}
