@@ -968,7 +968,7 @@ CCalendarView.prototype.getCalendars = function ()
 	this.setCalendarGridVisibility();
 
 	if (this.isPublic) {
-		Ajax.send('GetPublicCalendar', {'PublicCalendarId': Settings.PublicCalendarId}, this.onGetCalendarsResponse, this);
+		Ajax.send('GetPublicCalendar', {'CalendarId': Settings.PublicCalendarId}, this.onGetCalendarsResponse, this);
 	} else {
 		Ajax.send('GetCalendars', null, this.onGetCalendarsResponse, this);
 	}
