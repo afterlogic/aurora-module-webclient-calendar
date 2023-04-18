@@ -100,20 +100,7 @@ function CCalendarView()
 		}
 	});
 
-	this.colors = [
-		'#f09650',
-		'#f68987',
-		'#6fd0ce',
-		'#8fbce2',
-		'#b9a4f5',
-		'#f68dcf',
-		'#d88adc',
-		'#4afdb4',
-		'#9da1ff',
-		'#5cc9c9',
-		'#77ca71',
-		'#aec9c9'
-	];
+	this.colors = Settings.CalendarColors;
 
 	this.busyDays = ko.observableArray([]);
 

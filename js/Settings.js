@@ -28,6 +28,7 @@ module.exports = {
 	AllowSubscribedCalendars: false,
 	AllowPrivateEvents: true,
 	DefaultReminders: [],
+	CalendarColors: ['#f09650'],
 	
 	/**
 	 * Initializes settings from AppData object sections.
@@ -65,6 +66,7 @@ module.exports = {
 			this.AllowPrivateEvents = Types.pBool(oAppDataSection.AllowPrivateEvents, this.AllowPrivateEvents);
 			this.AllowDefaultReminders = Types.pBool(oAppDataSection.AllowDefaultReminders, this.AllowDefaultReminders);
 			this.DefaultReminders = oAppDataSection.DefaultReminders, this.DefaultReminders;
+			this.CalendarColors = oAppDataSection.CalendarColors, this.CalendarColors;
 			
 		}
 		if (!_.isEmpty(oAppMeetingsDataSection))

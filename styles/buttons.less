@@ -3,6 +3,8 @@
 		border-top: 1px solid #e2e2e2;
 		margin: 16px 0px 0px;
 		padding-top: 20px;
+		display: flex;
+		align-items: start;
 
 		&.without_border_top {
 			border-top: 0;
@@ -11,6 +13,7 @@
 		.button {
 			float: left;
 			margin-right: 6px;
+			flex-shrink: 0;
 			
 			html.rtl & {
 				float: right;
