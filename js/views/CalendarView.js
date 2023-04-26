@@ -871,21 +871,24 @@ CCalendarView.prototype.activateCustomScrollInDayAndWeekView = function ()
 	var
 		oView = this.$calendarGrid.fullCalendar('getView'),
 		sGridType = oView.name === 'month' ? 'day' : 'time',
-		oGridContainer = $('.fc-' + sGridType + '-grid-container'),
-		oScrollWrapper = $('<div></div>')
+		oGridContainer = $('.fc-' + sGridType + '-grid-container')
 	;
 
-	oGridContainer.parent().append(oScrollWrapper);
-	oGridContainer.appendTo(oScrollWrapper);
-
-	if (!oScrollWrapper.hasClass('scroll-wrap'))
-	{
-		oScrollWrapper.attr('data-bind', 'customScrollbar: {x: false, y: true, top: 0, scrollTo: topPositionToday, oScroll: scrollModel}');
-		oGridContainer.css({'overflow': 'hidden'}).addClass('scroll-inner');
-		ko.applyBindings(this, oScrollWrapper[0]);
-
+	if (!oGridContainer.hasClass('scroll-inner')) {
+		var oScrollWrapper = $('<div></div>');
+	
+		oGridContainer.parent().append(oScrollWrapper);
+		oGridContainer.appendTo(oScrollWrapper);
+	
+		if (!oScrollWrapper.hasClass('scroll-wrap'))
+		{
+			oScrollWrapper.attr('data-bind', 'customScrollbar: {x: false, y: true, top: 0, scrollTo: topPositionToday, oScroll: scrollModel}');
+			oGridContainer.css({'overflow': 'hidden'}).addClass('scroll-inner');
+			ko.applyBindings(this, oScrollWrapper[0]);
+		}
+		
+		this.domScrollWrapper = oScrollWrapper;
 	}
-	this.domScrollWrapper = oScrollWrapper;
 };
 
 CCalendarView.prototype.displayToday = function ()
