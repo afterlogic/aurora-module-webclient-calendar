@@ -9,6 +9,7 @@
 			<input type="checkbox" data-bind="checked: active" />
 		</label>
 		<span class="icon public" data-bind="visible: isPublic(), click: function (oItem, eEvent) {$parent.openGetLinkCalendarForm(oItem, eEvent);}"></span>
+		<span class="icon default" data-bind="visible: isDefault"></span>
 		<span class="title">
 			<span data-bind="text: name() + (isShared() ? ' - ' + owner() : ''), fade: {color: color}"></span>
 		</span>

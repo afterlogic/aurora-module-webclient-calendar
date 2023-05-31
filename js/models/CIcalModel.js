@@ -88,6 +88,11 @@ function CIcalModel(oRawIcal, sAttendee)
 	{
 		var fCalSubscription = CalendarCache.calendars.subscribe(function () {
 			this.calendars(CalendarCache.calendars());
+			this.calendars().forEach((calendar) => { 
+				if (calendar.isDefault) {
+					this.selectedCalendarId(calendar.id);
+				}
+			});
 			fCalSubscription.dispose();
 		}, this);
 	}

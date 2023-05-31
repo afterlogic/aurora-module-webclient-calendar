@@ -88,7 +88,8 @@ CCalendarCache.prototype.onGetCalendarsResponse = function (oResponse, oRequest)
 			return {
 				'name': oCalendar.Name + ' <' + oCalendar.Owner + '>', 
 				'id': oCalendar.Id,
-				'readonly': oCalendar.Subscribed
+				'readonly': oCalendar.Subscribed,
+				'isDefault': oCalendar.IsDefault
 			};
 		}));
 	}

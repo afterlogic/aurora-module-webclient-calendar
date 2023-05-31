@@ -1598,8 +1598,7 @@ CCalendarView.prototype.deleteCalendar = function (sId, bIsUnsubscribe)
 		fRemove = _.bind(function (bRemove) {
 			if (bRemove)
 			{
-				Ajax.send('DeleteCalendar', { 'Id': sId }, this.onDeleteCalendarResponse, this
-				);
+				Ajax.send('DeleteCalendar', { 'Id': sId }, this.onDeleteCalendarResponse, this);
 			}
 		}, this)
 	;
@@ -1632,6 +1631,40 @@ CCalendarView.prototype.onDeleteCalendarResponse = function (oResponse, oRequest
 
 			this.calendars.removeCalendar(oCalendar.id);
 			this.refetchEvents();
+		}
+	}
+};
+
+/**
+ * @param {string} sCalendarId
+ */
+CCalendarView.prototype.setDefaultCalendar = function (sCalendarId)
+{
+	Ajax.send('SetDefaultCalendar', { 'Id': sCalendarId }, this.onSetDefaultCalendarResponse, this);
+};
+
+/**
+ * @param {Object} oResponse
+ * @param {Object} oRequest
+ */
+CCalendarView.prototype.onSetDefaultCalendarResponse = function (oResponse, oRequest)
+{
+	if (oResponse.Result)
+	{
+		var
+			oParameters = oRequest.Parameters,
+			oCalendar = this.calendars.getCalendarById(oParameters.Id)
+		;
+
+		if (oCalendar)
+		{
+
+			if (oCalendar.isDefault)
+			{
+				this.defaultCal(oCalendar);
+			}
+			this.calendars.pickCurrentCalendar(oCalendar);
+			this.getCalendars();
 		}
 	}
 };
@@ -1691,8 +1724,12 @@ CCalendarView.prototype.onEventResizeStop = function ()
 
 CCalendarView.prototype.createEventInCurrentCalendar = function ()
 {
-	this.calendars.pickCurrentCalendar();
-	this.createEventToday(this.calendars.currentCal());
+
+	// it's not required to pick calendar
+	// instead of this we just pass default calendar to Create event dialog
+	// this.calendars.pickCurrentCalendar();
+	// this.createEventToday(this.calendars.currentCal());
+	this.createEventToday(this.calendars.defaultCal());
 };
 
 /**
