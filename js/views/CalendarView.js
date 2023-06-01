@@ -1724,11 +1724,8 @@ CCalendarView.prototype.onEventResizeStop = function ()
 
 CCalendarView.prototype.createEventInCurrentCalendar = function ()
 {
-
-	// it's not required to pick calendar
+	// it's not required to pick calendar this.calendars.pickCurrentCalendar()
 	// instead of this we just pass default calendar to Create event dialog
-	// this.calendars.pickCurrentCalendar();
-	// this.createEventToday(this.calendars.currentCal());
 	this.createEventToday(this.calendars.defaultCal());
 };
 
@@ -1824,8 +1821,9 @@ CCalendarView.prototype.getEventDataFromParams = function (aParameters)
 CCalendarView.prototype.createEventFromGrid = function (oStart, oEnd)
 {
 	var bAllDay = !oStart.hasTime();
-	this.calendars.pickCurrentCalendar();
-	this.openEventPopup(this.calendars.currentCal(), oStart.local(), oEnd.local(), bAllDay);
+	// it's not required to pick calendar this.calendars.pickCurrentCalendar()
+	// instead of this we just pass default calendar to Create event dialog
+	this.openEventPopup(this.calendars.defaultCal(), oStart.local(), oEnd.local(), bAllDay);
 };
 
 /**
