@@ -2,7 +2,7 @@
 	 visible: isEditable() || dataHtml() !== '',
 	 css: {'focused': dataFocus(), 'filled': dataHtml().length > 0}"
 >
-	<div class="value scrollable_field" data-bind="customScrollbar: {x: false}">
+	<div class="value scrollable_field" style="max-height: 150px;" data-bind="customScrollbar: {x: false}">
 		<div class="scroll-inner">
 			<label class="label placeholder"
 				   data-bind="text: placeholderText,
@@ -14,7 +14,7 @@
 			<!-- /ko -->
 			<!-- ko if: isEditable() -->
 			<div contenteditable="true" class="input autosize" data-bind="
-				 autosize: {minHeight: 26, autosizeTrigger: autosizeTrigger, scrollableHeight: 150},
+				 
 				 initDom: dataDom, valueUpdate: 'afterkeydown',
 				 hasfocus: dataFocus, visible: isEditable()"
 			></div>
