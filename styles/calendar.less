@@ -586,7 +586,11 @@
 	
 	font-size: 9pt;
 	overflow: hidden;
-	padding: 6px 10px;
+	padding: 6px 6px;
+
+	.fc-short & {
+		padding: 4px;
+	}
 }
 
 .fc-content .fc-time,
@@ -594,6 +598,54 @@
 	display: block;
 	font-size: 9pt;
 	overflow: hidden;
+
+	.fc-short & {
+		font-size: .85em;
+		padding: 0;
+		line-height: 1.1;
+	}
+}
+.fc-custom-task .fc-content .fc-time {
+	text-indent: 18px;
+}
+
+.fc-custom-task .fc-content .fc-title:first-child {
+	text-indent: 18px;
+}
+
+.fc-content .fc-title{
+	display: -webkit-box;
+	line-height: 16px;
+	max-height: 48px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	-webkit-line-clamp: 3;//number of lines to show
+	-webkit-box-orient: vertical;
+	
+	.custom_checkbox.round {
+
+		position: absolute;
+		left: 5px;
+		top: 5px;
+		text-indent: 0;
+
+		.fc-short & {
+			left: 4px;
+    		top: 2px;
+		}
+		
+		.icon{
+			border-radius: 50%;
+			background-color: transparent;
+			border-color: #fff;
+			
+			&:before {
+				margin-top: 1px;
+				color: #fff;
+			}
+		}
+	}
 }
 
 .AddDescriptionToTitle .fc-content .fc-title {
@@ -1629,29 +1681,6 @@ fc-month-view .fc-content,
 
 .ui-draggable-dragging{
 	z-index: 9 !important;
-}
-
-.fc-content .fc-title{
-	display: -webkit-box;
-	line-height: 16px;
-	max-height: 48px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: normal;
-	-webkit-line-clamp: 3;//number of lines to show
-	-webkit-box-orient: vertical;
-	
-	.custom_checkbox.round .icon{
-		border-radius: 50%;
-		background-color: transparent;
-		border-color: #fff;
-		
-		&:before {
-			margin-top: 1px;
-			color: #fff;
-		}
-	}
-	
 }
 
 .popup.calendar_popup .dates.close {

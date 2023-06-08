@@ -213,8 +213,8 @@ function CCalendarView()
 					completed.removeClass('checked');
 					title.css("text-decoration-line", "unset");
 				}
+				oEl.addClass('fc-custom-task');
 
-				fcTime.css("margin-left", "18px");
 				title.prepend(completed);
 
 				if (oEv.isCalendarShared && oEv.isPrivate && Settings.AllowPrivateEvents) {
