@@ -448,7 +448,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 		sAttendee = App.getAttendee(this.attendees());
 	}
 
-	this.isMyEvent(sAttendee !== owner && (owner === oParameters.Owner || owner === sCalendarOwner));
+	this.isMyEvent((this.organizer() != '' && owner === this.organizer() || this.organizer() == '') && (owner === oParameters.Owner || owner === sCalendarOwner));
 	this.editableSwitch(this.selectedCalendarIsShared(), this.selectedCalendarIsEditable(), this.isMyEvent(), this.selectedCalendarIsSubscribed());
 
 	this.setCurrentAttenderStatus(sAttendee, oParameters.Attendees || []);
