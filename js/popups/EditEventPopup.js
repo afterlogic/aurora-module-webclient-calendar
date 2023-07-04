@@ -76,7 +76,7 @@ function CEditEventPopup() {
     isEditableObservable: this.isEditable,
     autosizeTriggerObservable: this.autosizeTrigger,
     linkPopupEditableView: this.linkPopupEditableView,
-    allowEditLinks: false,
+    allowEditLinks: true,
     placeholderText: TextUtils.i18n('%MODULENAME%/LABEL_LOCATION'),
   })
 
@@ -405,7 +405,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
 
   this.status(oParameters.Status || false)
   this.locationView.setPlain(oParameters.Location)
-  this.descriptionView.setHtml(oParameters.Description)
+  this.descriptionView.setPlain(oParameters.Description)
   this.allEvents(oParameters.AllEvents || Enums.CalendarEditRecurrenceEvent.AllEvents)
 
   this.isTaskApp(oParameters.IsTaskApp || false)
@@ -505,7 +505,7 @@ CEditEventPopup.prototype.onSaveClick = function () {
           title: CalendarUtils.getTitleForEvent(this.subject(), this.descriptionView.getPlain()),
           allDay: this.allDay(),
           location: this.locationView.getPlain(),
-          description: this.descriptionView.getHtml(),
+          description: this.descriptionView.getPlain(),
           alarms: this.getAlarmsArray(this.displayedAlarms()),
           attendees: this.attendees(),
           owner: this.owner(),
@@ -630,7 +630,7 @@ CEditEventPopup.prototype.cleanAll = function () {
   }
   this.isTask(false)
   this.subject('')
-  this.descriptionView.setHtml('')
+  this.descriptionView.setPlain('')
   this.locationView.setPlain('')
   this.isRepeat(false)
   this.allDay(false)
@@ -673,7 +673,7 @@ CEditEventPopup.prototype.onDeleteClick = function () {
       end: moment(this.getDateTime(this.endDom(), this.endTime())),
       allDay: this.allDay(),
       location: this.locationView.getPlain(),
-      description: this.descriptionView.getHtml(),
+      description: this.descriptionView.getPlain(),
     }
     this.callbackDelete(oEventData)
   }
