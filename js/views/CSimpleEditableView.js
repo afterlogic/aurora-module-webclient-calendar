@@ -37,6 +37,9 @@ function CSimpleEditableView({
         }
       })
       linkPopupEditableView.initInputField(this.dataDom(), allowEditLinks)
+      if (this.dataHtml() !== '') {
+        this.dataDom().html(this.dataHtml())
+      }
     }
   }, this)
   this.dataFocus = ko.observable(false)
@@ -53,7 +56,11 @@ CSimpleEditableView.prototype.getPlain = function () {
 }
 
 CSimpleEditableView.prototype.setHtml = function (data) {
-  this.dataHtml(Types.pString(data).replace(/\r/g, '').replace(/\n/g, '<br />'))
+  this.setData(Types.pString(data).replace(/\r/g, '').replace(/\n/g, '<br />'))
+}
+
+CSimpleEditableView.prototype.setData = function (preparedData) {
+  this.dataHtml(preparedData)
   if (this.dataDom()) {
     this.dataDom().html(this.dataHtml())
   }
@@ -64,10 +71,7 @@ CSimpleEditableView.prototype.setPlain = function (data) {
   if (!TextUtils.isHtml(preparedData)) {
     preparedData = TextUtils.plainToHtml(preparedData, true)
   }
-  this.dataHtml(preparedData)
-  if (this.dataDom()) {
-    this.dataDom().html(this.dataHtml())
-  }
+  this.setData(preparedData)
 }
 
 module.exports = CSimpleEditableView
