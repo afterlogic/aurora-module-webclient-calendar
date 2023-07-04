@@ -11,7 +11,7 @@ module.exports = {
       $desc.find('a').attr('target', '_blank')
       return $desc.html()
     } else {
-      return TextUtils.plainToHtml(preparedValue)
+      return TextUtils.plainToHtml(preparedValue, true)
     }
   },
 }

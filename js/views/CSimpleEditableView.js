@@ -60,7 +60,11 @@ CSimpleEditableView.prototype.setHtml = function (data) {
 }
 
 CSimpleEditableView.prototype.setPlain = function (data) {
-  this.dataHtml(TextUtils.plainToHtml(Types.pString(data), true))
+  let preparedData = Types.pString(data)
+  if (!TextUtils.isHtml(preparedData)) {
+    preparedData = TextUtils.plainToHtml(preparedData, true)
+  }
+  this.dataHtml(preparedData)
   if (this.dataDom()) {
     this.dataDom().html(this.dataHtml())
   }

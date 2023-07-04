@@ -404,7 +404,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
   this.subject(oParameters.Subject || '')
 
   this.status(oParameters.Status || false)
-  this.locationView.setHtml(oParameters.Location)
+  this.locationView.setPlain(oParameters.Location)
   this.descriptionView.setHtml(oParameters.Description)
   this.allEvents(oParameters.AllEvents || Enums.CalendarEditRecurrenceEvent.AllEvents)
 
@@ -504,7 +504,7 @@ CEditEventPopup.prototype.onSaveClick = function () {
           subject: this.subject(),
           title: CalendarUtils.getTitleForEvent(this.subject(), this.descriptionView.getPlain()),
           allDay: this.allDay(),
-          location: this.locationView.getHtml(),
+          location: this.locationView.getPlain(),
           description: this.descriptionView.getHtml(),
           alarms: this.getAlarmsArray(this.displayedAlarms()),
           attendees: this.attendees(),
@@ -631,7 +631,7 @@ CEditEventPopup.prototype.cleanAll = function () {
   this.isTask(false)
   this.subject('')
   this.descriptionView.setHtml('')
-  this.locationView.setHtml('')
+  this.locationView.setPlain('')
   this.isRepeat(false)
   this.allDay(false)
   this.repeatPeriod(Enums.CalendarRepeatPeriod.None)
@@ -672,7 +672,7 @@ CEditEventPopup.prototype.onDeleteClick = function () {
       start: moment(this.getDateTime(this.startDom(), this.startTime())),
       end: moment(this.getDateTime(this.endDom(), this.endTime())),
       allDay: this.allDay(),
-      location: this.locationView.getHtml(),
+      location: this.locationView.getPlain(),
       description: this.descriptionView.getHtml(),
     }
     this.callbackDelete(oEventData)
