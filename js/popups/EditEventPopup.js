@@ -528,71 +528,43 @@ CEditEventPopup.prototype.onSaveClick = function () {
         iUnixDate = sDate ? moment(sDate).unix() : null
         iInterval = this.repeatInterval()
 
-        if (iPeriod === Enums.CalendarRepeatPeriod.Daily && iAlways === Enums.CalendarAlways.Disable) {
-          oEventData.rrule = {
-            byDays: [],
-            count: null,
-            end: 2,
-            interval: 1,
-            period: iPeriod,
-            until: iUnixDate,
-            weekNum: null,
-          }
-        } else if (iPeriod === Enums.CalendarRepeatPeriod.Weekly && iAlways === Enums.CalendarAlways.Disable) {
-          this.setDayOfWeek()
-
-          oEventData.rrule = {
-            byDays: this.getDays(),
-            count: null,
-            end: 2,
-            interval: iInterval,
-            period: iPeriod,
-            until: iUnixDate,
-            weekNum: null,
-          }
-        } else if (iPeriod === Enums.CalendarRepeatPeriod.Monthly) {
-          oEventData.rrule = {
-            byDays: [],
-            count: null,
-            end: 0,
-            interval: 1,
-            period: iPeriod,
-            until: null,
-            weekNum: null,
-          }
-        } else if (iPeriod === Enums.CalendarRepeatPeriod.Yearly) {
-          oEventData.rrule = {
-            byDays: [],
-            count: null,
-            end: 0,
-            interval: 1,
-            period: iPeriod,
-            until: null,
-            weekNum: null,
-          }
-        } else if (iPeriod === Enums.CalendarRepeatPeriod.Daily && iAlways === Enums.CalendarAlways.Enable) {
-          oEventData.rrule = {
-            byDays: [],
-            count: null,
-            end: 3,
-            interval: 1,
-            period: iPeriod,
-            until: iUnixDate,
-            weekNum: null,
-          }
-        } else if (iPeriod === Enums.CalendarRepeatPeriod.Weekly && iAlways === Enums.CalendarAlways.Enable) {
-          this.setDayOfWeek()
-
-          oEventData.rrule = {
-            byDays: this.getDays(),
-            count: null,
-            end: 3,
-            interval: iInterval,
-            period: iPeriod,
-            until: iUnixDate,
-            weekNum: null,
-          }
+        const rrule = {
+          byDays: [],
+          count: null,
+          end: 0,
+          interval: 1,
+          period: iPeriod,
+          until: null,
+          weekNum: null,
         }
+
+        switch (iPeriod) {
+          case Enums.CalendarRepeatPeriod.Daily:
+            if (iAlways === Enums.CalendarAlways.Disable) {
+              rrule['end'] = 2;
+              rrule['until'] = iUnixDate;
+            } else if (iAlways === Enums.CalendarAlways.Enable) {
+              rrule['end'] = 3;
+            }
+            break;
+          case Enums.CalendarRepeatPeriod.Weekly:
+            this.setDayOfWeek()
+            rrule['byDays'] = this.getDays();
+            rrule['interval'] = iInterval;
+            if (iAlways === Enums.CalendarAlways.Disable) {
+              rrule['end'] = 2;
+              rrule['until'] = iUnixDate;
+            } else if (iAlways === Enums.CalendarAlways.Enable) {
+              rrule['end'] = 3;
+            }
+            break;
+          case Enums.CalendarRepeatPeriod.Monthly:
+          case Enums.CalendarRepeatPeriod.Yearly:
+            //do nothing
+            break;
+        }
+
+        oEventData.rrule = rrule;
       }
 
       this.callbackSave(oEventData)

@@ -203,8 +203,8 @@ function CCalendarView() {
           title = content.find('.fc-title'),
           completed = $(
             '<label class="custom_checkbox round"><span class="icon"></span><input type="checkbox"></label>'
-          ),
-          fcTime = content.find('.fc-time')
+          )
+          // fcTime = content.find('.fc-time')
         if (oEv.status) {
           completed.addClass('checked')
           title.css('text-decoration-line', 'line-through')
@@ -1371,7 +1371,21 @@ CCalendarView.prototype.getParamsFromEventData = function (oEventData) {
   var sBrowserTimezone = moment.tz.guess(),
     sServerTimezone = UserSettings.timezone(),
     oStart = moment.tz(oEventData.start.format('YYYY-MM-DD HH:mm:ss'), sServerTimezone || sBrowserTimezone),
-    oEnd = moment.tz(oEventData.end.format('YYYY-MM-DD HH:mm:ss'), sServerTimezone || sBrowserTimezone)
+    oEnd = moment.tz(oEventData.end.format('YYYY-MM-DD HH:mm:ss'), sServerTimezone || sBrowserTimezone),
+    rrule = null
+
+  if (oEventData.rrule) {
+    rrule = {
+      byDays: oEventData.rrule.byDays,
+      count: oEventData.rrule.count,
+      end: Types.pInt(oEventData.rrule.end),
+      interval: Types.pInt(oEventData.rrule.interval),
+      period: Types.pInt(oEventData.rrule.period),
+      until: Types.pInt(oEventData.rrule.until),
+      weekNum: oEventData.rrule.weekNum,
+    }
+  }
+
   return {
     id: oEventData.id,
     uid: oEventData.uid,
@@ -1392,7 +1406,7 @@ CCalendarView.prototype.getParamsFromEventData = function (oEventData) {
     end: oEnd.format(),
     startTS: oStart.unix(),
     endTS: oEnd.unix(),
-    rrule: oEventData.rrule ? JSON.stringify(oEventData.rrule) : null,
+    rrule: rrule ? JSON.stringify(rrule) : null,
     type: oEventData.type,
     status: oEventData.status,
     withDate: oEventData.withDate,
@@ -1594,6 +1608,20 @@ CCalendarView.prototype.moveEvent = function (oEventData, delta, revertFunc) {
  * @param {Function} revertFunc
  */
 CCalendarView.prototype.resizeEvent = function (oEventData, delta, revertFunc) {
+  if (oEventData?.rrule?.until) {
+    var localUntill = new Date(oEventData.rrule.until * 1000),
+    utcUntil = new Date(
+      localUntill.getUTCFullYear(),
+      localUntill.getUTCMonth(),
+      localUntill.getUTCDate(),
+      localUntill.getUTCHours(),
+      localUntill.getUTCMinutes(),
+      localUntill.getUTCSeconds()
+    )
+    
+    oEventData.rrule.until = moment(utcUntil).unix()
+  }
+
   var oParameters = this.getParamsFromEventData(oEventData),
     /**
      * @param {number} iResult
