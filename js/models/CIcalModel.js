@@ -176,7 +176,7 @@ CIcalModel.prototype.parseType = function ()
 
 CIcalModel.prototype.fillDecisions = function ()
 {
-	this.cancelDecision(TextUtils.i18n('%MODULENAME%/INFO_CANCELED_APPOINTMENT', {'SENDER': App.currentAccountEmail()}));
+	this.cancelDecision(TextUtils.i18n('%MODULENAME%/INFO_CANCELED_APPOINTMENT', {'ORGANIZER': TextUtils.encodeHtml(this.organizer())}));
 
 	const textParams = { 'ATTENDEE': TextUtils.encodeHtml(this.attendee()) };
 	switch (this.icalConfig()) {
