@@ -152,6 +152,7 @@ function CCalendarView() {
     isRTL: UserSettings.IsRTL,
     scrollTime: moment.duration(8, 'hours'),
     forceEventDuration: true,
+    defaultTimedEventDuration: '00:00:01',
     views: {
       month: {
         columnFormat: 'dddd', // Monday

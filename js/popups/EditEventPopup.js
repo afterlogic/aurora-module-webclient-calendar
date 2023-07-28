@@ -514,6 +514,7 @@ CEditEventPopup.prototype.onSaveClick = function () {
           status: this.status(),
           withDate: this.withDate(),
           isPrivate: this.allowSetPrivateEvent() && this.isPrivateEvent(),
+          excluded: this.excluded(),
         },
         iAlways = Types.pInt(this.always())
       if (this.allDay()) {
