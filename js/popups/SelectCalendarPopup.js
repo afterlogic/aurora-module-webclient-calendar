@@ -67,7 +67,7 @@ CSelectCalendarPopup.prototype.onSaveClick = function ()
  */
 CSelectCalendarPopup.prototype.changeCalendarColor = function (sId)
 {
-	if ($.isFunction(this.calendars.getCalendarById))
+	if (_.isFunction(this.calendars.getCalendarById))
 	{
 		var oCalendar = this.calendars.getCalendarById(sId);
 		if (oCalendar)

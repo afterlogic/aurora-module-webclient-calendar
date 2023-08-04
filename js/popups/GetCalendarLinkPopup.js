@@ -2,7 +2,6 @@
 
 var
 	_ = require('underscore'),
-	$ = require('jquery'),
 	ko = require('knockout'),
 	
 	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js')
@@ -41,7 +40,7 @@ CGetCalendarLinkPopup.prototype.PopupTemplate = '%ModuleName%_GetCalendarLinkPop
  */
 CGetCalendarLinkPopup.prototype.onOpen = function (fCallback, oCalendar)
 {
-	if ($.isFunction(fCallback))
+	if (_.isFunction(fCallback))
 	{
 		this.fCallback = fCallback;
 	}

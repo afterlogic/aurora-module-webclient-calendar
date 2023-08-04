@@ -289,7 +289,7 @@ CEditEventPopup.prototype.createDatePickerObject = function (oElement, fSelect) 
     onSelect: fSelect,
   })
 
-  $(oElement).mousedown(function () {
+  $(oElement).on('mousedown', function () {
     $('#ui-datepicker-div').toggle()
   })
 }
@@ -418,7 +418,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
 
   this.attendees(oParameters.Attendees || [])
 
-  if ($.isFunction(App.getAttendee)) {
+  if (_.isFunction(App.getAttendee)) {
     sAttendee = App.getAttendee(this.attendees())
   }
 
@@ -465,7 +465,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
  * @param {string} sId
  */
 CEditEventPopup.prototype.changeCalendarColor = function (sId) {
-  if ($.isFunction(this.calendars.getCalendarById)) {
+  if (_.isFunction(this.calendars.getCalendarById)) {
     var oCalendar = this.calendars.getCalendarById(sId)
     if (oCalendar) {
       this.calendarColor('')
@@ -1171,7 +1171,7 @@ CEditEventPopup.prototype.setAppointmentAction = function (sDecision) {
       sDecision === Enums.IcalConfig.Declined &&
       oCalendar &&
       this.callbackAttendeeActionDecline &&
-      $.isFunction(this.callbackAttendeeActionDecline)
+      _.isFunction(this.callbackAttendeeActionDecline)
     ) {
       this.callbackAttendeeActionDecline(oCalendar, this.id())
       this.closePopup()

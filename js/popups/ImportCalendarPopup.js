@@ -2,7 +2,6 @@
 
 var
 	_ = require('underscore'),
-	$ = require('jquery'),
 	ko = require('knockout'),
 	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
@@ -47,7 +46,7 @@ CImportCalendarPopup.prototype.PopupTemplate = '%ModuleName%_ImportCalendarPopup
  */
 CImportCalendarPopup.prototype.onOpen = function (fCallback, oCalendar)
 {
-	if ($.isFunction(fCallback))
+	if (_.isFunction(fCallback))
 	{
 		this.fCallback = fCallback;
 	}

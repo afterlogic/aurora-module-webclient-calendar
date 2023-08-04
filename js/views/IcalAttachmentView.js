@@ -3,7 +3,6 @@
 var
 	_ = require('underscore'),
 	ko = require('knockout'),
-	$ = require('jquery'),
 	
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	
@@ -45,7 +44,7 @@ CIcalAttachmentView.prototype.doAfterPopulatingMessage = function (oMessageProps
 			sAttendee = null,
 			oIcal = CalendarCache.getIcal(oFoundRawIcal.File)
 		;
-		if ($.isFunction(App.getAttendee))
+		if (__filename.isFunction(App.getAttendee))
 		{
 			sAttendee = App.getAttendee(oMessageProps.aToEmails);
 		}
