@@ -2,7 +2,8 @@
 	"name": "afterlogic/aurora-module-webclient-calendar",
 	"type": "aurora-module",
 	"require": {
-		"afterlogic/aurora-framework": "~0.10.0"
+		"afterlogic/aurora-framework": "~0.10.0",
+		"afterlogic/aurora-module-webclient-core": "^0.10.106"
 	},
 	"autoload": {
 		"classmap": ["/"]

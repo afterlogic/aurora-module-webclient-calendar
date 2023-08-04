@@ -103,7 +103,7 @@
 								<div class="form_content">
 									<div class="row" data-bind="css: {'ampm_time': ampmTimeFormat()}">
 										<input class="date input" type="text"  spellcheck="false" readonly="readonly" data-bind="initDom: startDom" />
-										<span class="custom_selector" data-bind="visible: !allDay(), customSelect: {'control': false, 'selected': 'selected', 'input': true, 'options': timeOptions(), 'timeOptions': timeOptions, value: startTime, optionsText: 'text', optionsValue: 'value'}">
+										<span class="custom_selector" data-bind="visible: !allDay(), customSelect: {'control': false, 'input': true, 'options': timeOptions, value: startTime}">
 											<input class="value time input"  spellcheck="false" type="text" data-bind="value: startTime" />
 											<span class="dropdown">
 												<span class="dropdown_helper">
@@ -113,7 +113,7 @@
 											</span>
 										</span>
 										<input class="date input" type="text" spellcheck="false"  readonly="readonly" data-bind="initDom: endDom" />
-										<span class="custom_selector" data-bind="visible: !allDay(), customSelect: {'control': false, 'selected': 'selected', 'input': true, 'options': timeOptions(), 'timeOptions': timeOptions, value: endTime, optionsText: 'text', optionsValue: 'value'}">
+										<span class="custom_selector" data-bind="visible: !allDay(), customSelect: {'control': false, 'input': true, 'options': timeOptions, value: endTime}">
 											<input class="value time input" spellcheck="false"  type="text" data-bind="value: endTime" />
 											<span class="dropdown">
 												<span class="dropdown_helper">
@@ -255,8 +255,7 @@
 												<!-- ko if: $data === 'REMINDERS' -->
 													<span class="value" data-bind="text: $parent.text, visible: !$parents[1].isEditableReminders()"></span>
 													<span class="custom_selector" data-bind="visible: $parents[1].isEditableReminders(), 
-																customSelect: {'control': false, 'alarmOptions': $parents[1].alarmOptions, 'options': $parents[1].alarmOptions(), 
-																		value: $parent.alarm, optionsText: 'text', optionsValue: 'value'}">
+																customSelect: {'control': false, 'options': $parents[1].alarmOptions, value: $parent.alarm}">
 														<span class="link value" data-bind="text: $parent.text"></span>
 														<span class="dropdown" data-bind="visible: $parents[1].isEditableReminders()">
 															<span class="dropdown_helper">
