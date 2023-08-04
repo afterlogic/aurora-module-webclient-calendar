@@ -1538,7 +1538,7 @@ CCalendarView.prototype.eventClickCallback = function (oEventData) {
     if (oEventData.excluded) {
       fCallback(Enums.CalendarEditRecurrenceEvent.OnlyThisInstance)
     } else {
-      Popups.showPopup(EditEventRecurrencePopup, [fCallback])
+      Popups.showPopup(EditEventRecurrencePopup, [fCallback, oEventData.type])
     }
   } else {
     fCallback(Enums.CalendarEditRecurrenceEvent.AllEvents)
@@ -1641,7 +1641,7 @@ CCalendarView.prototype.resizeEvent = function (oEventData, delta, revertFunc) {
     if (oParameters.excluded) {
       fCallback(Enums.CalendarEditRecurrenceEvent.OnlyThisInstance)
     } else {
-      Popups.showPopup(EditEventRecurrencePopup, [fCallback])
+      Popups.showPopup(EditEventRecurrencePopup, [fCallback, oEventData.type])
     }
   } else {
     fCallback(Enums.CalendarEditRecurrenceEvent.AllEvents)

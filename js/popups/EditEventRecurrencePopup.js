@@ -2,7 +2,6 @@
 
 var
 	_ = require('underscore'),
-	$ = require('jquery'),
 	ko = require('knockout'),
 	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
@@ -18,10 +17,10 @@ function CEditEventRecurrencePopup()
 	CAbstractPopup.call(this);
 	
 	this.fCallback = null;
-	this.confirmDesc = TextUtils.i18n('%MODULENAME%/CONFIRM_EDIT_RECURRENCE');
-	this.onlyThisInstanceButtonText = ko.observable(TextUtils.i18n('%MODULENAME%/ACTION_CHANGE_ONLY_THIS_INSTANCE'));
+	this.confirmDesc = ko.observable(TextUtils.i18n('%MODULENAME%/CONFIRM_EDIT_RECURRENCE'));
+	this.onlyThisInstanceButtonText = TextUtils.i18n('%MODULENAME%/ACTION_CHANGE_ONLY_THIS_INSTANCE');
 	this.allEventsButtonText = ko.observable(TextUtils.i18n('%MODULENAME%/ACTION_CHANGE_ALL_EVENTS'));
-	this.cancelButtonText = ko.observable(TextUtils.i18n('COREWEBCLIENT/ACTION_CANCEL'));
+	this.cancelButtonText = TextUtils.i18n('COREWEBCLIENT/ACTION_CANCEL');
 }
 
 _.extendOwn(CEditEventRecurrencePopup.prototype, CAbstractPopup.prototype);
@@ -31,11 +30,19 @@ CEditEventRecurrencePopup.prototype.PopupTemplate = '%ModuleName%_EditEventRecur
 /**
  * @param {Function} fCallback
  */
-CEditEventRecurrencePopup.prototype.onOpen = function (fCallback)
+CEditEventRecurrencePopup.prototype.onOpen = function (fCallback, sDataType)
 {
-	if ($.isFunction(fCallback))
+	if (_.isFunction(fCallback))
 	{
 		this.fCallback = fCallback;
+	}
+
+	if (sDataType === 'VTODO') {
+		this.confirmDesc(TextUtils.i18n('%MODULENAME%/CONFIRM_EDIT_RECURRENCE_TASKS'));
+		this.allEventsButtonText(TextUtils.i18n('%MODULENAME%/ACTION_CHANGE_ALL_TASKS'));
+	} else {
+		this.confirmDesc(TextUtils.i18n('%MODULENAME%/CONFIRM_EDIT_RECURRENCE'));
+		this.allEventsButtonText(TextUtils.i18n('%MODULENAME%/ACTION_CHANGE_ALL_EVENTS'));
 	}
 };
 
