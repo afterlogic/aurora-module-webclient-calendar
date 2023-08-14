@@ -132,7 +132,6 @@ function CEditEventPopup() {
   this.rrule = ko.observable(null)
   this.repeatPeriod = ko.observable(Enums.CalendarRepeatPeriod.None)
   this.repeatPeriod.subscribe(function (iRepeatPeriod) {
-    console.log(iRepeatPeriod);
     this.setDayOfWeek()
     this.isRepeat(!!iRepeatPeriod)
   }, this)
