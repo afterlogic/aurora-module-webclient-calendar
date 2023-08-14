@@ -129,8 +129,10 @@ function CEditEventPopup() {
   }, this)
 
   this.excluded = ko.observable(false)
+  this.rrule = ko.observable(null)
   this.repeatPeriod = ko.observable(Enums.CalendarRepeatPeriod.None)
   this.repeatPeriod.subscribe(function (iRepeatPeriod) {
+    console.log(iRepeatPeriod);
     this.setDayOfWeek()
     this.isRepeat(!!iRepeatPeriod)
   }, this)
@@ -222,6 +224,9 @@ function CEditEventPopup() {
   this.isTask = ko.observable(false)
   this.isTaskApp = ko.observable(false)
   this.withDate = ko.observable(true)
+  this.allowConvertEventToTask = ko.computed(function () {
+    return this.isEditable() && !this.isTaskApp() && this.attendees().length === 0 && this.allEvents() === Enums.CalendarEditRecurrenceEvent.AllEvents;
+  }, this);
 
   this.isTask.subscribe(function (value) {
     this.eventType(value ? 'VTODO' : 'VEVENT')
@@ -440,6 +445,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
   this.guestAutocomplete('')
 
   this.excluded(oParameters.Excluded || false)
+  this.rrule(oParameters.RRule || null);
   this.repeatRuleParse(oParameters.RRule || null)
 
   if (this.id() === null) {

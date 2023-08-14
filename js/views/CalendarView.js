@@ -1688,7 +1688,7 @@ CCalendarView.prototype.onEventActionResponse = function (oResponse, oRequest, b
         ((oEvent && oEvent.rrule) || oParameters.rrule) &&
         oParameters.allEvents === Enums.CalendarEditRecurrenceEvent.AllEvents
       ) {
-        oCalendar.removeEventByUid(oParameters.uid, true)
+        oCalendar.removeEventByUid(oParameters.uid)
       } else {
         oCalendar.removeEvent(oParameters.id)
       }

@@ -93,7 +93,7 @@
 							<span class="value" data-bind="text: !allDay() ? ', ' : ' ', visible: !isEvOneDay()"></span>
 							<span class="value" data-bind="text: endTime, visible: !allDay() && (!isEvOneDay() || !isEvOneTime())"></span>
 						</div>
-						<span class="dates close" data-bind="style: {'float': 'none'}, visible: withDate() && isTask() && !isRepeat(), click: function(){withDate(false);}, customTooltip: '%MODULENAME%/ACTION_REMOVE_DATE'"></span>
+						<span class="dates close" data-bind="style: {'float': 'none'}, visible: withDate() && isTask() && !rrule(), click: function(){withDate(false);}, customTooltip: '%MODULENAME%/ACTION_REMOVE_DATE'"></span>
 						<div class="row dates" data-bind="visible: !withDate() && isTask() , click: function(){withDate(true);}"><a data-bind="i18n: {'key': '%MODULENAME%/ACTION_ADD_DATE'}"></a></div>
 
 						<span data-bind="css: {'repeat': isRepeat()}, customTooltip: '%MODULENAME%/INFO_RECURRING_EVENT'"></span>
@@ -280,7 +280,7 @@
 								<!-- ko template: { name: $data.ViewTemplate, data: $data} --><!-- /ko -->
 							<!-- /ko -->
 							<span class="item task"  data-bind="
-									visible: isEditable() && !isTaskApp() && bAllowTasks && attendees().length === 0,
+									visible: bAllowTasks && allowConvertEventToTask(),
 									css: {'selected' : isTask()}, 
 									customTooltip: '%MODULENAME%/LABEL_THIS_IS_A_TASK',
 									click: switchTask(!isTask())">
