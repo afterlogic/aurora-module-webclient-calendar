@@ -44,7 +44,7 @@ CIcalAttachmentView.prototype.doAfterPopulatingMessage = function (oMessageProps
 			sAttendee = null,
 			oIcal = CalendarCache.getIcal(oFoundRawIcal.File)
 		;
-		if (__filename.isFunction(App.getAttendee))
+		if (_.isFunction(App.getAttendee))
 		{
 			sAttendee = App.getAttendee(oMessageProps.aToEmails);
 		}
