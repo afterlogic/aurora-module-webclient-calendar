@@ -362,6 +362,13 @@ CCalendarView.prototype.applyCalendarSettings = function () {
 
   this.applyFirstDay()
 
+  const showWeekNumbers = Settings.ShowWeekNumbers && Settings.WeekStartsOn == 1;
+
+  this.$datePicker.datepicker('option', 'showWeek', showWeekNumbers);
+	this.fullcalendarOptions.weekNumbers = showWeekNumbers;
+  this.fullcalendarOptions.weekNumberTitle = TextUtils.i18n('%MODULENAME%/LABEL_WEEK_SHORT') + ' ';
+  this.fullcalendarOptions.weekNumberCalculation = 'ISO';
+
   this.recreateFullCalendar(this.defaultViewName())
 }
 
@@ -397,6 +404,8 @@ CCalendarView.prototype.initDatePicker = function () {
     selectOtherMonths: true,
     monthNames: this.aMonthNames,
     dayNamesMin: TextUtils.i18n('COREWEBCLIENT/LIST_DAY_NAMES_MIN').split(' '),
+    showWeek: false,
+		weekHeader: TextUtils.i18n('CALENDARWEBCLIENT/LABEL_WEEK_SHORT'),
     nextText: '',
     prevText: '',
     onChangeMonthYear: _.bind(this.changeMonthYearFromDatePicker, this),

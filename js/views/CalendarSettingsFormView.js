@@ -43,6 +43,7 @@ function CCalendarSettingsFormView()
 
 	/* Editable fields */
 	this.showWeekends = ko.observable(Settings.HighlightWorkingDays);
+	this.showWeekNumbers = ko.observable(Settings.ShowWeekNumbers);
 	this.selectedWorkdayStarts = ko.observable(GetClosestValue(this.availableTimes(), Settings.WorkdayStarts));
 	this.selectedWorkdayEnds = ko.observable(GetClosestValue(this.availableTimes(), Settings.WorkdayEnds));
 	this.showWorkday = ko.observable(Settings.HighlightWorkingHours);
@@ -50,7 +51,10 @@ function CCalendarSettingsFormView()
 	this.defaultTab = ko.observable(Settings.DefaultTab);
 	this.defaultReminders = ko.observable(Settings.DefaultReminders);
 	/*-- Editable fields */
-
+	
+	this.showWeekNumbersAccaptable = ko.computed(function () {
+		return this.weekStartsOn() == 1
+	}, this);
 	this.bAllowDefaultReminders = Settings.AllowDefaultReminders;
 
 	const reminderOptions = _.union(Settings.DefaultReminders, Settings.ReminderValuesInMinutes).map((iMinutes) => {
@@ -92,6 +96,7 @@ CCalendarSettingsFormView.prototype.getCurrentValues = function()
 {
 	return [
 		this.showWeekends(),
+		this.showWeekNumbers(),
 		this.selectedWorkdayStarts(),
 		this.selectedWorkdayEnds(),
 		this.showWorkday(),
@@ -104,6 +109,7 @@ CCalendarSettingsFormView.prototype.getCurrentValues = function()
 CCalendarSettingsFormView.prototype.revertGlobalValues = function()
 {
 	this.showWeekends(Settings.HighlightWorkingDays);
+	this.showWeekNumbers(Settings.ShowWeekNumbers);
 	this.selectedWorkdayStarts(GetClosestValue(this.availableTimes(), Settings.WorkdayStarts));
 	this.selectedWorkdayEnds(GetClosestValue(this.availableTimes(), Settings.WorkdayEnds));
 	this.showWorkday(Settings.HighlightWorkingHours);
@@ -117,6 +123,7 @@ CCalendarSettingsFormView.prototype.getParametersForSave = function ()
 	return {
 		'HighlightWorkingDays': this.showWeekends(),
 		'HighlightWorkingHours': this.showWorkday(),
+		'ShowWeekNumbers': this.showWeekNumbers(),
 		'WorkdayStarts': Types.pInt(this.selectedWorkdayStarts()),
 		'WorkdayEnds': Types.pInt(this.selectedWorkdayEnds()),
 		'WeekStartsOn': Types.pInt(this.weekStartsOn()),

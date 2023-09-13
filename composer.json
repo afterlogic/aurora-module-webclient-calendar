@@ -3,7 +3,8 @@
 	"type": "aurora-module",
 	"require": {
 		"afterlogic/aurora-framework": "~0.10.0",
-		"afterlogic/aurora-module-webclient-core": "^0.10.106"
+		"afterlogic/aurora-module-webclient-core": "^0.10.106",
+		"afterlogic/aurora-module-webclient-calendar": "^0.10.85"
 	},
 	"autoload": {
 		"classmap": ["/"]

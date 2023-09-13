@@ -45,6 +45,12 @@
                   <q-item-label v-t="'CALENDARWEBCLIENT.LABEL_HIGHLIGHT_WORK_DAYS'" />
                 </q-checkbox>
           </div>
+          <div class="row q-my-md">
+            <div class="col-2 q-my-md"></div>
+                <q-checkbox dense v-model="showWeekNumbers" color="primary">
+                  <q-item-label v-t="'CALENDARWEBCLIENT.LABEL_SHOW_WEEK_NUMBERS'" />
+                </q-checkbox>
+          </div>
           <div class="row">
             <div class="col-2 q-my-sm" v-t="'CALENDARWEBCLIENT.LABEL_DEFAULT_TAB'"></div>
             <div class="col-5">
@@ -87,6 +93,7 @@ export default {
       saving: false,
       highlightWorkingDays: false,
       highlightWorkingHours: false,
+      showWeekNumbers: false,
       workdayEnds: '',
       workdayStarts: '',
       timeFormat: 1,
@@ -138,6 +145,7 @@ export default {
       const data = settings.getCalendarSettings()
       return this.highlightWorkingDays !== data.highlightWorkingDays ||
           this.highlightWorkingHours !== data.highlightWorkingHours ||
+          this.showWeekNumbers !== data.showWeekNumbers ||
           this.workdayEnds.value !== data.workdayEnds ||
           this.workdayStarts.value !== data.workdayStarts ||
           this.timeFormat !== data.defaultTab ||
@@ -157,6 +165,7 @@ export default {
       const data = settings.getCalendarSettings()
       this.highlightWorkingDays = data.highlightWorkingDays
       this.highlightWorkingHours = data.highlightWorkingHours
+      this.showWeekNumbers = data.showWeekNumbers
       this.workdayEnds = this.chooseTime(data.workdayEnds, this.timeList)
       this.workdayStarts = this.chooseTime(data.workdayStarts, this.timeList)
       this.timeFormat = data.defaultTab
@@ -168,6 +177,7 @@ export default {
         const parameters = {
           HighlightWorkingDays: this.highlightWorkingDays,
           HighlightWorkingHours: this.highlightWorkingHours,
+          ShowWeekNumbers: this.showWeekNumbers,
           WorkdayStarts: this.workdayStarts.value,
           WorkdayEnds: this.workdayEnds.value,
           WeekStartsOn: this.weekStartsOn.value,
@@ -183,6 +193,7 @@ export default {
             settings.saveCalendarSettings({
               highlightWorkingDays: this.highlightWorkingDays,
               highlightWorkingHours: this.highlightWorkingHours,
+              showWeekNumbers: this.showWeekNumbers,
               workdayStarts: this.workdayStarts.value,
               workdayEnds: this.workdayEnds.value,
               weekStartsOn: this.weekStartsOn.value,

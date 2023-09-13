@@ -47,6 +47,21 @@
 				</span>
 			</div>
 
+			<div class="row" data-bind="css: {'disabled': !showWeekNumbersAccaptable()}">
+				<span class="label"></span>
+				<span class="value">
+					<label class="custom_checkbox" data-bind="css: {'checked': showWeekNumbers}">
+						<span class="icon"></span>
+						<input type="checkbox" id="showWeekNumbers" data-bind="checked: showWeekNumbers, enable: showWeekNumbersAccaptable" />
+					</label>
+					<label for="showWeekNumbers" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SHOW_WEEK_NUMBERS'}"></label>
+				</span>
+			</div>
+			<div class="hint row">
+				<span class="label"></span>
+				<span class="value" data-bind="i18n: {'key': '%MODULENAME%/HINT_SHOW_WEEK_NUMBERS'}"></span>
+			</div>
+
 			<div class="row">
 				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_DEFAULT_TAB'}"></span>
 				<span class="value">
