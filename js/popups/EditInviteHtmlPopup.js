@@ -5,15 +5,15 @@ var
 
 	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js'),
 
-	CHtmlEditorView = require('modules/MailWebclient/js/views/CHtmlEditorView.js')
+	CHtmlEditorView = require('modules/MailWebclient/js/views/CSummernoteEditorView.js')
 ;
 
-function setCaretBeforeSignature()
+function setCaretBeforeSignature(oHtmlEditor)
 {
 	const
-		koEditable = $('div.crea-content-editable'),
-		editable = koEditable.length > 0 ? koEditable[0] : null,
-		thirdChild = editable.childNodes && editable.childNodes.length > 2 ? editable.childNodes[3] : null
+		elEditable = oHtmlEditor.getEditableArea(),
+		editable = elEditable.length > 0 ? elEditable[0] : null,
+		thirdChild = editable.childNodes && editable.childNodes.length > 2 ? editable.childNodes[2] : null
 	;
 	if (thirdChild) {
 		const
@@ -55,7 +55,7 @@ CEditInviteHtmlPopup.prototype.onOpen = function (html, continueHandler, rejectH
 	this.rejectHandler = _.isFunction(rejectHandler) ? rejectHandler : () => {};
 
 	this.oHtmlEditor.init(html, false);
-	setCaretBeforeSignature();
+	setCaretBeforeSignature(this.oHtmlEditor);
 };
 
 CEditInviteHtmlPopup.prototype.onClose = function ()
@@ -65,7 +65,8 @@ CEditInviteHtmlPopup.prototype.onClose = function ()
 
 CEditInviteHtmlPopup.prototype.save = function ()
 {
-	this.continueHandler(this.oHtmlEditor.getText());
+	const bRemoveSignatureAnchor = true;
+	this.continueHandler(this.oHtmlEditor.getText(bRemoveSignatureAnchor));
 	this.closePopup();
 };
 

@@ -533,7 +533,7 @@ CEditEventPopup.prototype.onSaveClick = function ()
 		oEventData = this.getEventData(),
 		bNewEvent = oEventData.id === null,
 		bCheckOverlap = bNewEvent ? true : this.hasDatetimeChanges(oEventData),
-		сontinueSaving = (inviteHtml) => {
+		continueSaving = (inviteHtml) => {
 			this.isSaving(false);
 			this.callbackSave(oEventData, inviteHtml);
 			this.closePopup();
@@ -544,9 +544,9 @@ CEditEventPopup.prototype.onSaveClick = function ()
 		prepareHtmlAndContinue = () => {
 			if (this.isEditable() && oEventData.modified && this.attendees().length > 0 && this.customizeInvitationMessage()) {
 				const calendar = this.calendars.getCalendarById(oEventData.calendarId);
-				InviteHtmlUtils.prepareHtml(oEventData, calendar, сontinueSaving, rejectSaving);
+				InviteHtmlUtils.prepareHtml(oEventData, calendar, continueSaving, rejectSaving);
 			} else {
-				сontinueSaving();
+				continueSaving();
 			}
 		}
 	;
