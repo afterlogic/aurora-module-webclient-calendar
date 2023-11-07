@@ -142,6 +142,10 @@ function CIcalModel(oRawIcal, sAttendee)
 	// so it does not trigger when placing initial values
 	this.animation = ko.observable(false);
 
+	this.eventLink = ko.computed(function () {
+		return this.calendarId() ? '#calendar/' + this.calendarId() + '/' + this.uid() + '-' + this.oRawIcal.StartTS : '';
+	}, this);
+
 	this.parseType();
 }
 
