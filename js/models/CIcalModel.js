@@ -46,7 +46,9 @@ function CIcalModel(oRawIcal, sAttendee)
 	this.type = ko.observable(Types.pString(oRawIcal.Type));
 	this.location = ko.observable(DataFromServer.parseDescriptionLocation(oRawIcal.Location));
 	this.description = ko.observable(DataFromServer.parseDescriptionLocation(oRawIcal.Description));
-	this.when = ko.observable(Types.pString(oRawIcal.When));
+	this.when = ko.computed(function() {
+		return DataFromServer.formatDate(oRawIcal.When)
+	});
 	this.calendarId = ko.observable(Types.pString(oRawIcal.CalendarId));
 	this.calendarId.subscribe(function () {
 		// change oRawIcal so that the calendarId will be correct in a new tab
