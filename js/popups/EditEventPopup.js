@@ -91,6 +91,10 @@ function CEditEventPopup() {
   this.allDay.subscribe(function () {
     if (!this.allDay()) {
       this.setActualTime()
+      this.isEvOneTime(false)
+      this.isEvOneDay(true)
+    } else {
+        this.endTime(this.startTime())
     }
   }, this)
 
