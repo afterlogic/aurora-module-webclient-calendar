@@ -314,14 +314,18 @@ CCalendarModel.prototype.parseEvent = function (oEvent) {
     }
   }
   if (oEvent.rrule && !oEvent.excluded) {
-    oEvent.className.push('fc-event-repeat')
+    if (!oEvent.className.includes('fc-event-repeat')) {
+      oEvent.className.push('fc-event-repeat')
+    }
   } else {
     oEvent.className = _.filter(oEvent.className, function (sItem) {
       return sItem !== 'fc-event-repeat'
     })
   }
   if (Types.isNonEmptyArray(oEvent.attendees) && this.bAllowAppointments) {
-    oEvent.className.push('fc-event-appointment')
+    if(!oEvent.className.includes('fc-event-appointment')) {
+      oEvent.className.push('fc-event-appointment')
+    }
   } else {
     oEvent.className = _.filter(oEvent.className, function (sItem) {
       return sItem !== 'fc-event-appointment'
