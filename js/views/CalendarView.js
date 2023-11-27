@@ -1443,17 +1443,10 @@ CCalendarView.prototype.getEventDataFromParams = function (aParameters) {
  * @param {Object} oStart
  * @param {Object} oEnd
  */
-CCalendarView.prototype.createEventFromGrid = function (oStart, oEnd, ...args) {
+CCalendarView.prototype.createEventFromGrid = function (oStart, oEnd) {
   var bAllDay = !oStart.hasTime()
   this.calendars.pickCurrentCalendar()
-  if(args[1].name === 'month' && bAllDay) {
-    const oStartClone = oStart.clone()
-    oStartClone.set({ hour: 12, minute: 0, second: 0, millisecond: 0 });
-    const oEndClone = oStartClone.clone().add(30, 'minutes')
-    this.openEventPopup(this.calendars.currentCal(), oStartClone.local(), oEndClone.local(), false)
-  } else {
-    this.openEventPopup(this.calendars.currentCal(), oStart.local(), oEnd.local(), bAllDay)
-  }
+  this.openEventPopup(this.calendars.currentCal(), oStart.local(), oEnd.local(), bAllDay)
 }
 
 /**

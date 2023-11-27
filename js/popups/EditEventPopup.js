@@ -91,10 +91,6 @@ function CEditEventPopup() {
   this.allDay.subscribe(function () {
     if (!this.allDay()) {
       this.setActualTime()
-      this.isEvOneTime(false)
-      this.isEvOneDay(true)
-    } else {
-        this.endTime(this.startTime())
     }
   }, this)
 
@@ -1113,6 +1109,10 @@ CEditEventPopup.prototype.setActualTime = function () {
       oStartMomentDate = moment(oStartDate),
       oEndDate = this.getDateTime(this.endDom(), sNowTime),
       oEndMomentDate = moment(oEndDate)
+    if(_.isEqual(oStartMomentDate, oEndMomentDate)) {
+      oEndMomentDate.add(30, 'minutes')
+      this.isEvOneTime(false)
+    }
     if (oStartMomentDate.minutes() > 30) {
       oStartMomentDate.add(60 - oStartMomentDate.minutes(), 'minutes')
       oEndMomentDate.add(90 - oEndMomentDate.minutes(), 'minutes')
@@ -1120,9 +1120,7 @@ CEditEventPopup.prototype.setActualTime = function () {
       oStartMomentDate.add(30 - oStartMomentDate.minutes(), 'minutes')
       oEndMomentDate.add(60 - oEndMomentDate.minutes(), 'minutes')
     }
-
     this.iDiffInMinutes = oEndMomentDate.diff(oStartMomentDate, 'minutes')
-
     this.setStartDate(oStartMomentDate, true)
     this.startTime(oStartMomentDate.format(this.timeFormatMoment))
 
