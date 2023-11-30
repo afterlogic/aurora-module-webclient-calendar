@@ -368,6 +368,10 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
 
   this.allDay(oParameters.AllDay)
 
+  //we are overwriting variables because the date format is incorrect from the full calendar
+  oStartMomentDate = moment(oStartMomentDate.format('X'), 'X')
+  oEndMomentDate = moment(oEndMomentDate.format('X'), 'X')
+
   if (oStartMomentDate) {
     this.setStartDate(oStartMomentDate, true)
     this.startTime(oStartMomentDate.format(this.timeFormatMoment))
@@ -1049,7 +1053,6 @@ CEditEventPopup.prototype.setEndDate = function (oMomentDate, bChangeInDatepicke
 }
 
 CEditEventPopup.prototype.selectEndDate = function () {
-  let isFirstOpenPopup = true
   if (!this.lockSelectStartEndDate() && this.endDate() && this.startDate()) {
     this.lockSelectStartEndDate(true)
 
@@ -1077,26 +1080,7 @@ CEditEventPopup.prototype.selectEndDate = function () {
     }
 
     this.lockSelectStartEndDate(false)
-    isFirstOpenPopup && this.selectStartDate()
-    isFirstOpenPopup = false
   }
-}
-
-CEditEventPopup.prototype.convertTo24HourFormat = function (time, period) {
-	const [hourStr, minuteStr] = time.split(':');
-
-	let hours = parseInt(hourStr);
-	const minutes = parseInt(minuteStr);
-
-	if (period === 'PM' && hours !== 12) {
-			hours += 12;
-	}
-
-	if (period === 'AM' && hours === 12) {
-			hours = 0;
-	}
-
-	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 }
 
 /**
@@ -1105,15 +1089,7 @@ CEditEventPopup.prototype.convertTo24HourFormat = function (time, period) {
  * @return {Date}
  */
 CEditEventPopup.prototype.getDateTime = function (oInput, sTime) {
-  sTime = sTime ? sTime : ''
-  if(sTime) {
-    const [timeStr, period] = sTime.split(' ');
-    if(period === 'AM' || period === 'PM') {
-      sTime = this.convertTo24HourFormat(timeStr, period)
-    } else {
-      sTime = moment(sTime, this.timeFormatMoment).format('HH:mm')
-    }
-  }
+  sTime = sTime ? moment(sTime, this.timeFormatMoment).format('HH:mm') : ''
   var oDate = oInput.datepicker('getDate'),
     aTime = sTime ? sTime.split(':') : []
   //in some cases aTime is a current time (it happens only once after page loading), in this case oDate is null, so code falls.
