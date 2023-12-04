@@ -17,7 +17,8 @@ const DateUtils = require('%PathToCoreWebclientModule%/js/utils/Date.js'),
   Pulse = require('%PathToCoreWebclientModule%/js/Pulse.js'),
   CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
   Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
-  ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js')
+  ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js'),
+  Utils = require('%PathToCoreWebclientModule%/js/utils/Common.js')
 
 const EditCalendarPopup = require('modules/%ModuleName%/js/popups/EditCalendarPopup.js'),
   EditEventPopup = require('modules/%ModuleName%/js/popups/EditEventPopup.js'),
@@ -62,6 +63,7 @@ function CCalendarView() {
   this.linkColumn = 0
 
   this.sTimeFormat = UserSettings.timeFormat() === Enums.TimeFormat.F24 ? 'HH:mm' : 'hh:mm A'
+  this.dateFormatForMoment = Utils.getDateFormatForMoment(UserSettings.dateFormat())
 
   this.topPositionToday = ko.observable('.fc-widget-content.fc-today')
   this.loadOnce = false
@@ -163,6 +165,9 @@ function CCalendarView() {
       day: {
         columnFormat: 'dddd D', // Monday 7
       },
+      listMonth: {
+        listDayFormat: this.dateFormatForMoment
+      }
     },
     displayEventEnd: {
       month: true,
@@ -349,13 +354,14 @@ CCalendarView.prototype.recreateFullCalendar = function (viewName) {
 
 CCalendarView.prototype.applyCalendarSettings = function () {
   this.sTimeFormat = UserSettings.timeFormat() === Enums.TimeFormat.F24 ? 'HH:mm' : 'hh:mm A'
-
+  this.dateFormatForMoment = Utils.getDateFormatForMoment(UserSettings.dateFormat())
   this.calendarGridDom().removeClass('fc-show-weekends')
   if (Settings.HighlightWorkingDays) {
     this.calendarGridDom().addClass('fc-show-weekends')
   }
 
   this.fullcalendarOptions.timeFormat = this.sTimeFormat
+  this.fullcalendarOptions.views.listMonth.listDayFormat = this.dateFormatForMoment
   this.fullcalendarOptions.slotLabelFormat = this.sTimeFormat
   this.fullcalendarOptions.defaultView = this.defaultViewName()
   this.fullcalendarOptions.lang = moment.locale()
@@ -472,8 +478,9 @@ CCalendarView.prototype.onShow = function () {
   }
 
   var sTimeFormat = UserSettings.timeFormat() === Enums.TimeFormat.F24 ? 'HH:mm' : 'hh:mm A'
-  if (CalendarCache.calendarSettingsChanged() || this.sTimeFormat !== sTimeFormat || CalendarCache.calendarChanged()) {
-    if (CalendarCache.calendarSettingsChanged() || this.sTimeFormat !== sTimeFormat) {
+  const dateFormatForMoment = Utils.getDateFormatForMoment(UserSettings.dateFormat()) 
+  if (CalendarCache.calendarSettingsChanged() || this.sTimeFormat !== sTimeFormat || CalendarCache.calendarChanged() || this.dateFormatForMoment !== dateFormatForMoment) {
+    if (CalendarCache.calendarSettingsChanged() || this.sTimeFormat !== sTimeFormat || this.dateFormatForMoment !== dateFormatForMoment) {
       this.applyCalendarSettings()
     }
     CalendarCache.calendarSettingsChanged(false)
