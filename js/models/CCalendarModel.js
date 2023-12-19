@@ -303,8 +303,10 @@ CCalendarModel.prototype.parseEvent = function (oEvent) {
     oEvent.className = [className]
   }
   if (this.access() === Enums.CalendarAccess.Read) {
-    oEvent.className.push('fc-event-readonly')
-    oEvent.editable = false
+    if (!oEvent.className.includes('fc-event-readonly')) {
+      oEvent.className.push('fc-event-readonly')
+      oEvent.editable = false
+    }
   } else {
     oEvent.className = _.filter(oEvent.className, function (sItem) {
       return sItem !== 'fc-event-readonly'
@@ -323,7 +325,7 @@ CCalendarModel.prototype.parseEvent = function (oEvent) {
     })
   }
   if (Types.isNonEmptyArray(oEvent.attendees) && this.bAllowAppointments) {
-    if(!oEvent.className.includes('fc-event-appointment')) {
+    if (!oEvent.className.includes('fc-event-appointment')) {
       oEvent.className.push('fc-event-appointment')
     }
   } else {
@@ -335,7 +337,9 @@ CCalendarModel.prototype.parseEvent = function (oEvent) {
     oEvent.editable = false
   }
   if (oEvent.isPrivate) {
-    oEvent.className.push('fc-event-private')
+    if (!oEvent.className.includes('fc-event-private')) {
+      oEvent.className.push('fc-event-private')
+    }
   } else {
     oEvent.className = _.filter(oEvent.className, function (sItem) {
       return sItem !== 'fc-event-private'
