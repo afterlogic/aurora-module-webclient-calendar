@@ -305,8 +305,8 @@ CCalendarModel.prototype.parseEvent = function (oEvent) {
   if (this.access() === Enums.CalendarAccess.Read) {
     if (!oEvent.className.includes('fc-event-readonly')) {
       oEvent.className.push('fc-event-readonly')
-      oEvent.editable = false
     }
+    oEvent.editable = false
   } else {
     oEvent.className = _.filter(oEvent.className, function (sItem) {
       return sItem !== 'fc-event-readonly'
