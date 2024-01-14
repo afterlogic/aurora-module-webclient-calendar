@@ -1,6 +1,6 @@
 <div class="item" data-bind="
 	droppable: {valueFunc: function (oEvent, oUi) { $root.dropItem(oEvent, oUi); }},
-	dropdown: {'callback': $parent.calendarDropdownToggle, 'trueValue': id, passClick: false},
+	dropdown: {'callback': $parent.calendarDropdownToggle, 'trueValue': id, passClick: true},
 	style: {backgroundColor: color},
 	css: {'inactive': !active(), 'readonly': !isEditable()}">
 	<div class="label-container" data-bind="click: $parent.calendarListClick">
