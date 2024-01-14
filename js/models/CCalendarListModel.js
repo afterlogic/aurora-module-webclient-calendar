@@ -86,6 +86,12 @@ function CCalendarListModel(oParameters)
 	this.filteredSharedToAll = ko.computed(function () {
 		return this.getFilteredCalendars(this.sharedToAll());
 	}, this);
+
+	this.isSharedCalendarsActive = ko.computed(function () {
+		return this.shared().every(calendar => calendar.active()) && this.sharedToAll().every(calendar => calendar.active());
+	}, this);
+
+	this.toggleSharedCalendarsActiveStatusBind = _.bind(this.toggleSharedCalendarsActiveStatus, this)
 }
 
 CCalendarListModel.prototype.getFilteredCalendars = function (calendars) {
@@ -288,6 +294,21 @@ CCalendarListModel.prototype.expunge = function (aIds)
 	this.collection(_.filter(this.collection(), function(oCalendar) {
 		return _.include(aIds, oCalendar.id);
 	}, this));
+};
+
+/**
+ * Toggles calendars shared with the user 
+ */
+CCalendarListModel.prototype.toggleSharedCalendarsActiveStatus = function ()
+{
+	const bEverythingAcvtive = this.isSharedCalendarsActive()
+	
+	this.shared().forEach(calendar => {
+		calendar.active(!bEverythingAcvtive);
+	});
+	this.sharedToAll().forEach(calendar => {
+		calendar.active(!bEverythingAcvtive);
+	});
 };
 
 module.exports = CCalendarListModel;

@@ -120,21 +120,11 @@
 		}
 
 		.calendar_list_search {
-			padding: 16px 17px 0px 16px;
+			padding: 16px 17px 10px 16px;
 			margin-top: 6px;
 			border-top: 1px solid #ccc;
 			background: #f1f1f1;
-			opacity: 1;
-	
-			-webkit-transition: opacity 200ms ease 100ms;
-			-moz-transition: opacity 200ms ease 100ms;
-			-o-transition: opacity 200ms ease 100ms;
-			transition: opacity 200ms ease 100ms;
-	
-			&.hidden {
-				opacity: 0;
-			}
-	
+
 			input {
 				width: 100%;
 				border: 1px solid #ddd;
@@ -142,6 +132,22 @@
 				min-height: 26px;
 				padding: 0 10px;
 				box-sizing: border-box;
+			}
+		}
+
+		.calendar_list_check_buttons {
+			padding: 0px 0px 6px 2px;
+			background: #f1f1f1;
+		}
+
+		.calendar_list_check_buttons,
+		.calendar_list_search {
+			opacity: 1;
+			transition: opacity 200ms ease 100ms;
+	
+			&.hidden {
+				opacity: 0;
+				pointer-events: none;
 			}
 		}
 	}
