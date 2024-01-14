@@ -1,9 +1,11 @@
 <div class="item" data-bind="
 	droppable: {valueFunc: function (oEvent, oUi) { $root.dropItem(oEvent, oUi); }},
 	dropdown: {'callback': $parent.calendarDropdownToggle, 'trueValue': id, passClick: true},
-	style: {backgroundColor: color},
 	css: {'inactive': !active(), 'readonly': !isEditable()}">
-	<div class="label-container" data-bind="click: $parent.calendarListClick">
+	<div class="label-container" data-bind="
+		style: {backgroundColor: color},
+		click: $parent.calendarListClick
+	">
 		<label class="custom_checkbox" data-bind="css: {'checked': active}">
 			<span class="icon"></span>
 			<input type="checkbox" data-bind="checked: active" />
