@@ -222,7 +222,8 @@ CCalendarListModel.prototype.parseAndAddCalendar = function (oCalendarData)
 		this.collection.push(oCalendar);
 	}
 	
-	//this.sort();
+	// sorting is done on the server side
+	// this.sort();
 	
 	return oCalendar;
 };
@@ -280,11 +281,11 @@ CCalendarListModel.prototype.setDefault = function (sId)
 	}, this);
 };
 
-CCalendarListModel.prototype.sort = function ()
-{
-	var collection = _.sortBy(this.collection(), function(oCalendar){return oCalendar.name();});
-	this.collection(_.sortBy(collection, function(oCalendar){return oCalendar.isShared();}));
-};
+// CCalendarListModel.prototype.sort = function ()
+// {
+// 	var collection = _.sortBy(this.collection(), function(oCalendar){return oCalendar.name();});
+// 	this.collection(_.sortBy(collection, function(oCalendar){return oCalendar.isShared();}));
+// };
 
 /**
  * @param {Array} aIds
