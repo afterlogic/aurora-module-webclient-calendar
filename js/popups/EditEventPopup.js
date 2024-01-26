@@ -1114,10 +1114,18 @@ CEditEventPopup.prototype.repeatRuleParse = function (oRepeatRule)
 
 	if(oRepeatRule && allEvents === Enums.CalendarEditRecurrenceEvent.AllEvents)
 	{
-		if (oRepeatRule.until)
-		{
-			this.repeatEndDom().datepicker('setDate', new Date(oRepeatRule.until * 1000));
-		}
+		if (oRepeatRule.until) {
+			var localUntill = new Date(oRepeatRule.until * 1000),
+			  utcUntil = new Date(
+				localUntill.getUTCFullYear(),
+				localUntill.getUTCMonth(),
+				localUntill.getUTCDate(),
+				localUntill.getUTCHours(),
+				localUntill.getUTCMinutes(),
+				localUntill.getUTCSeconds()
+			  )
+			this.repeatEndDom().datepicker('setDate', utcUntil)
+		  }
 
 		let repeatPeriod = oRepeatRule.period;
 		if (oRepeatRule.byDays.length)
