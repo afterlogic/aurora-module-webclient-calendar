@@ -62,14 +62,14 @@
 		<!-- ko if: !isSaveType() && organizer() !== '' -->
 		<div class="row fluid organizer">
 			<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_ORGANIZER'}"></span>:
-			<span class="value" data-bind="text: organizer"></span>
+			<span class="value" data-bind="text: organizerText"></span>
 		</div>
 		<!-- /ko -->
 
 		<!-- ko if: !isSaveType() && attendee() !== '' && attendeeListText() === '' -->
 		<div class="row fluid attendee">
 			<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_ATTENDEE'}"></span>:
-			<span class="value" data-bind="text: attendee"></span>
+			<span class="value" data-bind="text: attendeeText"></span>
 		</div>
 		<!-- /ko -->
 

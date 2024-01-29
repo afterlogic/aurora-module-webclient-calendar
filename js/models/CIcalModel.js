@@ -34,13 +34,19 @@ function CIcalModel(oRawIcal, sAttendee)
 	this.sSequence = Types.pInt(oRawIcal.Sequence);
 	this.file = ko.observable(Types.pString(oRawIcal.File));
 	this.attendee = ko.observable(Types.pString(oRawIcal.Attendee));
-	this.organizer = ko.observable(Types.pString(oRawIcal.Organizer));
-	this.attendeeList = ko.observable(Types.pArray(oRawIcal.AttendeeList));
+	this.attendeeText = ko.observable('');
+	this.organizer = ko.observable(Types.pString(oRawIcal.Organizer.Email));
+	this.organizerText = ko.observable(oRawIcal.Organizer.DisplayName ? Types.pString(oRawIcal.Organizer.DisplayName) + " <" + this.organizer() + ">" : this.organizer());
+	this.attendeeList = ko.observable(Types.pArray(oRawIcal.AttendeeList).map(function(value,index) { return value['Email']; }));
 	this.attendeeListText = ko.computed(function () {
-		if (this.attendeeList().length === 1 && this.attendeeList()[0] === this.attendee()) {
+		if (this.oRawIcal.AttendeeList.length === 1 && this.oRawIcal.AttendeeList[0]['Email'] === this.attendee()) {
+			this.attendeeText = (this.oRawIcal.AttendeeList[0]['DisplayName']) ? this.oRawIcal.AttendeeList[0]['DisplayName'] + " <" + this.oRawIcal.AttendeeList[0]['Email'] + ">" : this.oRawIcal.AttendeeList[0]['Email']
 			return '';
 		}
-		return this.attendeeList().join(', ');
+
+		return Types.pArray(oRawIcal.AttendeeList).map(function(value,index) { 
+			return (value['DisplayName']) ? value['DisplayName'] + " <" + value['Email'] + ">" : value['Email']; 
+		}).join(', ');
 	}, this);
 	this.summary = ko.observable(Types.pString(oRawIcal.Summary));
 	this.type = ko.observable(Types.pString(oRawIcal.Type));
