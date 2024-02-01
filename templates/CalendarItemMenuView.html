@@ -8,7 +8,7 @@
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_IMPORT_CALENDAR'}, visible: isEditable() && !subscribed() && !isSharedToAll(), click: function (oItem) {$parent.openImportCalendarForm(oItem);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_GET_CALENDAR_LINK'}, visible: !subscribed(), click: function (oItem, eEvent) {$parent.openGetLinkCalendarForm(oItem, eEvent);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHARE_AND_PUBLISH'}, visible: (canShare() && bAllowShare && !subscribed()), click: function (oItem) {$parent.openShareCalendarForm(oItem);}"></span>
-				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_REMOVE_CALENDAR'}, visible: isOwner() && !isSharedToAll(), click: function () {$parent.deleteCalendar(id);}"></span>
+				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_REMOVE_CALENDAR'}, visible: isOwner() && !isSharedToAll() && !isDefault, click: function () {$parent.deleteCalendar(id);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_UNSUBSCRIBE_CALENDAR'}, visible: !isOwner() && !isSharedToAll(), click: function () {$parent.deleteCalendar(id, true);}"></span>
 				<!-- <span class="separator" data-bind="visible: (!isShared() || isOwner())"></span> -->
 				<span class="colors" data-bind="visible: isEditable() && !isSharedToAll(), foreach: $parent.colors">
