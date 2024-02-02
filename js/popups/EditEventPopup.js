@@ -1429,6 +1429,8 @@ CEditEventPopup.prototype.setAppointmentAction = function (sDecision)
 			'AppointmentAction': sDecision,
 			'CalendarId': this.selectedCalendarId(),
 			'EventId': this.uid(),
+			'RecurrenceId': this.recurrenceId(),
+			'AllEvents':  this.allEvents(),
 			'Attendee': currentAttendee ? currentAttendee.email : ''
 		};
 		Ajax.send('SetAppointmentAction', parameters, this.onSetAppointmentActionResponse, this, 'CalendarMeetingsPlugin');
