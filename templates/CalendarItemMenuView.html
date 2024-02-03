@@ -3,6 +3,8 @@
 		<span class="dropdown_helper">
 			<span class="dropdown_arrow"><span></span></span>
 			<span class="dropdown_content" data-bind="style: {backgroundColor: color}">
+				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_MUTE_CALENDAR'}, visible: isShared() && !isReminderMuted(), click: function (oItem) {$parent.SetCalendarMuteStatus(id);}"></span>
+				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_UNMUTE_CALENDAR'}, visible: isShared() && isReminderMuted(), click: function (oItem) {$parent.SetCalendarMuteStatus(id);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_EDIT_CALENDAR'}, visible: isEditable() && !isSharedToAll() && !isDefault, click: function (oItem) {$parent.openUpdateCalendarForm(oItem);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SET_DEFAULT_CALENDAR'}, visible: !isDefault && isEditable() && !subscribed(), click: function (oItem) {$parent.setDefaultCalendar(id);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_IMPORT_CALENDAR'}, visible: isEditable() && !subscribed() && !isSharedToAll(), click: function (oItem) {$parent.openImportCalendarForm(oItem);}"></span>

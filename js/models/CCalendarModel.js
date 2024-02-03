@@ -30,6 +30,7 @@ function CCalendarModel()
 	this.isSharedToAll = ko.observable(false);
 	this.sharedToAllAccess = Enums.CalendarAccess.Read;
 	this.isPublic = ko.observable(false);
+	this.isReminderMuted = ko.observable(false);
 	this.url = ko.observable('');
 	this.davUrl = ko.observable('');
 	this.exportUrl = ko.observable('');
@@ -120,6 +121,7 @@ CCalendarModel.prototype.parse = function (oData)
 	this.isSharedToAll(!!oData.SharedToAll);
 	this.sharedToAllAccess = oData.SharedToAllAccess;
 	this.isPublic(!!oData.IsPublic);
+	this.isReminderMuted(!!oData.IsReminderMuted);
 	this.access(oData.Access);
 
 	this.color(this.parseCssColor(oData.Color));

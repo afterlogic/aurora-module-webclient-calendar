@@ -1597,6 +1597,43 @@ CCalendarView.prototype.onDeleteCalendarResponse = function (oResponse, oRequest
 /**
  * @param {string} sCalendarId
  */
+CCalendarView.prototype.SetCalendarMuteStatus = function (sCalendarId)
+{
+	const oCalendar = this.calendars.getCalendarById(sCalendarId)
+	if (oCalendar) {
+		Ajax.send(
+			'SetCalendarMuteStatus',
+			{ 'CalendarId': sCalendarId, 'MuteStatus': !oCalendar.isReminderMuted() },
+			this.onSetCalendarMuteStatusResponse,
+			this
+		)
+	}
+}
+
+/**
+ * @param {Object} oResponse
+ * @param {Object} oRequest
+ */
+CCalendarView.prototype.onSetCalendarMuteStatusResponse = function (oResponse, oRequest)
+{
+	if (oResponse.Result) {
+		var
+			oParameters = oRequest.Parameters,
+			oCalendar = this.calendars.getCalendarById(oParameters.CalendarId)
+		;
+
+		if (oCalendar) {
+			oCalendar.isReminderMuted(oParameters.MuteStatus)
+		}
+	} else {
+		// status wasn't updated, needs to get actual statuses
+		this.getCalendars()
+	}
+}
+
+/**
+ * @param {string} sCalendarId
+ */
 CCalendarView.prototype.setDefaultCalendar = function (sCalendarId)
 {
 	Ajax.send('SetDefaultCalendar', { 'Id': sCalendarId }, this.onSetDefaultCalendarResponse, this);
