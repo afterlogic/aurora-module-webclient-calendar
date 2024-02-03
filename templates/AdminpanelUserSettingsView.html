@@ -1,0 +1,47 @@
+<div class="middle_bar">
+	<div class="panel_top">
+		<h2 class="settings_heading" data-bind="i18n: {'key': '%MODULENAME%/HEADING_DEFAULT_CALENDAR_SETTINGS_TAB'}"></h2>
+	</div>
+	<div class="panel_center">
+		<div class="fields">
+			<div class="fieldset">
+				<div class="row">
+					<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_CALENDAR_NAME'}"></span>
+					<span class="value">
+						<input class="input" type="text" data-bind="value: calendarName, valueUpdate: 'afterkeydown', onEnter: save">
+					</span>
+				</div>
+				<div class="row">
+					<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_CALENDAR_DESCRIPTION'}"></span>
+					<span class="value">
+						<input class="input" type="text" data-bind="value: calendarDescription, valueUpdate: 'afterkeydown', onEnter: save">
+					</span>
+				</div>
+				<div class="row" data-bind="visible: !!calendarColor()">
+					<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_CALENDAR_PREVIEW'}"></span>
+					<span class="value">
+						<span
+							style="border: 1px solid rgba(0, 0, 0, 0.2); border-radius: 4px; display: inline-block; padding: 3px 26px 4px 8px; color: #fff; font-size: 11pt; line-height: 1.4;"
+							data-bind="style: { backgroundColor: calendarColor() }, text: calendarName()"
+						></span>
+					</span>
+				</div>
+				<div class="row">
+					<span class="colors" data-bind="foreach: colors">
+						<span class="item color_pick"
+							data-bind="style: {backgroundColor: $data}, css: {'selected': $parent.calendarColor() === $data},
+							 click: function () { $parent.calendarColor($data) }"></span>
+					</span>
+				</div>
+			</div>
+			<div class="row buttons">
+				<span class="button" data-bind="click: save, visible: !isSaving()">
+					<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
+				</span>
+				<span class="button" data-bind="visible: isSaving()">
+					<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE_IN_PROGRESS'}"></span>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

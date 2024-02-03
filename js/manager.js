@@ -68,7 +68,27 @@ module.exports = function (oAppData) {
 							fRegisterMessagePaneController(require('modules/%ModuleName%/js/views/IcalAttachmentView.js'), 'BeforeMessageBody');
 						});
 					}
-					ModulesManager.run('SettingsWebclient', 'registerSettingsTab', [function () { return require('modules/%ModuleName%/js/views/CalendarSettingsFormView.js'); }, Settings.HashModuleName, TextUtils.i18n('%MODULENAME%/LABEL_SETTINGS_TAB')]);
+					ModulesManager.run('SettingsWebclient', 'registerSettingsTab', [
+						function () { 
+							return require('modules/%ModuleName%/js/views/CalendarSettingsFormView.js');
+						},
+						Settings.HashModuleName,
+						TextUtils.i18n('%MODULENAME%/LABEL_SETTINGS_TAB')
+					]);
+
+					ModulesManager.run('AdminPanelWebclient', 'registerAdminPanelTab', [
+						function(resolve) {
+							require.ensure(
+								['modules/%ModuleName%/js/views/AdminpanelUserSettingsView.js'],
+								function() {
+									resolve(require('modules/%ModuleName%/js/views/AdminpanelUserSettingsView.js'));
+								},
+								"admin-bundle"
+							);
+						},
+						Settings.HashModuleName + '-user',
+						TextUtils.i18n('%MODULENAME%/LABEL_SETTINGS_TAB')
+					]);
 				},
 				getScreens: function () {
 					var oScreens = {};
@@ -107,6 +127,21 @@ module.exports = function (oAppData) {
 						);
 					},
 					Settings.HashModuleName,
+					TextUtils.i18n('%MODULENAME%/LABEL_SETTINGS_TAB')
+				]);
+
+				
+				ModulesManager.run('AdminPanelWebclient', 'registerAdminPanelTab', [
+					function(resolve) {
+						require.ensure(
+							['modules/%ModuleName%/js/views/AdminpanelUserSettingsView.js'],
+							function() {
+								resolve(require('modules/%ModuleName%/js/views/AdminpanelUserSettingsView.js'));
+							},
+							"admin-bundle"
+						);
+					},
+					Settings.HashModuleName + '-user',
 					TextUtils.i18n('%MODULENAME%/LABEL_SETTINGS_TAB')
 				]);
 			}
