@@ -25,7 +25,7 @@ function AdminpanelUserSettingsView()
 	this.sServerModule = Settings.ServerModuleName
 
 	this.iUserId = 0
-	this.defaultCalendarId = null
+	this.mainCalendarId = null
 
 	this.calendarName = ko.observable('')
 	this.calendarDescription = ko.observable('')
@@ -65,13 +65,13 @@ AdminpanelUserSettingsView.prototype.requestPerEntitytSettings = function ()
 		Ajax.send(Settings.ServerModuleName, 'GetCalendars', params, function (oResponse) {
 			
 			if (oResponse.Result && oResponse.Result.Calendars) {
-				const defaultCalendar = _.find(oResponse.Result.Calendars, calendar => calendar.IsDefault)
+				const mainCalendar = _.find(oResponse.Result.Calendars, calendar => calendar.IsMain)
 				
-				if (defaultCalendar) {
-					this.defaultCalendarId = defaultCalendar.Id
-					this.calendarName(defaultCalendar.Name)
-					this.calendarDescription(defaultCalendar.Description)
-					this.calendarColor(defaultCalendar.Color)
+				if (mainCalendar) {
+					this.mainCalendarId = mainCalendar.Id
+					this.calendarName(mainCalendar.Name)
+					this.calendarDescription(mainCalendar.Description)
+					this.calendarColor(mainCalendar.Color)
 	
 					this.updateSavedState()
 				}
@@ -104,7 +104,7 @@ AdminpanelUserSettingsView.prototype.revertGlobalValues = function()
 AdminpanelUserSettingsView.prototype.getParametersForSave = function ()
 {
 	return {
-		'Id': this.defaultCalendarId,
+		'Id': this.mainCalendarId,
 		'UserId': this.iUserId,
 		'Name': this.calendarName(),
 		'Description': Types.pString(this.calendarDescription()),

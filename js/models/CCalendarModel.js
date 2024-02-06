@@ -25,7 +25,8 @@ function CCalendarModel()
 	this.name = ko.observable('');
 	this.description = ko.observable('');
 	this.owner = ko.observable('');
-	this.isDefault = false;
+	this.isDefault = false; // Can be changed by a user
+	this.isMain = false; // The first calendar that was created for a user. Its Id starts with MyCalendar
 	this.isShared =  ko.observable(false);
 	this.isSharedToAll = ko.observable(false);
 	this.sharedToAllAccess = Enums.CalendarAccess.Read;
@@ -117,6 +118,7 @@ CCalendarModel.prototype.parse = function (oData)
 	this.owner(Types.pString(oData.Owner));
 	this.active(Storage.hasData(this.id) ? Storage.getData(this.id) : true);
 	this.isDefault = !!oData.IsDefault;
+	this.isMain = !!oData.IsMain;
 	this.isShared(!!oData.Shared);
 	this.isSharedToAll(!!oData.SharedToAll);
 	this.sharedToAllAccess = oData.SharedToAllAccess;
