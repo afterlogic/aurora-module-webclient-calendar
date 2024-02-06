@@ -42,6 +42,10 @@ function CCalendarModel()
 		return this.events().length;
 	}, this);
 	this.access = ko.observable(Enums.CalendarAccess.Write);
+
+	this.nameSuffix = ko.computed(function () {
+		return this.isShared() && this.description() !== '#main' ? ' - ' + this.owner().split('@')[0] : '';
+	}, this);
 	
 	this.color = ko.observable('');
 	this.color.subscribe(function(){
