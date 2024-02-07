@@ -97,7 +97,10 @@ function CCalendarView()
 		},
 		onCalendarActiveChange: function () {
 			self.refreshView();
-		}
+		},
+		onCalendarsVisibilityChange: function () {
+			self.refreshView();
+		},
 	});
 
 	this.colors = Settings.CalendarColors

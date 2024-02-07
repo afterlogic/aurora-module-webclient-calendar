@@ -17,6 +17,7 @@ function CCalendarListModel(oParameters)
 {
 	this.parentOnCalendarActiveChange = oParameters.onCalendarActiveChange;
 	this.parentOnCalendarCollectionChange = oParameters.onCalendarCollectionChange;
+	this.parentOnCalendarsVisibilityChange = oParameters.onCalendarsVisibilityChange;
 	
 	this.defaultCal = ko.observable(null);
 	this.currentCal = ko.observable(null);
@@ -91,7 +92,12 @@ function CCalendarListModel(oParameters)
 		return this.shared().every(calendar => calendar.active()) && this.sharedToAll().every(calendar => calendar.active());
 	}, this);
 
+	this.isSharedCalendarsVisible = ko.observable(true);
+
 	this.toggleSharedCalendarsActiveStatusBind = _.bind(this.toggleSharedCalendarsActiveStatus, this)
+
+	this.toggleSharedCalendarsVisibilityBind = _.bind(this.toggleSharedCalendarsVisibility, this)
+	this.showSharedCalendarsVisibilityBind = _.bind(this.showSharedCalendarsVisibility, this)
 }
 
 CCalendarListModel.prototype.getFilteredCalendars = function (calendars) {
@@ -154,17 +160,23 @@ CCalendarListModel.prototype.getEvents = function (oStart, oEnd)
 	;
 	
 	_.each(this.collection(), function (oCalendar) {
-		if (oCalendar && oCalendar.active())
-		{
-			if (oStart && oEnd)
-			{
-				aCalendarEvents = oCalendar.getEvents(oStart, oEnd);
+		if (oCalendar) {
+			let bShow = oCalendar.active()
+			if ( (oCalendar.isShared() || oCalendar.isSharedToAll()) && !this.isSharedCalendarsVisible() ) {
+				bShow = false
 			}
-			else
-			{
-				aCalendarEvents = oCalendar.events();
+
+			if (bShow) {
+				if (oStart && oEnd)
+				{
+					aCalendarEvents = oCalendar.getEvents(oStart, oEnd);
+				}
+				else
+				{
+					aCalendarEvents = oCalendar.events();
+				}
+				aCalendarsEvents = _.union(aCalendarsEvents, aCalendarEvents);
 			}
-			aCalendarsEvents = _.union(aCalendarsEvents, aCalendarEvents);
 		}
 	}, this);
 
@@ -300,16 +312,35 @@ CCalendarListModel.prototype.expunge = function (aIds)
 /**
  * Toggles calendars shared with the user 
  */
-CCalendarListModel.prototype.toggleSharedCalendarsActiveStatus = function ()
+CCalendarListModel.prototype.toggleSharedCalendarsActiveStatus = function (bStatus)
 {
-	const bEverythingAcvtive = this.isSharedCalendarsActive()
-	
+	bStatus = bStatus !== undefined ? bStatus : !this.isSharedCalendarsActive()
 	this.shared().forEach(calendar => {
-		calendar.active(!bEverythingAcvtive);
+		calendar.active(bStatus);
 	});
 	this.sharedToAll().forEach(calendar => {
-		calendar.active(!bEverythingAcvtive);
+		calendar.active(bStatus);
 	});
+};
+
+/**
+ * Toggles calendars shared with the user 
+ */
+CCalendarListModel.prototype.toggleSharedCalendarsVisibility = function ()
+{
+	this.isSharedCalendarsVisible(!this.isSharedCalendarsVisible())
+	this.parentOnCalendarsVisibilityChange()
+};
+
+/**
+ * Shows calendars shared with the user 
+ */
+CCalendarListModel.prototype.showSharedCalendarsVisibility = function ()
+{
+	if (!this.isSharedCalendarsVisible()) {
+		this.isSharedCalendarsVisible(true)
+		this.parentOnCalendarsVisibilityChange()
+	}
 };
 
 module.exports = CCalendarListModel;

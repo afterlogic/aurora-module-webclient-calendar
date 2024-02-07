@@ -36,21 +36,31 @@
 								<div class="calendar_list_search" data-bind="css: {'hidden': !calendars.showSharedCalendars()}">
 									<input type="text" data-bind="value: calendars.search, valueUpdate: 'afterkeydown'" />
 								</div>
-								<div class="calendar_list_check_buttons" data-bind="css: { 'hidden': !calendars.showSharedCalendars() }">
+								<div class="calendar_list_check_buttons buttons" data-bind="css: { 'hidden': !calendars.showSharedCalendars() }">
 									<span class="link"
 										data-bind="i18n: {'key': '%MODULENAME%/ACTION_UNCHECK_ALL_CALENDARS'},
-										visible: calendars.isSharedCalendarsActive(),
-										click: calendars.toggleSharedCalendarsActiveStatusBind"
+										click: calendars.toggleSharedCalendarsActiveStatusBind(false)"
 									></span>
-									<span class="link"
+									<!-- <span class="link"
 										data-bind="i18n: {'key': '%MODULENAME%/ACTION_CHECK_ALL_CALENDARS'},
 										visible: !calendars.isSharedCalendarsActive(),
 										click: calendars.toggleSharedCalendarsActiveStatusBind"
+									></span> -->
+									<span class="button"
+										data-bind="i18n: {'key': '%MODULENAME%/ACTION_HIDE_CALENDARS'},
+										visible: calendars.isSharedCalendarsVisible(),
+										click: calendars.toggleSharedCalendarsVisibilityBind"
+									></span>
+									<span class="button"
+										data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_CALENDARS'},
+										visible: !calendars.isSharedCalendarsVisible(),
+										click: calendars.toggleSharedCalendarsVisibilityBind"
 									></span>
 								</div>
 							</div>
 							<div class="expandable_calendar_list" data-bind="visible: bAllowShare,
-								 css: {'collapsed': !calendars.showSharedCalendars()}"
+								css: {'collapsed': !calendars.showSharedCalendars()},
+								click: calendars.showSharedCalendarsVisibilityBind"
 							>
 								<div class="items_list calendars"
 									 data-bind="visible: calendars.filteredShared().length > 0"
