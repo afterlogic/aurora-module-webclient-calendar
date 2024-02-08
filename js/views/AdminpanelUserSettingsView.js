@@ -65,7 +65,7 @@ AdminpanelUserSettingsView.prototype.requestPerEntitytSettings = function ()
 		Ajax.send(Settings.ServerModuleName, 'GetCalendars', params, function (oResponse) {
 			
 			if (oResponse.Result && oResponse.Result.Calendars) {
-				const mainCalendar = _.find(oResponse.Result.Calendars, calendar => calendar.IsMain)
+				const mainCalendar = _.find(oResponse.Result.Calendars, calendar => calendar.IsMain())
 				
 				if (mainCalendar) {
 					this.mainCalendarId = mainCalendar.Id
