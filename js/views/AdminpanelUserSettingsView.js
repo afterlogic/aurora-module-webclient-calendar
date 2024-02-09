@@ -8,6 +8,8 @@ var
 
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	Api = require('%PathToCoreWebclientModule%/js/Api.js'),
+	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
+	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 
 	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
 	CAbstractSettingsFormView = ModulesManager.run('AdminPanelWebclient', 'getAbstractSettingsFormViewClass'),
@@ -31,6 +33,8 @@ function AdminpanelUserSettingsView()
 	this.calendarDescription = ko.observable('')
 	this.calendarColor = ko.observable('')
 	this.colors = Settings.CalendarColors
+
+	this.isLoading = ko.observable(false)
 }
 
 _.extendOwn(AdminpanelUserSettingsView.prototype, CAbstractSettingsFormView.prototype)
@@ -61,11 +65,14 @@ AdminpanelUserSettingsView.prototype.requestPerEntitytSettings = function ()
 		const params = {
 			'UserId': this.iUserId,
 		}
+
+		this.isLoading(true)
 		
 		Ajax.send(Settings.ServerModuleName, 'GetCalendars', params, function (oResponse) {
+			this.isLoading(false)
 			
 			if (oResponse.Result && oResponse.Result.Calendars) {
-				const mainCalendar = _.find(oResponse.Result.Calendars, calendar => calendar.IsMain())
+				const mainCalendar = _.find(oResponse.Result.Calendars, calendar => calendar.IsMain)
 				
 				if (mainCalendar) {
 					this.mainCalendarId = mainCalendar.Id
@@ -74,6 +81,8 @@ AdminpanelUserSettingsView.prototype.requestPerEntitytSettings = function ()
 					this.calendarColor(mainCalendar.Color)
 	
 					this.updateSavedState()
+				} else {
+					Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_MAIN_CALENDAR_NOT_FOUND'));
 				}
 			} else {
 				this.revertGlobalValues()

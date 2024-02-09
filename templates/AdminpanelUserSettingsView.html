@@ -8,13 +8,15 @@
 				<div class="row">
 					<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_CALENDAR_NAME'}"></span>
 					<span class="value">
-						<input class="input" type="text" data-bind="value: calendarName, valueUpdate: 'afterkeydown', onEnter: save">
+						<input class="input" type="text" 
+							data-bind="disable: isLoading() || isSaving(), css: {'disabled': isLoading() || isSaving()}, value: calendarName, valueUpdate: 'afterkeydown', onEnter: save">
 					</span>
 				</div>
 				<div class="row">
 					<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_CALENDAR_DESCRIPTION'}"></span>
 					<span class="value">
-						<input class="input" type="text" data-bind="value: calendarDescription, valueUpdate: 'afterkeydown', onEnter: save">
+						<input class="input" type="text" 
+							data-bind="disable: isLoading() || isSaving(), css: {'disabled': isLoading() || isSaving()}, value: calendarDescription, valueUpdate: 'afterkeydown', onEnter: save">
 					</span>
 				</div>
 				<div class="row" data-bind="visible: !!calendarColor()">
@@ -30,7 +32,7 @@
 					<span class="colors" data-bind="foreach: colors">
 						<span class="item color_pick"
 							data-bind="style: {backgroundColor: $data}, css: {'selected': $parent.calendarColor() === $data},
-							 click: function () { $parent.calendarColor($data) }"></span>
+							 click: function () {if (!$parent.isLoading() && !$parent.isSaving()) { $parent.calendarColor($data) } }"></span>
 					</span>
 				</div>
 			</div>
