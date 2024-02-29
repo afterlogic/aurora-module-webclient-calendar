@@ -200,10 +200,10 @@ function CEditEventPopup()
 			this.selectedCalendarIsSubscribed(oCalendar.subscribed());
 			this.changeCalendarColor(sValue);
 
-			// isShared - only if shared to me
+			// isShared - only if shared to me, including isSharedToAll case
 			// isSharedToAll - shared to me and shared by me
 			// shares - shared to me and shared by me
-			this.allowSetPrivateEvent(!oCalendar.isShared() && !oCalendar.isSharedToAll());
+			this.allowSetPrivateEvent(!oCalendar.isShared());
 		}
 	}, this);
 	
