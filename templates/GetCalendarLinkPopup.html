@@ -1,8 +1,11 @@
-<div class="popup calendar_popup calendar_getlink" style="display: none;">
+<div class="popup calendar_popup calendar_getlink" style="display: none;" data-bind="css: {'bg-light': isBackgroundLight}">
 	<div class="mask" data-bind="click: cancelPopup"></div>
 	<div class="popup_panel">
 		<span class="close" data-bind="click: cancelPopup"></span>
-		<span class="popup_heading" data-bind="style: {backgroundColor: selectedColor}, i18n: {'key': '%MODULENAME%/HEADING_GET_CALENDAR_LINK'}"></span>
+		<span class="popup_heading" data-bind="
+			style: {backgroundColor: selectedColor},
+			i18n: {'key': '%MODULENAME%/HEADING_GET_CALENDAR_LINK'}
+		"></span>
 
 		<div class="fields">
 			<div class="fieldset dav_access">

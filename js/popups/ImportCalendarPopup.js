@@ -14,7 +14,8 @@ var
 	
 	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js'),
 	
-	Settings = require('modules/%ModuleName%/js/Settings.js')
+	Settings = require('modules/%ModuleName%/js/Settings.js'),
+	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js')
 ;
 
 /**
@@ -38,6 +39,10 @@ function CImportCalendarPopup()
 
 	this.isPrivateEvent = ko.observable(false);
 	this.allowSetPrivateEvent = ko.observable(true);
+
+	this.isBackgroundLight = ko.computed(function () {
+		return !this.color() ? false : CalendarUtils.isColorLight(this.color())
+	}, this);
 }
 
 _.extendOwn(CImportCalendarPopup.prototype, CAbstractPopup.prototype);

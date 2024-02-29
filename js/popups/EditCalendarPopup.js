@@ -13,6 +13,7 @@ var
 	Settings = require('modules/%ModuleName%/js/Settings.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	Ajax = require('modules/%ModuleName%/js/Ajax.js'),
+	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js'),
 	Api = require('%PathToCoreWebclientModule%/js/Api.js')
 ;
 
@@ -36,11 +37,15 @@ function CEditCalendarPopup()
 	this.selectedColor = ko.observable(this.colors()[0]);
 	
 	this.popupHeading = ko.observable('');
-
+	
 	this.allowSubscribedCalendars = ko.observable(Settings.AllowSubscribedCalendars);
 	this.calendarSubscribed = ko.observable(false);
 	this.calendarSource = ko.observable('');
 	this.calendarSourceFocus = ko.observable(false);
+
+	this.isBackgroundLight = ko.computed(function () {
+		return !this.selectedColor() ? false : CalendarUtils.isColorLight(this.selectedColor())
+	}, this);
 }
 
 _.extendOwn(CEditCalendarPopup.prototype, CAbstractPopup.prototype);
@@ -159,17 +164,19 @@ CEditCalendarPopup.prototype.onCreateCalendarResponse = function (oResponse, oRe
  * @param {Object} oResponse
  * @param {Object} oRequest
  */
- CEditCalendarPopup.prototype.onUpdateCalendarResponse = function (oResponse, oRequest)
- {
-	 if (oResponse.Result)
-	 {
-		if (_.isFunction(this.fCallback)) {
-			this.fCallback(oResponse, oRequest);
-			this.closePopup();
-		}
-	 } else {
-		 Api.showErrorByCode(oResponse);
-	 }
- };
+CEditCalendarPopup.prototype.onUpdateCalendarResponse = function (oResponse, oRequest)
+{
+	if (oResponse.Result)
+	{
+	if (_.isFunction(this.fCallback)) {
+		this.fCallback(oResponse, oRequest);
+		this.closePopup();
+	}
+	} else {
+		Api.showErrorByCode(oResponse);
+	}
+};
+
+CEditCalendarPopup.prototype.isColorLight = CalendarUtils.isColorLight;
 
 module.exports = new CEditCalendarPopup();

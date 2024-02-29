@@ -47,6 +47,7 @@ function CCalendarModel()
 		return (this.isShared() && !this.isMain()) ? ' - ' + this.owner().split('@')[0] : '';
 	}, this);
 	
+	this.isBackgroundLight = ko.observable(false);
 	this.color = ko.observable('');
 	this.color.subscribe(function(){
 		
@@ -54,6 +55,8 @@ function CCalendarModel()
 			oEvent.backgroundColor = oEvent.borderColor = this.color();
 			return oEvent;
 		}, this));
+
+		this.isBackgroundLight(CalendarUtils.isColorLight(this.color()));
 		
 		this.name.valueHasMutated();
 

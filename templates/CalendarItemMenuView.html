@@ -1,4 +1,7 @@
-<div class="item" data-bind="css: {'expand': $parent.currentCalendarDropdown() === id}, style: {backgroundColor: color}">
+<div class="item" data-bind="
+	css: {'expand': $parent.currentCalendarDropdown() === id, 'bg-light': isBackgroundLight},
+	style: {backgroundColor: color}
+">
 	<span class="dropdown">
 		<span class="dropdown_helper">
 			<span class="dropdown_arrow"><span></span></span>

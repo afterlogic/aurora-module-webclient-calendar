@@ -11,7 +11,9 @@ var
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js'),
 	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
-	Screens = require('%PathToCoreWebclientModule%/js/Screens.js')
+	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
+
+	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js')
 ;
 
 /**
@@ -73,6 +75,10 @@ function CCalendarSharePopup()
 		{'value': Enums.CalendarAccess.Read, 'display': TextUtils.i18n('%MODULENAME%/LABEL_READ_ACCESS')},
 		{'value': Enums.CalendarAccess.Write, 'display': TextUtils.i18n('%MODULENAME%/LABEL_WRITE_ACCESS')}
 	];
+
+	this.isBackgroundLight = ko.computed(function () {
+		return !this.selectedColor() ? false : CalendarUtils.isColorLight(this.selectedColor())
+	}, this);
 }
 
 _.extendOwn(CCalendarSharePopup.prototype, CAbstractPopup.prototype);

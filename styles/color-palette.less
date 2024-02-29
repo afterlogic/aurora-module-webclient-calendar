@@ -37,9 +37,13 @@
 		margin-top: 20px;
 
 		.item {
-			color: #ffffff;
 			height: 18px;
 			width: 24px;
+			color: #f2f2f3;
+		
+			&.bg-light {
+				color: #605e62;
+			}
 
 			&:before {
 				// font-size: 15px;
@@ -58,10 +62,12 @@
 
 	.item {
 		height: 22px;
-		padding: 0px;
 		width: 22px;
-		display: inline-block;
 		margin: 0px 6px 6px 0px;
+		padding: 0px;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
 
 		&:before {
 			font-size: 11px;

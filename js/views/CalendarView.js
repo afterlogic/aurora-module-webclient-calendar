@@ -38,6 +38,8 @@ var
 	CCalendarListModel = require('modules/%ModuleName%/js/models/CCalendarListModel.js'),
 	CCalendarModel = require('modules/%ModuleName%/js/models/CCalendarModel.js'),
 
+	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js'),
+
 	bMobileDevice = false
 ;
 
@@ -187,6 +189,10 @@ function CCalendarView()
 		eventDrop: _.bind(this.moveEvent, this),
 		eventResize: _.bind(this.resizeEvent, this),
 		eventRender: function(oEv, oEl) {
+			if (CalendarUtils.isColorLight(oEv.backgroundColor)) {
+				oEl.addClass('fc-bg-light');
+			}
+
 			if (Settings.AddDescriptionToTitle)
 			{
 				var oTitle = oEl.find( '.fc-title' );

@@ -5,7 +5,9 @@ var
 	$ = require('jquery'),
 	ko = require('knockout'),
 	
-	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js')
+	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js'),
+
+	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js')
 ;
 
 /**
@@ -29,6 +31,10 @@ function CGetCalendarLinkPopup()
 	}, this);
 	this.pubUrl = ko.observable('');
 	this.canShare = ko.observable(false);
+
+	this.isBackgroundLight = ko.computed(function () {
+		return !this.selectedColor() ? false : CalendarUtils.isColorLight(this.selectedColor())
+	}, this);
 }
 
 _.extendOwn(CGetCalendarLinkPopup.prototype, CAbstractPopup.prototype);

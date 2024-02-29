@@ -1,8 +1,11 @@
-<div class="popup calendar_popup calendar_create" style="display: none;">
+<div class="popup calendar_popup calendar_create" style="display: none;" data-bind="css: {'bg-light': isBackgroundLight}">
 	<div class="mask" data-bind="click: cancelPopup"></div>
 	<div class="popup_panel">
 		<span class="close" data-bind="click: cancelPopup"></span>
-		<span class="popup_heading" data-bind="style: {backgroundColor: selectedColor}, text: popupHeading()"></span>
+		<span class="popup_heading" data-bind="
+			style: {backgroundColor: selectedColor},
+			text: popupHeading()"
+		></span>
 		<div class="fields">
 			<div class="fieldset">
 				<div class="row name" data-bind="css: {'focused': calendarNameFocus(), 'filled': (calendarName()) ? calendarName().length : false}">
@@ -27,8 +30,11 @@
 
 				<div class="row source">
 					<span class="colors" data-bind="foreach: colors">
-						<span class="item color_pick" data-bind="style: {backgroundColor: $data}, css: {'selected': $parent.selectedColor() === $data},
-							 click: function () {$parent.selectedColor($data)}"></span>
+						<span class="item color_pick" data-bind="
+							style: {backgroundColor: $data},
+							css: {'selected': $parent.selectedColor() === $data, 'bg-light': $parent.isColorLight($data)},
+							click: function () {$parent.selectedColor($data)}"
+						></span>
 					</span>
 				</div>
 			</div>

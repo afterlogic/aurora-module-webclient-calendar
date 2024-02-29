@@ -70,7 +70,14 @@
 				<!--<span class="icon repeat" data-bind="visible: repeatPeriod() !== Enums.CalendarRepeatPeriod.None"></span>-->
 				<span class="icon appointment" data-bind="visible: attendees().length !== 0"></span>
 				<span class="close" data-bind="click: cancelPopup"></span>
-				<span class="popup_heading" data-bind="dropdown: {'control': false}, style: {backgroundColor: calendarColor}, css: {'calendar_selector': calendarsList().length > 1 && selectedCalendarIsEditable()}">
+				<span class="popup_heading" data-bind="
+					dropdown: {'control': false},
+					style: {backgroundColor: calendarColor},
+					css: {
+						'calendar_selector': calendarsList().length > 1 && selectedCalendarIsEditable(),
+						'bg-light': isBackgroundLight
+					}
+				">
 					<span class="current">
 						<span data-bind="text: selectedCalendarName, fade: {color: calendarColor}"></span>
 					</span>
@@ -78,7 +85,13 @@
 						<span class="dropdown_helper">
 							<span class="dropdown_arrow"><span></span></span>
 							<span class="dropdown_content" data-bind="foreach: calendarsList()">
-								<span class="item" data-bind="visible: $parent.selectedCalendarId() !== id, text: name, style: { backgroundColor: color }, click: function () { $parent.selectedCalendarId(id); }"></span>
+								<span class="item" data-bind="
+									visible: $parent.selectedCalendarId() !== id,
+									text: name,
+									style: { backgroundColor: color },
+									css: {'bg-light': isBackgroundLight},
+									click: function () { $parent.selectedCalendarId(id);}
+								"></span>
 							</span>
 						</span>
 					</span>
@@ -105,8 +118,8 @@
 						<span data-bind="css: {'repeat': isRepeat()}, customTooltip: '%MODULENAME%/INFO_RECURRING_EVENT'"></span>
 
 						<div class="subforms" data-bind="visible: dateEdit()">
-							<div class="dates_form">
-								<div class="form_content" data-bind="initDom: datesFormDom">
+							<div class="dates_form" data-bind="css: {'bg-light': isBackgroundLight}">
+								<div class="form_content" data-bind="style: {'backgroundColor': calendarColor}">
 									<div class="row" data-bind="css: {'ampm_time': ampmTimeFormat()}">
 										<span class="date_from_input">
 											<input class="date input" type="text"  spellcheck="false" readonly="readonly" data-bind="initDom: startDom" />
@@ -147,7 +160,10 @@
 
 									<!-- ko template: {name: '%ModuleName%_EditEventPopup_RepeatPanelView'} --><!-- /ko -->
 								</div>
-								<span class="form_arrow" data-bind="initDom: datesFormArrowDom"></span>
+								<span class="form_arrow" data-bind="
+									style: {'border-top-color': calendarColor},
+									css: {'bg-light': isBackgroundLight}
+								"></span>
 							</div>
 						</div>
 					</div>
