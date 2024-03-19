@@ -170,10 +170,12 @@ function CCalendarView()
 			},
 			week: {
 				agendaEventMinHeight: 18,
+				nowIndicator: true,
 				columnFormat: 'dddd D' // Monday 7
 			},
 			day: {
 				agendaEventMinHeight: 18,
+				nowIndicator: true,
 				slotEventOverlap: false,
 				columnFormat: 'dddd D' // Monday 7
 			}
@@ -606,48 +608,48 @@ CCalendarView.prototype.getClientEvent = function (sCalendarId, sEventId)
 	return oEventResult;
 }
 
-CCalendarView.prototype.setTimeline = function ()
-{
-	var
-		now = new Date(),
-		nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-		todayDate = new Date(this.todayDate.getFullYear(), this.todayDate.getMonth(), this.todayDate.getDate()),
-		parentDiv = null,
-		timeline = null,
-		curSeconds = 0,
-		percentOfDay = 0,
-		topLoc = 0
-	;
+// CCalendarView.prototype.setTimeline = function ()
+// {
+// 	var
+// 		now = new Date(),
+// 		nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+// 		todayDate = new Date(this.todayDate.getFullYear(), this.todayDate.getMonth(), this.todayDate.getDate()),
+// 		parentDiv = null,
+// 		timeline = null,
+// 		curSeconds = 0,
+// 		percentOfDay = 0,
+// 		topLoc = 0
+// 	;
 
-	if (todayDate < nowDate)
-	{ // the day has changed
-		this.execCommand('gotoDate', now);
-		this.todayDate = this.execCommand('getDate').toDate();
-		var view = this.execCommand('getView');
-		view.unrenderDates();
-		view.renderDates();		
-		this.execCommand('rerenderEvents');
-	}
+// 	if (todayDate < nowDate)
+// 	{ // the day has changed
+// 		this.execCommand('gotoDate', now);
+// 		this.todayDate = this.execCommand('getDate').toDate();
+// 		var view = this.execCommand('getView');
+// 		view.unrenderDates();
+// 		view.renderDates();		
+// 		this.execCommand('rerenderEvents');
+// 	}
 
-	// render timeline
-	parentDiv = $(".fc-slats:visible").parent();
-	timeline = parentDiv.children(".timeline");
+// 	// render timeline
+// 	parentDiv = $(".fc-slats:visible").parent();
+// 	timeline = parentDiv.children(".timeline");
 
-	if (timeline.length === 0)
-	{ //if timeline isn't there, add it
-		timeline = $("<hr>").addClass("timeline");
-		parentDiv.prepend(timeline);
-	}
-	timeline.css('left', $("td .fc-axis").width() + 10);
+// 	if (timeline.length === 0)
+// 	{ //if timeline isn't there, add it
+// 		timeline = $("<hr>").addClass("timeline");
+// 		parentDiv.prepend(timeline);
+// 	}
+// 	timeline.css('left', $("td .fc-axis").width() + 10);
 
-	timeline.show();
+// 	timeline.show();
 
-	curSeconds = (now.getHours() * 60 * 60) + (now.getMinutes() * 60) + now.getSeconds();
-	percentOfDay = curSeconds / 86400; //24 * 60 * 60 = 86400, % of seconds in a day
-	topLoc = Math.floor(parentDiv.height() * percentOfDay);
+// 	curSeconds = (now.getHours() * 60 * 60) + (now.getMinutes() * 60) + now.getSeconds();
+// 	percentOfDay = curSeconds / 86400; //24 * 60 * 60 = 86400, % of seconds in a day
+// 	topLoc = Math.floor(parentDiv.height() * percentOfDay);
 
-	timeline.css("top", topLoc + "px");
-};
+// 	timeline.css("top", topLoc + "px");
+// };
 
 /**
  * When all event's rendered
@@ -682,8 +684,8 @@ CCalendarView.prototype.viewRenderCallback = function (oView, oElement)
 {
 	var
 		prevDate = null,
-		constDate = "01/01/1971 ",
-		timelineInterval
+		constDate = "01/01/1971 "
+		// timelineInterval
 	;
 
 	this.changeDate();
@@ -693,20 +695,20 @@ CCalendarView.prototype.viewRenderCallback = function (oView, oElement)
 		this.initResizing();
 	}
 
-	if(typeof(timelineInterval) !== "undefined")
-	{
-		window.clearInterval(timelineInterval);
-	}
+	// if(typeof(timelineInterval) !== "undefined")
+	// {
+	// 	window.clearInterval(timelineInterval);
+	// }
 
-	timelineInterval = window.setInterval(_.bind(function () {
-		this.setTimeline();
-	}, this), 60000);
+	// timelineInterval = window.setInterval(_.bind(function () {
+	// 	this.setTimeline();
+	// }, this), 60000);
 
-	try
-	{
-		this.setTimeline();
-	}
-	catch(err) { }
+	// try
+	// {
+	// 	this.setTimeline();
+	// }
+	// catch(err) { }
 
 	if (oView.name !== 'month' && Settings.HighlightWorkingHours)
 	{
