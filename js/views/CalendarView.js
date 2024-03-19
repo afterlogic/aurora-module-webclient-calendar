@@ -163,15 +163,18 @@ function CCalendarView()
 		isRTL: UserSettings.IsRTL,
 		scrollTime: moment.duration(8, 'hours'),
 		forceEventDuration: true,
-		listDayFormat: 'D. MMMM',
+		listDayFormat: 'D. MMMM',	
 		views: {
 			month: {
 				columnFormat: 'dddd' // Monday
 			},
 			week: {
+				agendaEventMinHeight: 18,
 				columnFormat: 'dddd D' // Monday 7
 			},
 			day: {
+				agendaEventMinHeight: 18,
+				slotEventOverlap: false,
 				columnFormat: 'dddd D' // Monday 7
 			}
 		},
