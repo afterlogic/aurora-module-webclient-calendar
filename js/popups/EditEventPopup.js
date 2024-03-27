@@ -725,6 +725,7 @@ CEditEventPopup.prototype.onEscHandler = function ()
 
 CEditEventPopup.prototype.onClose = function ()
 {
+	window.location.hash = Settings.HashModuleName;
 	this.hideAll();
 	this.cleanAll();
 };
