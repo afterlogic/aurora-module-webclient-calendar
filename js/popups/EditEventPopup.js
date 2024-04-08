@@ -1168,6 +1168,8 @@ CEditEventPopup.prototype.setAppointmentAction = function (sDecision) {
       CalendarId: this.selectedCalendarId(),
       EventId: this.uid(),
       Attendee: sEmail,
+      RecurrenceId: this.recurrenceId(),
+			AllEvents:  this.allEvents(),
     }
   if (oAttendee) {
     AppointmentUtils.markIcalInCache(sDecision, this.uid())
