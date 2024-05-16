@@ -5,7 +5,8 @@ var
 	$ = require('jquery'),
 	ko = require('knockout'),
 	
-	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js')
+	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js'),
+	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js')
 ;
 
 /**
@@ -37,6 +38,10 @@ function CSelectCalendarPopup()
 
 	this.isPrivateEvent = ko.observable(false);
 	this.allowSetPrivateEvent = ko.observable(true);
+
+	this.isBackgroundLight = ko.computed(function () {
+		return !this.calendarColor() ? false : CalendarUtils.isColorLight(this.calendarColor())
+	}, this);
 }
 
 _.extendOwn(CSelectCalendarPopup.prototype, CAbstractPopup.prototype);

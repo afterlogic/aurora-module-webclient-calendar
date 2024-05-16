@@ -11,7 +11,7 @@
 					</span>
 				</div>
 				<div class="row">
-					<span class="popup_heading" data-bind="
+					<span class="popup_heading" style="width: auto;" data-bind="
 						dropdown: {'control': false},
 						style: {backgroundColor: calendarColor},
 						css: {
@@ -26,7 +26,13 @@
 							<span class="dropdown_helper">
 								<span class="dropdown_arrow"><span></span></span>
 								<span class="dropdown_content" data-bind="foreach: calendarsList()">
-									<span class="item" data-bind="visible: $parent.selectedCalendarId() !== id, text: name, style: { backgroundColor: color }, click: function () { $parent.selectedCalendarId(id) }"></span>
+									<span class="item" data-bind="
+										visible: $parent.selectedCalendarId() !== id,
+										text: name,
+										style: { backgroundColor: color },
+										css: {'bg-light': isBackgroundLight},
+										click: function () { $parent.selectedCalendarId(id) }
+									"></span>
 								</span>
 							</span>
 						</span>
