@@ -267,6 +267,8 @@ function CEditEventPopup() {
 
   this.aReminderPhrase = TextUtils.i18n('%MODULENAME%/INFO_REMINDER').split('%')
 
+  this.canEditAttendees = ko.observable(false)
+
   this.isAppointmentButtonsVisible = ko.observable(false)
 }
 
@@ -432,13 +434,17 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
 
   this.isMyEvent(
     ((this.organizer() != '' && owner === this.organizer()) || this.organizer() == '') &&
-      (owner === oParameters.Owner || owner === sCalendarOwner)
+      (owner === oParameters.Owner || owner === sCalendarOwner) || (sAttendee == '' && this.appointment())
   )
   this.editableSwitch(
     this.selectedCalendarIsShared(),
     this.selectedCalendarIsEditable(),
     this.isMyEvent(),
     this.selectedCalendarIsSubscribed()
+  )
+
+  this.canEditAttendees(
+    this.isEditable() && (sAttendee == '' && ((this.organizer() != '' && owner === this.organizer()) || this.organizer() == '') || sAttendee != '')
   )
 
   this.setCurrentAttenderStatus(sAttendee, oParameters.Attendees || [])
@@ -459,13 +465,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
 
   this.modified = false
 
-  this.isAppointmentButtonsVisible(
-    this.appointment() &&
-      this.selectedCalendarIsEditable() &&
-      _.find(this.attendees(), function (oAttendee) {
-        return oAttendee.email === owner
-      })
-  )
+  this.isAppointmentButtonsVisible(this.appointment() && this.selectedCalendarIsEditable() && sAttendee !== '')
 
   this.isPrivateEvent(!!oParameters.IsPrivate)
 }

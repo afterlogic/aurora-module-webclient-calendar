@@ -38,7 +38,7 @@
 								'declined': status === 2,
 								'tentative': status === 3
 							 }">
-							<span class="control remove" data-bind="visible: $parent.isEditable(), click: $parent.removeGuest.bind($parent), customTooltip: 'COREWEBCLIENT/ACTION_REMOVE'"></span>
+							<span class="control remove" data-bind="visible: $parent.canEditAttendees(), click: $parent.removeGuest.bind($parent), customTooltip: 'COREWEBCLIENT/ACTION_REMOVE'"></span>
 							<span class="name" data-bind="css: {'recivedAnim': $parent.recivedAnim() && email === $parent.whomAnimate()}">
 								<span class="icon status" data-bind="customTooltip: function () { return $parent.getAttenderTextStatus(status); }"></span>
 								<span class="text" data-bind="customTooltip: email, text: name, visible: name !== ''"></span>
@@ -46,7 +46,7 @@
 							</span>
 						</div>
 					</div>
-						<div class="row add_attender" data-bind="visible: isEditable(), css: {'focused': guestEmailFocus()}">
+						<div class="row add_attender" data-bind="visible: canEditAttendees(), css: {'focused': guestEmailFocus()}">
 						<span class="control add" data-bind="customTooltip: '%MODULENAME%/ACTION_ADD_GUESTS', click: onAddGuestClick"></span>
 						<label for="add_attender_input" class="label placeholder" data-i18n="%MODULENAME%/LABEL_EMAIL_OR_NAME" data-bind="i18n: 'text', visible: guestAutocomplete() === ''"></label>
 						<input id="add_attender_input" class="value input" spellcheck="false"  type="text" autocomplete="on" data-bind="value: guestAutocomplete, hasfocus: guestEmailFocus, valueUpdate: ['blur', 'afterkeydown'], autocompleteSimple: {callback: autocompleteCallback.bind($data), dataAccessor: guestAutocompleteItem}" />
