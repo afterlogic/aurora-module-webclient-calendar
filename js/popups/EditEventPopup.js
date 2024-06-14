@@ -179,7 +179,6 @@ function CEditEventPopup() {
   this.selectedCalendarId.subscribe(function (sValue) {
     if (sValue) {
       var oCalendar = this.calendars.getCalendarById(sValue)
-
       this.owner(oCalendar.owner())
       this.selectedCalendarName(oCalendar.name())
       this.selectedCalendarIsShared(oCalendar.isShared())
@@ -269,6 +268,8 @@ function CEditEventPopup() {
 
   this.canEditAttendees = ko.observable(false)
 
+  this.canDeleteEvent = ko.observable(false)
+
   this.isAppointmentButtonsVisible = ko.observable(false)
 }
 
@@ -321,13 +322,16 @@ CEditEventPopup.prototype.initializeDatePickers = function () {
 CEditEventPopup.prototype.onOpen = function (oParameters) {
   this.linkPopupEditableView.onOpen()
 
-  var owner = App.getUserPublicId(),
+  var 
+    userPublicId = App.getUserPublicId(),
     oEndMomentDate = null,
     oStartMomentDate = null,
-    sAttendee = '',
+    currentAttendee = '',
+    userAccountsIsNotInAteendees = true,
     oCalendar = null,
     sCalendarOwner = '',
     oToday = moment()
+  
   this.withDate(!!oParameters.Start && !!oParameters.End)
 
   if (!oParameters.Start && !oParameters.End) {
@@ -429,13 +433,16 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
   this.attendees(oParameters.Attendees || [])
 
   if (_.isFunction(App.getAttendee)) {
-    sAttendee = App.getAttendee(this.attendees())
+    currentAttendee = App.getAttendee(this.attendees())
   }
 
+  userAccountsIsNotInAteendees = currentAttendee == '';
+
   this.isMyEvent(
-    ((this.organizer() != '' && owner === this.organizer()) || this.organizer() == '') &&
-      (owner === oParameters.Owner || owner === sCalendarOwner) || (sAttendee == '' && this.appointment())
+    ((this.organizer() != '' && userPublicId === this.organizer()) || this.organizer() == '') &&
+      (userPublicId === oParameters.Owner || userPublicId === sCalendarOwner) || (this.appointment() && userAccountsIsNotInAteendees)
   )
+
   this.editableSwitch(
     this.selectedCalendarIsShared(),
     this.selectedCalendarIsEditable(),
@@ -444,10 +451,10 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
   )
 
   this.canEditAttendees(
-    this.isEditable() && (sAttendee == '' && ((this.organizer() != '' && owner === this.organizer()) || this.organizer() == '') || sAttendee != '')
+    this.isEditable() && (userAccountsIsNotInAteendees && ((this.organizer() != '' && userPublicId === this.organizer()) || this.organizer() == '') || !userAccountsIsNotInAteendees)
   )
 
-  this.setCurrentAttenderStatus(sAttendee, oParameters.Attendees || [])
+  this.setCurrentAttenderStatus(currentAttendee, oParameters.Attendees || [])
 
   this.owner(oParameters.Owner || owner)
 
@@ -465,7 +472,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
 
   this.modified = false
 
-  this.isAppointmentButtonsVisible(this.appointment() && this.selectedCalendarIsEditable() && sAttendee !== '')
+  this.isAppointmentButtonsVisible(this.appointment() && this.selectedCalendarIsEditable() && !userAccountsIsNotInAteendees)
 
   this.isPrivateEvent(!!oParameters.IsPrivate)
 }
@@ -1198,8 +1205,9 @@ CEditEventPopup.prototype.setAppointmentAction = function (sDecision) {
  * @param {boolean} bSubscrubed
  */
 CEditEventPopup.prototype.editableSwitch = function (bShared, bEditable, bMyEvent, bSubscrubed = false) {
-  this.isEditable(((bShared && bEditable) || bMyEvent) && !bSubscrubed)
+  this.isEditable(((bShared && bEditable) || !bShared) && bMyEvent && !bSubscrubed)
   this.isEditableReminders(bEditable)
+  this.canDeleteEvent(bEditable)
 }
 
 /**
