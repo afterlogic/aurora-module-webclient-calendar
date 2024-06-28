@@ -1475,6 +1475,7 @@ CCalendarView.prototype.openEventPopup = function (oCalendar, oStart, oEnd, bAll
         AllDay: bAllDay,
         TimeFormat: this.sTimeFormat,
         DateFormat: UserSettings.dateFormat(),
+        Organizer: App.getUserPublicId(),
         CallbackAttendeeActionDecline: _.bind(this.attendeeActionDecline, this),
       },
     ])

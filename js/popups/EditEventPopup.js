@@ -456,7 +456,7 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
 
   this.setCurrentAttenderStatus(currentAttendee, oParameters.Attendees || [])
 
-  this.owner(oParameters.Owner || owner)
+  this.owner(oParameters.Owner)
 
   this.guestAutocomplete('')
 
