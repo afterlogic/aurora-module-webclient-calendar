@@ -541,8 +541,7 @@ CEditEventPopup.prototype.onSaveClick = function () {
       oEventData.end = oEnd
 
       if (iPeriod) {
-        sDate = this.repeatEndDom().datepicker('getDate')
-        iUnixDate = sDate ? moment(sDate).unix() : null
+        iUnixDate = moment(this.getDateTime(this.repeatEndDom(), this.startTime())).unix()
         iInterval = this.repeatInterval()
 
         const rrule = {
