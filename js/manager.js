@@ -9,6 +9,15 @@ module.exports = function (oAppData) {
 		
 		Settings = require('modules/%ModuleName%/js/Settings.js')
 	;
+
+	let calendarViewInstance = null;
+
+	const getCalendarViewInstance = () => {
+		if(!calendarViewInstance) {
+			calendarViewInstance = require('modules/%ModuleName%/js/views/CalendarView.js');
+		}
+		return calendarViewInstance;
+	}
 	
 	Settings.init(oAppData);
 	
@@ -25,11 +34,7 @@ module.exports = function (oAppData) {
 	{
 		return {
 			getScreens: function () {
-				var oScreens = {};
-				oScreens[Settings.HashModuleName] = function () {
-					return require('modules/%ModuleName%/js/views/CalendarView.js');
-				};
-				return oScreens;
+				return { [Settings.HashModuleName]: getCalendarViewInstance };
 			},
 			getHeaderItem: function () {
 				return {
@@ -68,13 +73,30 @@ module.exports = function (oAppData) {
 						});
 					}
 					ModulesManager.run('SettingsWebclient', 'registerSettingsTab', [function () { return require('modules/%ModuleName%/js/views/CalendarSettingsFormView.js'); }, Settings.HashModuleName, TextUtils.i18n('%MODULENAME%/LABEL_SETTINGS_TAB')]);
+
+					App.broadcastEvent('RegisterNewItemElement', {
+						'title': TextUtils.i18n('%MODULENAME%/ACTION_CREATE_EVENT'),
+						'handler': () => {
+							window.location.hash = Settings.HashModuleName;
+							const calendarViewInstance = getCalendarViewInstance();
+							calendarViewInstance.createEventInCurrentCalendar();
+
+							if (calendarViewInstance.calendars.currentCal()) {
+								calendarViewInstance.createEventInCurrentCalendar();
+							} else {
+								const currentCalSubscribtion = calendarViewInstance.calendars.currentCal.subscribe(function () {
+									calendarViewInstance.createEventInCurrentCalendar();
+									currentCalSubscribtion.dispose();
+								});
+							}
+						},
+						'className': 'item_calendar',
+						'order': 4,
+						'column': 1
+					});
 				},
 				getScreens: function () {
-					var oScreens = {};
-					oScreens[Settings.HashModuleName] = function () {
-						return require('modules/%ModuleName%/js/views/CalendarView.js');
-					};
-					return oScreens;
+					return { [Settings.HashModuleName]: getCalendarViewInstance };
 				},
 				getHeaderItem: function () {
 					return {
