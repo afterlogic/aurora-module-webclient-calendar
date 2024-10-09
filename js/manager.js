@@ -80,6 +80,15 @@ module.exports = function (oAppData) {
                             'handler': () => {
                                 const calendarViewInstance = getCalendarViewInstance();
                                 calendarViewInstance.createEventInCurrentCalendar();
+
+								if (calendarViewInstance.calendars.currentCal()) {
+									calendarViewInstance.createEventInCurrentCalendar();
+								} else {
+									const currentCalSubscribtion = calendarViewInstance.calendars.currentCal.subscribe(function () {
+										calendarViewInstance.createEventInCurrentCalendar();
+										currentCalSubscribtion.dispose();
+									});
+								}
                             },
                             'hash': Settings.HashModuleName
                         },
