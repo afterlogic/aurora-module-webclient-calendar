@@ -223,7 +223,7 @@ function CEditEventPopup() {
   this.isTaskApp = ko.observable(false)
   this.withDate = ko.observable(true)
   this.allowConvertEventToTask = ko.computed(function () {
-    return this.isEditable() && !this.isTaskApp() && this.attendees().length === 0 && this.allEvents() === Enums.CalendarEditRecurrenceEvent.AllEvents;
+    return Settings.ShowTasksInCalendars && this.isEditable() && !this.isTaskApp() && this.attendees().length === 0 && this.allEvents() === Enums.CalendarEditRecurrenceEvent.AllEvents;
   }, this);
 
   this.isTask.subscribe(function (value) {

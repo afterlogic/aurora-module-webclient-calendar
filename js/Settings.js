@@ -30,6 +30,7 @@ module.exports = {
 	DefaultReminders: [],
 	CalendarColors: ['#f09650'],
 	ShowWeekNumbers: false,
+	ShowTasksInCalendars: true,
 	
 	/**
 	 * Initializes settings from AppData object sections.
@@ -69,6 +70,7 @@ module.exports = {
 			this.DefaultReminders = oAppDataSection.DefaultReminders, this.DefaultReminders;
 			this.CalendarColors = oAppDataSection.CalendarColors, this.CalendarColors;
 			this.ShowWeekNumbers = oAppDataSection.ShowWeekNumbers, this.ShowWeekNumbers;
+			this.ShowTasksInCalendars = Types.pBool(oAppDataSection.ShowTasksInCalendars, this.ShowTasksInCalendars);
 			
 		}
 		if (!_.isEmpty(oAppMeetingsDataSection))

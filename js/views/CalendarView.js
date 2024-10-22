@@ -1010,7 +1010,9 @@ CCalendarView.prototype.onGetEventsResponse = function (oResponse, oRequest) {
 
   this.setAutoReloadTimer()
   this.checkStarted(false)
-  this.getTasks(aCalendarIds)
+  if (Settings.ShowTasksInCalendars) {
+    this.getTasks(aCalendarIds)
+  }
 }
 
 /**
