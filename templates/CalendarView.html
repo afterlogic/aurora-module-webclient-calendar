@@ -62,9 +62,6 @@
 							<span class="icon"></span>
 						</span>
 						<span class="group range_select">
-							<span class="item" data-bind="click: displayToday">
-								<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_TODAY'}"></span>
-							</span>
 							<span class="item" data-bind="click: function(){changeView('agendaDay');}, css: {'selected passive': selectedView() === 'agendaDay'}">
 								<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_DAY_VIEW'}"></span>
 							</span>
@@ -80,6 +77,9 @@
 						</span>
 
 						<span class="group date_select">
+							<span class="item" data-bind="click: displayToday">
+								<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_TODAY'}"></span>
+							</span>
 							<span class="item prev" data-bind="click: displayPrev">
 								<span class="icon"></span>
 							</span>
