@@ -19,66 +19,48 @@ ko.bindingHandlers.autosize = {
 			iHeight = jqEl.height(),
 			iOuterHeight = jqEl.outerHeight(),
 			iInnerHeight = jqEl.innerHeight(),
+
 			iBorder = iOuterHeight - iInnerHeight,
-			iPaddingTB = iInnerHeight - iHeight,
+			iVerticalPadding = iInnerHeight - iHeight,
 			iMinHeight = oOptions.minHeight ? oOptions.minHeight : 0,
 			iMaxHeight = oOptions.maxHeight ? oOptions.maxHeight : 0,
 			iScrollableHeight = oOptions.scrollableHeight ? oOptions.scrollableHeight : 1000,// max-height of .scrollable_field
-			oAutosizeTrigger = oOptions.autosizeTrigger ? oOptions.autosizeTrigger : null,
-				
 			/**
 			 * @param {boolean=} bIgnoreScrollableHeight
 			 */
 			fResize = function (bIgnoreScrollableHeight) {
-				var iPadding = 0;
+				const iPadding = Browser.firefox ? Types.pInt(jqEl.css('padding-top')) * 2 : 0
 
-				if (Browser.firefox)
-				{
-					iPadding = Types.pInt(jqEl.css('padding-top')) * 2;
-				}
-
-				if (iMaxHeight)
-				{
+				if (iMaxHeight) {
 					/* 0-timeout to get the already changed text */
 					setTimeout(function () {
-						if (jqEl.prop('scrollHeight') < iMaxHeight)
-						{
-							jqEl.height(iMinHeight - iPaddingTB - iBorder);
-							jqEl.height(jqEl.prop('scrollHeight') + iPadding - iPaddingTB);
+						if (jqEl.prop('scrollHeight') < iMaxHeight) {
+							jqEl.height(iMinHeight - iVerticalPadding - iBorder)
+							jqEl.height(jqEl.prop('scrollHeight') + iPadding - iVerticalPadding)
+						} else {
+							jqEl.height(iMaxHeight - iVerticalPadding - iBorder)
 						}
-						else
-						{
-							jqEl.height(iMaxHeight - iPaddingTB - iBorder);
-						}
-					}, 100);
-				}
-				else if (bIgnoreScrollableHeight || jqEl.prop('scrollHeight') < iScrollableHeight)
-				{
+					}, 100)
+				} else if (bIgnoreScrollableHeight || jqEl.prop('scrollHeight') < iScrollableHeight) {
 					setTimeout(function () {
-						jqEl.height(iMinHeight - iPaddingTB - iBorder);
-						jqEl.height(jqEl.prop('scrollHeight') + iPadding - iPaddingTB);
-					}, 100);
+						var h = iMinHeight - iVerticalPadding - iBorder
+						jqEl.height(h)
+						var h1 = jqEl.prop('scrollHeight') + iPadding - iVerticalPadding
+						jqEl.height(h1)
+					}, 100)
 				}
 			}
 		;
 
-		jqEl.on('keydown', function(oEvent, oData) {
-			fResize();
-		});
-		jqEl.on('paste', function(oEvent, oData) {
-			fResize();
-		});
+		jqEl.on('keydown paste', function () { fResize() })
 
-		if (oAutosizeTrigger)
-		{
-			oAutosizeTrigger.subscribe(function (arg) {
-				fResize(arg);
-			}, this);
+		if (ko.isObservable(oOptions?.autosizeTrigger)) {
+			oOptions.autosizeTrigger.subscribe(function (arg) { fResize(arg) }, this)
 		}
 
-		fResize();
+		fResize()
 	}
-};
+}
 
 ko.bindingHandlers.fade = {
 	'init': function (oElement, fValueAccessor, fAllBindingsAccessor, oViewModel, bindingContext) {
