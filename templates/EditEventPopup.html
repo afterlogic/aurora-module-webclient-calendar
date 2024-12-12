@@ -220,7 +220,7 @@
 									<span class="input" data-bind="text: subject, visible: !isEditable()"></span>
 									<textarea id="event_subject" class="input autosize" data-bind="
 										style: {'text-decoration': status() && isTask() ? 'line-through' : 'none'},
-										autosize: {minHeight: 40, autosizeTrigger: autosizeTrigger, scrollableHeight: 110}, 
+										autosize: {autosizeTrigger: autosizeTrigger, scrollableHeight: 110}, 
 										valueUpdate: 'afterkeydown', onEnter: onSaveClick,
 										value: subject, hasfocus: subjectFocus, visible: isEditable()"></textarea>
 								</div>

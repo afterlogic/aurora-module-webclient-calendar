@@ -759,11 +759,9 @@ fc-month-view .fc-content,
 		box-sizing: content-box;
 
 		.input:focus,
-		.textarea:focus,
-		input:focus,
-		textarea:focus{
+		.textarea:focus {
 			border-color: #93b5e3;
-			box-shadow: 0 0 2px 0 #1d67cd;
+			// box-shadow: 0 0 2px 0 #1d67cd;
 			outline: none;
 		}
 		.placeholder {
@@ -862,6 +860,7 @@ fc-month-view .fc-content,
 	
 	.fieldset.main {
 		margin-left: -8px;
+		margin-right: -8px;
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
@@ -882,50 +881,56 @@ fc-month-view .fc-content,
 			border-color: #cccccc;
 		}
 	}
+
+	.placeholder,
+	.input {
+		font-size: 10pt;
+	}
 	
 	.row.name {
 		.placeholder,
 		.input {
-			line-height: 35px;
 			font-size: 15pt;
 			font-weight: bold;
+			line-height: 1.4;
 		}
 
 		.input.autosize {
-			height: 43px;
+			height: 20px;
+			min-height: auto;
 		}
 
 		.placeholder {
-			left: 3px;
 			position: relative;
+			left: 3px;
 			top: 5px;
 			z-index: 1;
 		}
 	}
 	
-	.row.description,
-	.row.source,
-	.row.location,
-	.row.add_attender {
-		.placeholder,
-		.input {
-			font-size: 10pt;
-		}
+	// .row.description,
+	// .row.source,
+	// .row.location,
+	// .row.add_attender {
+	// 	.placeholder,
+	// 	.input {
+	// 		font-size: 10pt;
+	// 	}
 
-		.input.autosize {
-			height: 26px;
-		}
+	// 	.input.autosize {
+	// 		height: 26px;
+	// 	}
 
-		.placeholder {
-			left: 3px;
-			top: 5px;
+	// 	.placeholder {
+	// 		left: 3px;
+	// 		top: 5px;
 			
-			html.rtl & {
-				left: auto;
-				right: 3px;
-			}
-		}
-	}
+	// 		html.rtl & {
+	// 			left: auto;
+	// 			right: 3px;
+	// 		}
+	// 	}
+	// }
 
 	.row.private_event {
 		padding-left: 9px;
@@ -1490,8 +1495,7 @@ fc-month-view .fc-content,
 			border-radius: 50%;
 
 			&:before {
-				margin-left: -2px;
-				font-size: 13pt;
+				font-size: 14px;
 			}
 		}
 	}	
