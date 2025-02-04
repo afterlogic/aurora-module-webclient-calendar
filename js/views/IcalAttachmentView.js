@@ -3,14 +3,16 @@
 var
 	_ = require('underscore'),
 	ko = require('knockout'),
-	$ = require('jquery'),
 	
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	AddressUtils = require('%PathToCoreWebclientModule%/js/utils/Address.js'),
 	
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	
 	CalendarCache = require('modules/%ModuleName%/js/Cache.js'),
-	CIcalModel = require('modules/%ModuleName%/js/models/CIcalModel.js')
+	CIcalModel = require('modules/%ModuleName%/js/models/CIcalModel.js'),
+
+	InformatikSettings = require('modules/InformatikProjects/js/Settings.js')
 ;
 
 function CIcalAttachmentView()
@@ -49,11 +51,18 @@ CIcalAttachmentView.prototype.doAfterPopulatingMessage = function (oMessageProps
 	}
 	var
 		sAttendee = null,
-		oIcal = CalendarCache.getIcal(oFoundRawIcal.File)
+		oIcal = CalendarCache.getIcal(oFoundRawIcal.File),
+		aAttendeeList = Types.pArray(oFoundRawIcal.AttendeeList).map(email => AddressUtils.getEmailParts(email).email),
+		centralAccountEmail = AddressUtils.getEmailParts(InformatikSettings.SenderForExternalRecipients),
+		currentAccountEmail = AddressUtils.getEmailParts(App.currentAccountEmail())
 	;
-	if ($.isFunction(App.getAttendee))
-	{
-		sAttendee = App.getAttendee(oMessageProps.aToEmails) || App.currentAccountEmail();
+
+	// checking if there is a current account in attendee list or Informatik specific central account
+	sAttendee = aAttendeeList.find(email => email === currentAccountEmail.email) || aAttendeeList.find(email => email === centralAccountEmail.email);
+
+	// if attendee isn't found, then try to find any user's account in attendee list
+	if (!sAttendee) {
+		sAttendee = App.getAttendee ? App.getAttendee(oMessageProps.aToEmails) : App.currentAccountEmail();
 	}
 
 	if (!oIcal)
