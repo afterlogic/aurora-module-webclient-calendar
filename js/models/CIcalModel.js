@@ -392,7 +392,7 @@ CIcalModel.prototype.parse = function (oRawIcal, sAttendee)
 	this.file(Types.pString(oRawIcal.File));
 	this.organizer = ko.observable(TextUtils.encodeHtml(Types.pString(oRawIcal.Organizer)));
 	this.attendeeList = ko.observableArray(Types.pArray(oRawIcal.AttendeeList).map(attendee => TextUtils.encodeHtml(attendee)));
-	this.attendee(TextUtils.encodeHtml(Types.pString(oRawIcal.Attendee) || sAttendee));
+	this.attendee(Types.pString(oRawIcal.Attendee) || sAttendee);
 	this.type(Types.pString(oRawIcal.Type));
 	this.location(Types.pString(oRawIcal.Location));
 	// description shouldn't be HTML encoded because it prepared as HTML on server side

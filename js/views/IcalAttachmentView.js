@@ -52,13 +52,14 @@ CIcalAttachmentView.prototype.doAfterPopulatingMessage = function (oMessageProps
 	var
 		sAttendee = null,
 		oIcal = CalendarCache.getIcal(oFoundRawIcal.File),
-		aAttendeeList = Types.pArray(oFoundRawIcal.AttendeeList).map(email => AddressUtils.getEmailParts(email).email),
+		aAttendeeList = Types.pArray(oFoundRawIcal.AttendeeList),
 		centralAccountEmail = AddressUtils.getEmailParts(InformatikSettings.SenderForExternalRecipients),
 		currentAccountEmail = AddressUtils.getEmailParts(App.currentAccountEmail())
 	;
 
 	// checking if there is a current account in attendee list or Informatik specific central account
-	sAttendee = aAttendeeList.find(email => email === currentAccountEmail.email) || aAttendeeList.find(email => email === centralAccountEmail.email);
+	sAttendee = aAttendeeList.find(attendee => AddressUtils.getEmailParts(attendee).email === currentAccountEmail.email)
+				|| aAttendeeList.find(attendee => AddressUtils.getEmailParts(attendee).email === centralAccountEmail.email);
 
 	// if attendee isn't found, then try to find any user's account in attendee list
 	if (!sAttendee) {
