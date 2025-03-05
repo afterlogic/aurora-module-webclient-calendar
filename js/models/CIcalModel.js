@@ -53,8 +53,8 @@ function CIcalModel(oRawIcal, sAttendee)
 	this.location = ko.observable(DataFromServer.parseDescriptionLocation(oRawIcal.Location));
 	this.description = ko.observable(DataFromServer.parseDescriptionLocation(oRawIcal.Description));
 	this.when = ko.computed(function() {
-		return DataFromServer.formatDate(oRawIcal.When)
-	});
+		return this.getWhenDateTime(oRawIcal)
+	}, this);
 	this.calendarId = ko.observable(Types.pString(oRawIcal.CalendarId));
 	this.calendarId.subscribe(function () {
 		// change oRawIcal so that the calendarId will be correct in a new tab
@@ -168,6 +168,40 @@ function CIcalModel(oRawIcal, sAttendee)
 
 	this.parseType();
 }
+
+CIcalModel.prototype.getWhenDateTime = function (oRawIcal)
+{
+	let sWhen = '';
+	// regexp must be called only once!
+	const regex = /\d{2}:\d{2}(:\d{2})?/gm
+
+	if (oRawIcal.Start && oRawIcal.End) {
+		const oStart = DataFromServer.getDateTimeObject(oRawIcal.Start)
+		const oEnd = DataFromServer.getDateTimeObject(oRawIcal.End)
+		const sStartDate = oStart.getDate()
+		const sEndDate = oEnd.getDate()
+
+		switch(true) {
+			// date without time assumes it's an all day event
+			case !regex.test(oRawIcal.Start):
+				sWhen = oStart.getDate()
+				break
+			// has time and dates are equal
+			case sStartDate === sEndDate:
+				sWhen = sStartDate + ' ' + oStart.getTime() + ' - ' + oEnd.getTime()
+				break
+			// has time and dates are not equal. a long event
+			case sStartDate !== sEndDate:
+				sWhen = sStartDate + ' ' + oStart.getTime() + ' - ' + sEndDate + ' ' + oEnd.getTime()
+				break
+		}
+	} else if (oRawIcal.When) {
+		const oWhen = DataFromServer.getDateTimeObject(oRawIcal.When)
+		sWhen = regex.test(oRawIcal.When) ? oWhen.getFullDate() : oWhen.getDate()
+	}
+
+	return sWhen
+};
 
 CIcalModel.prototype.parseType = function ()
 {

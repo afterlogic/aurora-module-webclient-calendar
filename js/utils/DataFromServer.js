@@ -17,11 +17,11 @@ module.exports = {
 		}
 	},
 
-	formatDate(inputDate) {
+	getDateTimeObject(inputDate) {
 		const date = new Date(Types.pString(inputDate))
 		const oDateModel = new CDateModel()
 		oDateModel.parse(date.getTime() / 1000)
-		return oDateModel.getDate()
-	},
 
+		return oDateModel
+	},
 }
