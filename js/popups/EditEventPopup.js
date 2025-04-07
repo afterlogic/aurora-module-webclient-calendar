@@ -890,6 +890,7 @@ CEditEventPopup.prototype.disableAlarms = function () {
 CEditEventPopup.prototype.autocompleteCallback = function (oRequest, fResponse) {
   const suggestParameters = {
       exceptEmail: this.owner(),
+      withoutEmptyEmails: true
     },
     autocompleteCallback = ModulesManager.run('ContactsWebclient', 'getSuggestionsAutocompleteCallback', [
       suggestParameters,
