@@ -188,18 +188,18 @@
 
 											<span data-bind="css: {'row_weeks': repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly}">
 												<label class="custom_radio" data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Daily || repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly, css: { 'checked': always() === 1 }">
-													<input type="radio" name="always" data-bind="checkedValue: 1, checked: always" />
+													<input type="radio" name="always" id="always_repeat" data-bind="checkedValue: 1, checked: always" />
 													<span class="icon"></span>
 												</label>
 												
-												<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_ALWAYS'}, visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Daily || repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly"></span>
+												<label for="always_repeat" class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_ALWAYS'}, visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Daily || repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly"></label>
 												
 												<label class="custom_radio" data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Daily || repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly, css: { 'checked': always() === 0 }">
-													<input type="radio" name="always" data-bind="checkedValue: 0, checked: always" />
+													<input type="radio" name="always" id="repeat_until" data-bind="checkedValue: 0, checked: always" />
 													<span class="icon"></span>
 												</label>
 
-												<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_UNTIL'}, visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Daily || repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly"></span>
+												<label for="repeat_until" class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REPEAT_UNTIL'}, visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Daily || repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly"></label>
 												
 												<span data-bind="visible: repeatPeriod() === Enums.CalendarRepeatPeriod.Daily || repeatPeriod() === Enums.CalendarRepeatPeriod.Weekly">
 													<input class="date input" spellcheck="false" type="text" readonly="readonly" data-bind="initDom: repeatEndDom, value: repeatEndDate" />
