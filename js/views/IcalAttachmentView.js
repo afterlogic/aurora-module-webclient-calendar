@@ -49,25 +49,30 @@ CIcalAttachmentView.prototype.doAfterPopulatingMessage = function (oMessageProps
 	if (currentIcalFile === oFoundRawIcal.File) {
 		return;
 	}
-	var
-		sAttendee = null,
-		oIcal = CalendarCache.getIcal(oFoundRawIcal.File),
-		aAttendeeList = Types.pArray(oFoundRawIcal.AttendeeList),
-		centralAccountEmail = AddressUtils.getEmailParts(InformatikSettings.SenderForExternalRecipients),
-		currentAccountEmail = AddressUtils.getEmailParts(App.currentAccountEmail())
-	;
 
-	// checking if there is a current account in attendee list or Informatik specific central account
-	sAttendee = aAttendeeList.find(attendee => AddressUtils.getEmailParts(attendee).email === currentAccountEmail.email)
-				|| aAttendeeList.find(attendee => AddressUtils.getEmailParts(attendee).email === centralAccountEmail.email);
-
-	// if attendee isn't found, then try to find any user's account in attendee list
-	if (!sAttendee) {
-		sAttendee = App.getAttendee ? App.getAttendee(oMessageProps.aToEmails) : App.currentAccountEmail();
-	}
-
+	var oIcal = CalendarCache.getIcal(oFoundRawIcal.File);
+	
 	if (!oIcal)
 	{
+		var
+			sAttendee = null,
+			aAttendeeList = Types.pArray(oFoundRawIcal.AttendeeList),
+			centralAccountEmail = AddressUtils.getEmailParts(InformatikSettings.SenderForExternalRecipients),
+			currentAccountEmail = AddressUtils.getEmailParts(App.currentAccountEmail())
+		;
+	
+		// checking if there is a current account in attendee list or Informatik specific central account
+		sAttendee = aAttendeeList.find(attendee => AddressUtils.getEmailParts(attendee).email === currentAccountEmail.email)
+					|| aAttendeeList.find(attendee => AddressUtils.getEmailParts(attendee).email === centralAccountEmail.email);
+	
+		// if attendee isn't found, then try to find any user's account in attendee list
+		// added workaround to let user accept the invitation even if he is not in the attendee list
+		if (!sAttendee && App.getAttendee) {
+			sAttendee = App.getAttendee(oMessageProps.aToEmails)
+		}
+		if (!sAttendee) {
+			sAttendee = App.currentAccountEmail();
+		}
 		oIcal = new CIcalModel(oFoundRawIcal, sAttendee);
 
 		// animation of buttons turns on with delay
@@ -80,6 +85,7 @@ CIcalAttachmentView.prototype.doAfterPopulatingMessage = function (oMessageProps
 			}
 		}, this));
 	}
+
 	oIcal.refreshIcsData(oMessageProps.sFromEmail);
 	this.ical(oIcal);
 };
