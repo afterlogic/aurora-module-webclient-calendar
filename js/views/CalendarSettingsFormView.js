@@ -5,6 +5,7 @@ var
 	ko = require('knockout'),
 	
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	UserSettings = require('%PathToCoreWebclientModule%/js/Settings.js'),
@@ -46,7 +47,40 @@ function CCalendarSettingsFormView()
 	this.showWorkday = ko.observable(Settings.HighlightWorkingHours);
 	this.weekStartsOn = ko.observable(Settings.WeekStartsOn);
 	this.defaultTab = ko.observable(Settings.DefaultTab);
+	this.defaultReminders = ko.observable(Settings.DefaultReminders);
 	/*-- Editable fields */
+
+	this.bAllowDefaultReminders = Settings.AllowDefaultReminders;
+
+	const reminderOptions = _.union(Settings.DefaultReminders, Settings.ReminderValuesInMinutes).map((iMinutes) => {
+		const bSelected = Settings.DefaultReminders.indexOf(iMinutes) >= 0;
+		return {
+			'value': iMinutes,
+			'label': TextUtils.i18n('%MODULENAME%/INFO_REMINDER', {'REMINDERS': CalendarUtils.getReminderFiendlyTitle(iMinutes)}),
+			'selected': ko.observable(bSelected)
+		};
+	});
+	this.reminderOptions = ko.observableArray(reminderOptions);
+	this.displayReminderSelector = ko.observable(false);
+
+	this.selectedReminderOptions = ko.computed(function () {
+		const selectedOptions = _.sortBy(this.reminderOptions().filter(option => option.selected()), 'value');
+		this.defaultReminders(selectedOptions.map(option => option.value));
+		this.displayReminderSelector(selectedOptions.length <= 4);
+
+		return selectedOptions;
+	}, this);
+	
+	this.selectedReminder = ko.observable(null);
+	this.selectedReminder.subscribe(function (v) {
+		const oFoundOption = this.reminderOptions().find((option)=> {
+			return option.value === Types.pInt(v);
+		});
+		if (oFoundOption) {
+			this.selectReminder(oFoundOption);
+			this.selectedReminder('');
+		}
+	}, this);
 }
 
 _.extendOwn(CCalendarSettingsFormView.prototype, CAbstractSettingsFormView.prototype);
@@ -61,7 +95,8 @@ CCalendarSettingsFormView.prototype.getCurrentValues = function()
 		this.selectedWorkdayEnds(),
 		this.showWorkday(),
 		this.weekStartsOn(),
-		this.defaultTab()
+		this.defaultTab(),
+		this.defaultReminders()
 	];
 };
 
@@ -73,6 +108,7 @@ CCalendarSettingsFormView.prototype.revertGlobalValues = function()
 	this.showWorkday(Settings.HighlightWorkingHours);
 	this.weekStartsOn(Settings.WeekStartsOn);
 	this.defaultTab(Settings.DefaultTab);
+	this.defaultReminders(Settings.DefaultReminders);
 };
 
 CCalendarSettingsFormView.prototype.getParametersForSave = function ()
@@ -83,7 +119,8 @@ CCalendarSettingsFormView.prototype.getParametersForSave = function ()
 		'WorkdayStarts': Types.pInt(this.selectedWorkdayStarts()),
 		'WorkdayEnds': Types.pInt(this.selectedWorkdayEnds()),
 		'WeekStartsOn': Types.pInt(this.weekStartsOn()),
-		'DefaultTab': Types.pInt(this.defaultTab())
+		'DefaultTab': Types.pInt(this.defaultTab()),
+		'DefaultReminders': this.defaultReminders()
 	};
 };
 
@@ -95,12 +132,22 @@ CCalendarSettingsFormView.prototype.applySavedValues = function (oParameters)
 	CalendarCache.calendarSettingsChanged(true);
 
 	Settings.update(oParameters.HighlightWorkingDays, oParameters.HighlightWorkingHours, oParameters.WorkdayStarts,
-					oParameters.WorkdayEnds, oParameters.WeekStartsOn, oParameters.DefaultTab);
+					oParameters.WorkdayEnds, oParameters.WeekStartsOn, oParameters.DefaultTab, oParameters.DefaultReminders);
 };
 
 CCalendarSettingsFormView.prototype.setAccessLevel = function (sEntityType, iEntityId)
 {
 	this.visible(sEntityType === '');
+};
+
+CCalendarSettingsFormView.prototype.selectReminder = function (oReminder) 
+{
+	oReminder.selected(true);
+};
+
+CCalendarSettingsFormView.prototype.removeReminder = function (oReminder) 
+{
+	oReminder.selected(false);
 };
 
 module.exports = new CCalendarSettingsFormView();

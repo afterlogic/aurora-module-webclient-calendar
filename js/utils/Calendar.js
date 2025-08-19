@@ -6,6 +6,7 @@ var
 	moment = require('moment'),
 
 	CalendarUtils = require('%PathToCoreWebclientModule%/js/utils/Calendar.js'),
+	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 
 	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
@@ -99,6 +100,35 @@ CalendarUtils.isColorLight = function(color) {
 	// Using the HSP value, determine whether the color is light or dark
 	// return hsp > 127.5
 	return hsp > 160;
-}
+};
+
+/**
+ * @param {integer} iMinutes
+ * 
+ * @return {string}
+ */
+CalendarUtils.getReminderFiendlyTitle = function (iMinutes)
+{
+	let sText = '' + iMinutes;
+
+	if (iMinutes > 0 && iMinutes < 60)
+	{
+		sText = (TextUtils.i18n('COREWEBCLIENT/LABEL_MINUTES_PLURAL', {'COUNT': iMinutes}, null, iMinutes));
+	}
+	else if (iMinutes >= 60 && iMinutes < 1440)
+	{
+		sText = (TextUtils.i18n('%MODULENAME%/LABEL_HOURS_PLURAL', {'COUNT': iMinutes / 60}, null, iMinutes / 60));
+	}
+	else if (iMinutes >= 1440 && iMinutes < 10080)
+	{
+		sText = (TextUtils.i18n('%MODULENAME%/LABEL_DAYS_PLURAL', {'COUNT': iMinutes / 1440}, null, iMinutes / 1440));
+	}
+	else
+	{
+		sText = (TextUtils.i18n('%MODULENAME%/LABEL_WEEKS_PLURAL', {'COUNT': iMinutes / 10080}, null, iMinutes / 10080));
+	}
+
+	return sText;
+};
 
 module.exports = CalendarUtils;

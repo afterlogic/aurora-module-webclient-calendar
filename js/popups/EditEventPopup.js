@@ -417,6 +417,11 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 			)
 		);
 	}
+
+	if (!oParameters.Alarms && Settings.AllowDefaultReminders) {
+		oParameters.Alarms = Settings.DefaultReminders
+	}
+
 	this.selectedCalendarId(oParameters.SelectedCalendar);
 	this.selectedCalendarId.valueHasMutated();
 
