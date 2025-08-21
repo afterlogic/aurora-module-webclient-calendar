@@ -147,6 +147,8 @@ function CIcalModel(oRawIcal, sAttendee)
 	}, this);
 
 	this.parseType();
+
+	this.defaultReminders = ko.observableArray([]);
 }
 
 CIcalModel.prototype.parseType = function ()
@@ -293,7 +295,8 @@ CIcalModel.prototype.setAppointmentAction = function (sPrevConfig)
 					'AppointmentAction': this.icalConfig(),
 					'CalendarId': this.selectedCalendarId(),
 					'File': this.file(),
-					'Attendee': this.attendee()
+					'Attendee': this.attendee(),
+					'Reminders': this.defaultReminders()
 				},
 				this.onSetAppointmentActionResponse,
 				this,
