@@ -17,7 +17,11 @@ var
 
 	HeaderItemView = (!App.isNewTab() && !App.isMobile()) ? require('modules/%ModuleName%/js/views/HeaderItemView.js') : null,
 
-	MainTab = App.isNewTab() && window.opener ? window.opener.MainTabCalendarMethods : null
+	MainTab = App.isNewTab() && window.opener ? window.opener.MainTabCalendarMethods : null,
+
+	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js'),
+	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
 
 /**
@@ -41,6 +45,8 @@ function CIcalModel(oRawIcal, sAttendee)
 	this.when = ko.observable('');
 	this.calendarId = ko.observable('');
 	this.selectedCalendarId = ko.observable('');
+	this.exists = ko.observable(false);
+
 	this.parse(oRawIcal, sAttendee);
 
 	this.calendarId.subscribe(function () {
@@ -82,12 +88,19 @@ function CIcalModel(oRawIcal, sAttendee)
 	this.isTentative = ko.computed(function () {
 		return this.icalConfig() === Enums.IcalConfig.Tentative;
 	}, this);
-	this.calendars = ko.observableArray(CalendarCache.calendars());
+	this.calendars = ko.observableArray(_.filter(CalendarCache.calendars(), (calendar) => {
+		return !calendar.isShared;
+	}));
 
 	if (this.calendars().length === 0)
 	{
 		var fCalSubscription = CalendarCache.calendars.subscribe(function () {
-			this.calendars(CalendarCache.calendars());
+			// this.calendars(CalendarCache.calendars());
+
+			this.calendars(_.filter(CalendarCache.calendars(), (calendar) => {
+				return !calendar.isShared;
+			}));
+
 			this.calendars().forEach((calendar) => { 
 				if (calendar.isDefault) {
 					this.selectedCalendarId(calendar.id);
@@ -148,7 +161,15 @@ function CIcalModel(oRawIcal, sAttendee)
 
 	this.parseType();
 
-	this.defaultReminders = ko.observableArray([]);
+	this.bAllowDefaultReminders = Settings.AllowDefaultReminders;
+
+	this.defaultReminders = ko.observableArray(_.sortBy(Settings.DefaultReminders.map((iMinutes) => {
+		return {
+			value: iMinutes,
+			label: TextUtils.i18n('%MODULENAME%/INFO_REMINDER', {'REMINDERS': CalendarUtils.getReminderFiendlyTitle(iMinutes)}),
+			checked: ko.observable(true)
+		};
+	})));
 }
 
 CIcalModel.prototype.parseType = function ()
@@ -288,15 +309,19 @@ CIcalModel.prototype.setAppointmentAction = function (sPrevConfig)
 	this.isAppointmentActionInProgress(true);
 	
 	var
+		checkedReminders = this.defaultReminders().filter(item => item.checked()).map((item) => {
+			return item.value;
+		}),
 		fSetAppointmentAction = function () {
 			Ajax.send(
 				'SetAppointmentAction',
 				{
 					'AppointmentAction': this.icalConfig(),
+					'EventId': this.uid() !== '' ? this.uid() : '',
 					'CalendarId': this.selectedCalendarId(),
 					'File': this.file(),
 					'Attendee': this.attendee(),
-					'Reminders': this.defaultReminders()
+					'Reminders': !this.exists() ? checkedReminders : null
 				},
 				this.onSetAppointmentActionResponse,
 				this,
@@ -334,6 +359,7 @@ CIcalModel.prototype.onSetAppointmentActionResponse = function (oResponse, oRequ
 	}
 	else
 	{
+		this.exists(true);
 		this.markChanges();
 	}
 };
@@ -404,6 +430,7 @@ CIcalModel.prototype.parse = function (oRawIcal, sAttendee)
 	this.when(Types.pString(oRawIcal.When));
 	this.calendarId(Types.pString(oRawIcal.CalendarId));
 	this.selectedCalendarId(Types.pString(oRawIcal.CalendarId));
+	this.exists(Types.pString(oRawIcal.CalendarId) != '');
 	CalendarCache.addIcal(this);
 };
 

@@ -89,7 +89,8 @@ CCalendarCache.prototype.onGetCalendarsResponse = function (oResponse, oRequest)
 				'name': oCalendar.Name + ' <' + oCalendar.Owner + '>', 
 				'id': oCalendar.Id,
 				'readonly': oCalendar.Subscribed,
-				'isDefault': oCalendar.IsDefault
+				'isDefault': oCalendar.IsDefault,
+				'isShared': !!oCalendar.Shared
 			};
 		}));
 	}

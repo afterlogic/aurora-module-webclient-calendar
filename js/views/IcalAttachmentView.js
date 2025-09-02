@@ -12,41 +12,14 @@ var
 	CalendarCache = require('modules/%ModuleName%/js/Cache.js'),
 	CIcalModel = require('modules/%ModuleName%/js/models/CIcalModel.js'),
 
-	InformatikSettings = require('modules/InformatikProjects/js/Settings.js'),
-
-	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
-	CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js'),
-	Settings = require('modules/%ModuleName%/js/Settings.js')
+	InformatikSettings = require('modules/InformatikProjects/js/Settings.js')
 ;
 
 function CIcalAttachmentView()
 {
 	this.ical = ko.observable(null);
-
-	this.bAllowDefaultReminders = Settings.AllowDefaultReminders;
-
-	this.defaultReminders = ko.observableArray(_.sortBy(Settings.DefaultReminders.map((iMinutes) => {
-		return {
-			value: iMinutes,
-			label: TextUtils.i18n('%MODULENAME%/INFO_REMINDER', {'REMINDERS': CalendarUtils.getReminderFiendlyTitle(iMinutes)}),
-			checked: ko.observable(true)
-		};
-	}), 'value'));
-
+	
 	const self = this;
-	this.defaultReminders().forEach(function(reminder) {
-		if (ko.isObservable(reminder.checked)) {
-			reminder.checked.subscribe(function(newValue) {
-				if (self.ical() && self.ical().defaultReminders) {
-					self.ical().defaultReminders(
-						self.defaultReminders().filter(item => item.checked()).map((item) => {
-							return item.value;
-						})
-					);
-				}
-			});
-		}
-	}, this);
 }
 
 CIcalAttachmentView.prototype.ViewTemplate = '%ModuleName%_IcalAttachmentView';
