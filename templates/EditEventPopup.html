@@ -49,7 +49,7 @@
 						<div class="row add_attender" data-bind="visible: canEditAttendees(), css: {'focused': guestEmailFocus()}">
 						<span class="control add" data-bind="customTooltip: '%MODULENAME%/ACTION_ADD_GUESTS', click: onAddGuestClick"></span>
 						<label for="add_attender_input" class="label placeholder" data-i18n="%MODULENAME%/LABEL_EMAIL_OR_NAME" data-bind="i18n: 'text', visible: guestAutocomplete() === ''"></label>
-						<input id="add_attender_input" class="value input" spellcheck="false"  type="text" autocomplete="on" data-bind="value: guestAutocomplete, hasfocus: guestEmailFocus, valueUpdate: ['blur', 'afterkeydown'], autocompleteSimple: {callback: autocompleteCallback.bind($data), dataAccessor: guestAutocompleteItem}" />
+						<input id="add_attender_input" class="value input" spellcheck="false"  type="text" autocomplete="on" data-bind="value: guestAutocomplete, hasfocus: guestEmailFocus, valueUpdate: ['blur', 'afterkeydown', 'input'], autocompleteSimple: {callback: autocompleteCallback.bind($data), dataAccessor: guestAutocompleteItem}" />
 					</div>
 					<div class="row appointment" data-bind="visible: isAppointmentButtonsVisible">
 						<div class="buttons">
