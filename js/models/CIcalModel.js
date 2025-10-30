@@ -347,6 +347,7 @@ CIcalModel.prototype.setAppointmentAction = function ()
 		{
 			'AppointmentAction': this.icalConfig(),
 			'CalendarId': this.selectedCalendarId(),
+			'EventId': this.uid(),
 			'File': this.file(),
 			'Attendee': this.attendee()
 		},

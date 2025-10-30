@@ -63,7 +63,10 @@ CIcalAttachmentView.prototype.doAfterPopulatingMessage = function (oMessageProps
 				}
 			}, this));
 
-			oIcal.updateAttendeeStatus(oMessageProps.sFromEmail);
+			if (oFoundRawIcal.Delivered) {
+				oIcal.showChanges();
+				oIcal.markChanges();
+			}
 		}
 		this.ical(oIcal);
 	}
