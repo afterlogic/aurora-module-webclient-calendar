@@ -22,7 +22,7 @@
 									<!-- ko template: {name: '%ModuleName%_CalendarItemView'} --><!-- /ko -->
 								<!-- /ko -->
 							</div>
-							<div class="calendar_list_less_more_control" data-bind="visible: bAllowShare && calendars.hasSharedCalendars()">
+							<div class="calendar_list_less_more_control" data-bind="visible: bAllowShare && (calendars.hasSharedCalendars() || calendars.hasBlockCalendars())">
 								<span class="link"
 									  data-bind="i18n: {'key': '%MODULENAME%/ACTION_MORE_CALENDARS'},
 									  visible: !calendars.showSharedCalendars(),
@@ -88,6 +88,22 @@
 										<!-- ko template: {name: '%ModuleName%_CalendarItemView'} --><!-- /ko -->
 									<!-- /ko -->
 								</div>
+								<!-- Custom blocks -->
+								<!-- ko foreach: calendars.calendarBlocks() -->
+								<div class="items_list calendars"
+									 data-bind="visible: Calendars.length > 0"
+								>
+									<span class="section_title">
+										<span class="title block-calendar">
+											<span class="icon"></span>
+											<span class="text" data-bind="text: Name"></span>
+										</span>
+									</span>
+									<!-- ko foreach: Calendars -->
+										<!-- ko template: {name: '%ModuleName%_CalendarItemView'} --><!-- /ko -->
+									<!-- /ko -->
+								</div>
+								<!-- /ko -->
 							</div>
 						</div>
 					</div>

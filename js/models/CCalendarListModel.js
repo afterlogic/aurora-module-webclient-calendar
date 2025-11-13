@@ -22,6 +22,17 @@ function CCalendarListModel(oParameters)
 	this.defaultCal = ko.observable(null);
 	this.currentCal = ko.observable(null);
 	
+	this.calendarBlocksData = ko.observableArray([]);
+
+	this.calendarBlocks = ko.computed(function () {
+		return this.calendarBlocksData().map(blockData => {
+			return {
+				Name: blockData.Name,
+				Calendars: this.getFilteredCalendarsByIds(blockData.Calendars)
+			}
+		})
+	}, this);
+
 	this.collection = ko.observableArray([]);
 	this.collection.subscribe(function () {
 		this.pickCurrentCalendar(this.defaultCal());
@@ -46,22 +57,32 @@ function CCalendarListModel(oParameters)
 	this.ownCount = ko.computed(function () {
 		return this.own().length;
 	}, this);
+	this.blockCalendarIds = ko.computed(function () {
+        return _.flatten(_.map(this.calendarBlocksData(), function(oItem) {
+            return oItem.Calendars || [];
+        }), true);
+    }, this);
+	this.hasBlockCalendars = ko.computed(function () {
+		return this.blockCalendarIds().length > 0;
+	}, this);
 	this.shared = ko.computed(function () {
 		var 
 			calendars = _.filter(this.collection(), 
-				function(oItem){ return (oItem.isShared() && !oItem.isSharedToAll()); 
-			})
+				function(oItem){ 
+					return (oItem.isShared() && !oItem.isSharedToAll() && !_.includes(this.blockCalendarIds(), oItem.id)); 
+			}, this)
 		;
 		return calendars;
 	}, this);
 	this.sharedToAll = ko.computed(function () {
 		var 
 			calendars = _.filter(this.collection(), 
-				function(oItem){ return (oItem.isShared() && oItem.isSharedToAll()); 
-			})
+				function(oItem){ return (oItem.isShared() && oItem.isSharedToAll() && !_.includes(this.blockCalendarIds(), oItem.id)); 
+			}, this)
 		;
 		return calendars;
 	}, this);
+
 	this.ids = ko.computed(function () {
 		return _.map(this.collection(), function (oCalendar){
 			return oCalendar.id;
@@ -88,6 +109,7 @@ function CCalendarListModel(oParameters)
 		return this.getFilteredCalendars(this.sharedToAll());
 	}, this);
 
+
 	this.isSharedCalendarsActive = ko.computed(function () {
 		return this.shared().every(calendar => calendar.active()) && this.sharedToAll().every(calendar => calendar.active());
 	}, this);
@@ -112,6 +134,16 @@ CCalendarListModel.prototype.getFilteredCalendars = function (calendars) {
 		;
 		return name.indexOf(search) !== -1 || owner.indexOf(search) !== -1;
 	});
+};
+
+CCalendarListModel.prototype.getFilteredCalendarsByIds = function (ids) {
+	return this.getFilteredCalendars(this.getCalendarsByIds(ids));
+};
+
+CCalendarListModel.prototype.getCalendarsByIds = function (ids) {
+	return _.filter(this.collection(), 
+		function(oItem){ return _.includes(ids, oItem.id); 
+	}, this);
 };
 
 /**
@@ -235,7 +267,7 @@ CCalendarListModel.prototype.parseAndAddCalendar = function (oCalendarData)
 	}
 	
 	// sorting is done on the server side
-	// this.sort();
+	this.sort();
 	
 	return oCalendar;
 };
@@ -293,11 +325,11 @@ CCalendarListModel.prototype.setDefault = function (sId)
 	}, this);
 };
 
-// CCalendarListModel.prototype.sort = function ()
-// {
-// 	var collection = _.sortBy(this.collection(), function(oCalendar){return oCalendar.name();});
-// 	this.collection(_.sortBy(collection, function(oCalendar){return oCalendar.isShared();}));
-// };
+CCalendarListModel.prototype.sort = function ()
+{
+	var collection = _.sortBy(this.collection(), function(oCalendar){return oCalendar.name();});
+	this.collection(_.sortBy(collection, function(oCalendar){return oCalendar.isShared();}));
+};
 
 /**
  * @param {Array} aIds

@@ -1140,6 +1140,10 @@ CCalendarView.prototype.onGetCalendarsResponse = function (oResponse, oParameter
 			}
 		}, this);
 
+		if (oResponse.Result.Blocks && oResponse.Result.Blocks.length > 0) {
+			this.calendars.calendarBlocksData(oResponse.Result.Blocks);
+		}
+
 		if (this.calendars.count() === 0 && this.isPublic && this.needsToReload)
 		{
 			this.browserTitle(TextUtils.i18n('%MODULENAME%/INFO_NO_CALENDAR_FOUND'));
