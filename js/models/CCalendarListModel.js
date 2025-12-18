@@ -327,8 +327,22 @@ CCalendarListModel.prototype.setDefault = function (sId)
 
 CCalendarListModel.prototype.sort = function ()
 {
-	var collection = _.sortBy(this.collection(), function(oCalendar){return oCalendar.name();});
-	this.collection(_.sortBy(collection, function(oCalendar){return oCalendar.isShared();}));
+	this.collection(this.collection().sort(function (a, b) {
+
+		if (a.isShared() !== b.isShared()) {
+			return a.isShared() ? 1 : -1;
+		}
+
+		return a.name().localeCompare(
+			b.name(),
+			undefined,
+			{
+				sensitivity: 'case',
+				caseFirst: 'lower',
+				numeric: true
+			}
+		);
+	}));
 };
 
 /**
