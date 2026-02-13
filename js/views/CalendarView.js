@@ -1052,28 +1052,44 @@ CCalendarView.prototype.getTimeLimits = function ()
 		iEnd = this.getDateFromCurrentView('end')
 	;
 
+	//start and end dates are not set yet
 	if (this.startDateTime === 0 && this.endDateTime === 0)
 	{
 		this.startDateTime = iStart;
 		this.endDateTime = iEnd;
 		this.needsToReload = true;
 	}
+	//start and end dates are fully within currently displayed range, so period needs to be extended in both sides
 	else if (iStart < this.startDateTime && iEnd > this.endDateTime)
-	{
+		{
 		this.startDateTime = iStart;
 		this.endDateTime = iEnd;
 		this.needsToReload = true;
 	}
+	//moving to the past, so start date needs to be extended
 	else if (iStart < this.startDateTime)
 	{
-		iEnd= this.startDateTime;
 		this.startDateTime = iStart;
+
+		//correct end date to keep it up to 2 months far from start date
+		const iEndCorrected = moment.unix(iStart).add(2,'month').unix();
+		if (iEndCorrected < this.endDateTime) {
+			this.endDateTime = iEndCorrected;
+		}
+
 		this.needsToReload = true;
 	}
+	// moving to the future, so end date needs to be extended
 	else if (iEnd > this.endDateTime)
 	{
-		iStart = this.endDateTime;
 		this.endDateTime = iEnd;
+
+		//correct start date to keep it up to 2 months far from end date
+		const iStartCorrected = moment.unix(iEnd).subtract(2,'month').unix();
+		if (iStartCorrected > this.startDateTime) {
+			this.startDateTime = iStartCorrected;
+		}
+
 		this.needsToReload = true;
 	}
 };
