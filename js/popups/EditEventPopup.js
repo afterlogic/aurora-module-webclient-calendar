@@ -786,7 +786,7 @@ CEditEventPopup.prototype.onDeleteClick = function ()
 	{
 		var
 			oEventData = {
-				calendarId: this.selectedCalendarId(),
+				calendarId: this.calendarId(),
 				id: this.id(),
 				uid: this.uid(),
 				recurrenceId: this.recurrenceId(),
@@ -1423,7 +1423,7 @@ CEditEventPopup.prototype.setAppointmentAction = function (sDecision)
 		}
 		const parameters = {
 			'AppointmentAction': sDecision,
-			'CalendarId': this.selectedCalendarId(),
+			'CalendarId': this.calendarId(),
 			'EventId': this.uid(),
 			'RecurrenceId': this.recurrenceId(),
 			'AllEvents':  this.allEvents(),
@@ -1435,7 +1435,7 @@ CEditEventPopup.prototype.setAppointmentAction = function (sDecision)
 		this.attendees([]);
 		this.attendees(aAttendees);
 		this.setCurrentAttendeeStatus(currentAttendee.email, this.attendees());
-		const oCalendar = this.calendars.getCalendarById(this.selectedCalendarId());
+		const oCalendar = this.calendars.getCalendarById(this.calendarId());
 		if (sDecision === Enums.IcalConfig.Declined && oCalendar && 
 				this.callbackAttendeeActionDecline && $.isFunction(this.callbackAttendeeActionDecline))
 		{
