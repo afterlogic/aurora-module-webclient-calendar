@@ -1690,10 +1690,9 @@ CCalendarView.prototype.onSetDefaultCalendarResponse = function (oResponse, oReq
 
 		if (oCalendar)
 		{
-
-			if (oCalendar.isDefault)
+			if (!oCalendar.isDefault)
 			{
-				this.defaultCal(oCalendar);
+				this.calendars.setDefault(oCalendar.id);
 			}
 			this.calendars.pickCurrentCalendar(oCalendar);
 			this.getCalendars();
@@ -1756,17 +1755,10 @@ CCalendarView.prototype.onEventResizeStop = function ()
 
 CCalendarView.prototype.createEventInCurrentCalendar = function ()
 {
-	// it's not required to pick calendar this.calendars.pickCurrentCalendar()
-	// instead of this we just pass default calendar to Create event dialog
-	this.createEventToday(this.calendars.defaultCal());
-};
-
-/**
- * @param {Object} oCalendar
- */
-CCalendarView.prototype.createEventToday = function (oCalendar)
-{
-	var oToday = moment();
+	var 
+		oCalendar = this.calendars.defaultCal(),
+		oToday = moment()
+	;
 
 	if (oToday.minutes() > 30)
 	{
@@ -1872,7 +1864,7 @@ CCalendarView.prototype.openEventPopup = function (oCalendar, oStart, oEnd, bAll
 			CallbackSave: _.bind(this.createEvent, this),
 			CallbackDelete: _.bind(this.deleteEvent, this),
 			Calendars: this.calendars,
-			SelectedCalendar: oCalendar ? oCalendar.id : 0,
+			SelectedCalendar: oCalendar.id,
 			Start: oStart,
 			End: oEnd,
 			AllDay: bAllDay,

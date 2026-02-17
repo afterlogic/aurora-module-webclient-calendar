@@ -364,8 +364,10 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 	this.eventType(oParameters.Type || 'VEVENT');
 	this.isTask(this.eventType() === 'VTODO');
 
-	this.calendarId(oParameters.SelectedCalendar);
 	this.calendars = oParameters.Calendars;
+	this.calendarId(oParameters.SelectedCalendar);
+	this.selectedCalendarId(oParameters.SelectedCalendar);
+	this.selectedCalendarId.valueHasMutated();
 
 	oCalendar = this.calendars.getCalendarById(this.calendarId());
 	if (oCalendar)
@@ -421,11 +423,6 @@ CEditEventPopup.prototype.onOpen = function (oParameters)
 	if (!oParameters.Alarms && Settings.AllowDefaultReminders) {
 		oParameters.Alarms = Settings.DefaultReminders
 	}
-
-	this.selectedCalendarId(oParameters.SelectedCalendar);
-	this.selectedCalendarId.valueHasMutated();
-
-	this.changeCalendarColor(this.selectedCalendarId());
 	
 	// parameters for event editing only (not for creating)
 	this.id(oParameters.ID || null);
