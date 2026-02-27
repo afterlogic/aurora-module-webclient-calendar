@@ -54,7 +54,7 @@
 						<label style="vertical-align: bottom;" for="customizeInvitationMessage" data-bind="i18n: {'key': '%MODULENAME%/ACTION_CUSTOMIZE_INVITATION_MESSAGE'}"></label>
 					</div>
 					<div class="row appointment" data-bind="visible: isAppointmentButtonsVisible">
-						<div class="buttons">
+						<div class="buttons" data-bind="style: {'margin-bottom': isEditable() ? '20px' : '0'}">
 							<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_ACCEPT_APPOINTMENT'}, css: {'selected_button': attendeeStatus() === Enums.IcalConfigInt.Accepted},
 									click: function(){ setAppointmentAction(Enums.IcalConfig.Accepted); }"></span>
 							<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_TENTATIVE_APPOINTMENT'}, css: {'selected_button': attendeeStatus() === Enums.IcalConfigInt.Tentative},
