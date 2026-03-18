@@ -414,6 +414,8 @@ CIcalModel.prototype.onAddEventsFromFileResponse = function (oResponse, oRequest
 };
 
 /**
+ * @deprecated API method UpdateAttendeeStatus is deprecated since version 9.8.4. The SetAppointmentAction should be used instead.
+ * 
  * @param {string} sEmail
  */
 CIcalModel.prototype.updateAttendeeStatus = function (sEmail)
