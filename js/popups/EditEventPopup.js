@@ -24,7 +24,8 @@ const AppointmentUtils = require('modules/%ModuleName%/js/utils/Appointment.js')
   Ajax = require('modules/%ModuleName%/js/Ajax.js'),
   Settings = require('modules/%ModuleName%/js/Settings.js'),
   CSimpleEditableView = require('modules/%ModuleName%/js/views/CSimpleEditableView.js'),
-  CLinkPopupEditableView = require('modules/%ModuleName%/js/views/CLinkPopupEditableView.js')
+  CLinkPopupEditableView = require('modules/%ModuleName%/js/views/CLinkPopupEditableView.js'),
+  AddressUtils = require('%PathToCoreWebclientModule%/js/utils/Address.js')
 
 /**
  * @constructor
@@ -697,10 +698,14 @@ CEditEventPopup.prototype.showGuests = function () {
 CEditEventPopup.prototype.onAddGuestClick = function () {
   var oGuestAutocompleteItem = this.guestAutocompleteItem(),
     sGuestAutocomplete = this.guestAutocomplete(),
-    oItem = oGuestAutocompleteItem || { name: '', email: sGuestAutocomplete },
+    parsedEmail = AddressUtils.getEmailParts(sGuestAutocomplete),
+    oItem = oGuestAutocompleteItem || { name: parsedEmail.name || '', email: parsedEmail.email || sGuestAutocomplete },
     bIsInvited = _.any(this.attendees(), function (oEl) {
       return oEl.email === oItem.email
     })
+  if (false === oItem.email.includes('@')) {
+    Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_EMAIL_INVALID'))
+  } else
   if (oItem.email === '') {
     Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_EMAIL_BLANK'))
   } else if (oItem.email === this.owner()) {
