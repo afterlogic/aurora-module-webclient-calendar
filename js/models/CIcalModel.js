@@ -46,7 +46,6 @@ function CIcalModel(oRawIcal, sAttendee)
 	this.calendarId = ko.observable('');
 	this.selectedCalendarId = ko.observable('');
 	this.exists = ko.observable(false);
-
 	this.parse(oRawIcal, sAttendee);
 
 	this.calendarId.subscribe(function () {
@@ -108,6 +107,12 @@ function CIcalModel(oRawIcal, sAttendee)
 			});
 			fCalSubscription.dispose();
 		}, this);
+	} else {
+		this.calendars().forEach((calendar) => { 
+			if (calendar.isDefault) {
+				this.selectedCalendarId(calendar.id);
+			}
+		});
 	}
 
 	this.chosenCalendarName = ko.computed(function () {
