@@ -1553,8 +1553,11 @@ CCalendarView.prototype.eventClickCallback = function (oEventData) {
       }
     }, this),
     oCalendar = this.calendars.getCalendarById(oEventData.calendarId)
+  
+  var bViewOnly = this.isPublic || !oCalendar.isEditable()
+  
   if (oEventData.rrule && !oCalendar.subscribed()) {
-    if (oEventData.excluded) {
+    if (oEventData.excluded || bViewOnly) {
       fCallback(Enums.CalendarEditRecurrenceEvent.OnlyThisInstance)
     } else {
       Popups.showPopup(EditEventRecurrencePopup, [fCallback, oEventData.type])

@@ -244,7 +244,7 @@
 
 					<div class="buttons clearfix">
 						<div class="subforms">
-							<div class="alarm_form" data-bind="visible: displayedAlarms().length > 0 && (withDate() || !isTask())">
+							<div class="alarm_form" data-bind="visible: showReminders() && displayedAlarms().length > 0 && (withDate() || !isTask())">
 								<div class="form_content">
 									<div class="alarms" data-bind="foreach: displayedAlarms()">
 										<span class="item alarm">
