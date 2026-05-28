@@ -697,6 +697,10 @@ CEditEventPopup.prototype.showGuests = function () {
 }
 
 CEditEventPopup.prototype.onAddGuestClick = function () {
+  if (window.event._isAddGuessClickHandled) {
+    return;
+  }
+
   var oGuestAutocompleteItem = this.guestAutocompleteItem(),
     sGuestAutocomplete = this.guestAutocomplete(),
     parsedEmail = AddressUtils.getEmailParts(sGuestAutocomplete),
@@ -725,6 +729,8 @@ CEditEventPopup.prototype.onAddGuestClick = function () {
   this.guestAutocomplete('')
 
   this.guestEmailFocus(true)
+
+  window.event._isAddGuessClickHandled = true;
 }
 
 /**
