@@ -11,7 +11,6 @@ class CalendarSettings {
       this.highlightWorkingDays = typesUtils.pBool(calendarData.HighlightWorkingDays)
       this.highlightWorkingHours = typesUtils.pBool(calendarData.HighlightWorkingHours)
       this.showWeekNumbers = typesUtils.pBool(calendarData.ShowWeekNumbers)
-      this.publicCalendarId = typesUtils.pString(calendarData.PublicCalendarId)
       this.weekStartsOn = typesUtils.pInt(calendarData.WeekStartsOn) // 0 - sunday
       this.workdayEnds = typesUtils.pInt(calendarData.WorkdayEnds)
       this.workdayStarts = typesUtils.pInt(calendarData.WorkdayStarts)

@@ -32,7 +32,9 @@ const EditCalendarPopup = require('modules/%ModuleName%/js/popups/EditCalendarPo
   CalendarCache = require('modules/%ModuleName%/js/Cache.js'),
   Settings = require('modules/%ModuleName%/js/Settings.js'),
   CCalendarListModel = require('modules/%ModuleName%/js/models/CCalendarListModel.js'),
-  CCalendarModel = require('modules/%ModuleName%/js/models/CCalendarModel.js')
+  CCalendarModel = require('modules/%ModuleName%/js/models/CCalendarModel.js'),
+  UrlUtils = require('%PathToCoreWebclientModule%/js/utils/Url.js')
+  
 
 const bMobileDevice = false
 
@@ -858,7 +860,8 @@ CCalendarView.prototype.getCalendars = function () {
   this.setCalendarGridVisibility()
 
   if (this.isPublic) {
-    Ajax.send('GetPublicCalendar', { CalendarId: Settings.PublicCalendarId }, this.onGetCalendarsResponse, this)
+    var sPubId = UrlUtils.getRequestParam('calendar-pub') || '';
+    Ajax.send('GetPublicCalendar', { CalendarId: sPubId }, this.onGetCalendarsResponse, this)
   } else {
     Ajax.send('GetCalendars', null, this.onGetCalendarsResponse, this)
   }

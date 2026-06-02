@@ -21,7 +21,6 @@ module.exports = {
 	DefaultTab: '3', // 1 - day, 2 - week, 3 - month
 	HighlightWorkingDays: true,
 	HighlightWorkingHours: true,
-	PublicCalendarId: '',
 	WeekStartsOn: '0', // 0 - sunday, 1 - monday, 6 - saturday
 	WorkdayEnds: '18',
 	WorkdayStarts: '9',
@@ -60,7 +59,8 @@ module.exports = {
 			this.DefaultTab = Types.pString(oAppDataSection.DefaultTab, this.DefaultTab); // 1 - day, 2 - week, 3 - month
 			this.HighlightWorkingDays = Types.pBool(oAppDataSection.HighlightWorkingDays, this.HighlightWorkingDays);
 			this.HighlightWorkingHours = Types.pBool(oAppDataSection.HighlightWorkingHours, this.HighlightWorkingHours);
-			this.PublicCalendarId = Types.pString(oAppDataSection.PublicCalendarId, this.PublicCalendarId);
+			// Public calendar id is obtained from URL query parameter 'calendar-pub',
+			// so it is not populated from server AppData anymore.
 			this.WeekStartsOn = Types.pString(oAppDataSection.WeekStartsOn, this.WeekStartsOn); // 0 - sunday
 			this.WorkdayEnds = Types.pString(oAppDataSection.WorkdayEnds, this.WorkdayEnds);
 			this.WorkdayStarts = Types.pString(oAppDataSection.WorkdayStarts, this.WorkdayStarts);
