@@ -132,7 +132,8 @@ CCalendarModel.prototype.parse = function (oData) {
   this.color(this.parseCssColor(oData.Color))
   this.url(Types.pString(oData.Url))
   this.exportUrl(UrlUtils.getAppPath() + '?calendar-download/' + Types.pString(oData.ExportHash))
-  this.pubUrl(UrlUtils.getAppPath() + '?calendar-pub=' + Types.pString(oData.PubHash))
+  this.pubHash = Types.pString(oData.PubHash)
+  this.pubUrl(UrlUtils.getAppPath() + '?calendar-pub=' + this.pubHash)
   this.shares(oData.Shares || [])
 
   _.each(

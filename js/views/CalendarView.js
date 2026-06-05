@@ -905,7 +905,12 @@ CCalendarView.prototype.onGetCalendarsResponse = function (oResponse, oParameter
                 oPublicHeaderItem.linkText(oCalendar.name())
                 this.browserTitle(oCalendar.name())
               }
-              aNewCalendarIds.push(oCalendar.id)
+
+              if (!oCalendar.isPublic()) {
+                aNewCalendarIds.push(oCalendar.id)
+              } else if (oCalendar.pubHash) {
+                aNewCalendarIds.push(oCalendar.pubHash)
+              }
             }
           }
         }
