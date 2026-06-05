@@ -998,7 +998,7 @@ CCalendarView.prototype.onGetEventsResponse = function (oResponse, oRequest) {
     _.each(
       aCalendarIds,
       function (sCalendarId) {
-        oCalendar = this.calendars.getCalendarById(sCalendarId)
+        oCalendar = this.isPublic ? this.calendars.getCalendarByPubHash(sCalendarId) : this.calendars.getCalendarById(sCalendarId)
         if (oCalendar && oCalendar.eventsCount() > 0 && oCalendar.active()) {
           oCalendar.expungeEvents(aEvents, this.startDateTime, this.endDateTime, 'VEVENT')
         }

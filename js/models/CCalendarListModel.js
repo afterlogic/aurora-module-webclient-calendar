@@ -106,6 +106,16 @@ CCalendarListModel.prototype.getCalendarById = function (sCalendarId)
 };
 
 /**
+ * @param {string} sPubHash
+ */
+CCalendarListModel.prototype.getCalendarByPubHash = function (sPubHash)
+{
+	return _.find(this.collection(), function(oCalendar) {
+		return oCalendar.pubHash === sPubHash;
+	}, this);
+};
+
+/**
  * @param {Object=} oStart
  * @param {Object=} oEnd
  * @return {Array}
