@@ -906,10 +906,10 @@ CCalendarView.prototype.onGetCalendarsResponse = function (oResponse, oParameter
                 this.browserTitle(oCalendar.name())
               }
 
-              if (!oCalendar.isPublic()) {
+              if (this.isPublic && oCalendar.isPublic() && oCalendar.pubHash) {
+                 aNewCalendarIds.push(oCalendar.pubHash)
+              } else {
                 aNewCalendarIds.push(oCalendar.id)
-              } else if (oCalendar.pubHash) {
-                aNewCalendarIds.push(oCalendar.pubHash)
               }
             }
           }
