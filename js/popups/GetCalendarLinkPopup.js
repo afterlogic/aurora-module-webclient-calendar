@@ -3,8 +3,12 @@
 var
 	_ = require('underscore'),
 	ko = require('knockout'),
+
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	UrlUtils = require('%PathToCoreWebclientModule%/js/utils/Url.js'),
 	
-	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js')
+	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js'),
+	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js')
 ;
 
 /**
@@ -21,11 +25,7 @@ function CGetCalendarLinkPopup()
 	this.calendarUrl = ko.observable('');
 	this.exportUrl = ko.observable('');
 	this.icsLink = ko.observable('');
-	this.isPublicSourceValue = ko.observable(false);
 	this.isPublic = ko.observable(false);
-	this.isPublicChanged = ko.computed(function () {
-		return this.isPublicSourceValue() !== this.isPublic();
-	}, this);
 	this.pubUrl = ko.observable('');
 	this.canShare = ko.observable(false);
 }
@@ -51,20 +51,72 @@ CGetCalendarLinkPopup.prototype.onOpen = function (fCallback, oCalendar)
 		this.calendarUrl(oCalendar.davUrl() + oCalendar.url());
 		this.exportUrl(oCalendar.exportUrl());
 		this.icsLink(oCalendar.davUrl() + oCalendar.url() + '?export');
-		this.isPublicSourceValue(oCalendar.isPublic());
 		this.isPublic(oCalendar.isPublic());
 		this.pubUrl(oCalendar.pubUrl());
-		this.exportUrl(oCalendar.exportUrl());
 		this.canShare(oCalendar.canShare());
+	}
+};
+
+
+/**
+ * @param {string|Object} mResult
+ * @returns {string}
+ */
+CGetCalendarLinkPopup.prototype.parsePublicLinkResult = function (mResult)
+{
+	if (!mResult)
+	{
+		return '';
+	}
+
+	return UrlUtils.getAppPath() + '?calendar-pub=' + mResult;
+};
+
+/**
+ * @param {boolean} bIsPublic
+ */
+CGetCalendarLinkPopup.prototype.updateCalendarPublic = function (bIsPublic)
+{
+	this.isPublic(bIsPublic);
+
+	Ajax.send(
+		'Calendar',
+		'UpdateCalendarPublic',
+		{
+			Id: this.calendarId(),
+			IsPublic: bIsPublic
+		},
+		this.onUpdateCalendarPublicResponse,
+		this
+	);
+};
+
+/**
+ * @param {Object} oResponse
+ * @param {Object} oRequest
+ */
+CGetCalendarLinkPopup.prototype.onUpdateCalendarPublicResponse = function (oResponse, oRequest)
+{
+	if (oResponse.Result !== false)
+	{
+		var
+			oParameters = oRequest.Parameters,
+			bIsPublic = !!oParameters.IsPublic,
+			sPubUrl = bIsPublic ? this.parsePublicLinkResult(oResponse.Result) : ''
+		;
+
+		this.isPublic(bIsPublic);
+		this.pubUrl(sPubUrl);
+
+		if (this.fCallback)
+		{
+			this.fCallback(this.calendarId(), bIsPublic, sPubUrl);
+		}
 	}
 };
 
 CGetCalendarLinkPopup.prototype.cancelPopup = function ()
 {
-	if (this.fCallback)
-	{
-		this.fCallback(this.calendarId(), this.isPublic());
-	}
 	this.closePopup();
 };
 

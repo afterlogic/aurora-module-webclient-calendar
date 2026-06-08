@@ -17,21 +17,20 @@
 				</div>
 			</div>
 			<div class="fieldset web_access" data-bind="visible: canShare()">
-				<div class="row web_access_switch">
-					<label class="custom_checkbox" data-bind="css: {'checked': isPublic}">
-						<span class="icon"></span>
-						<input type="checkbox" id="make_public_access" data-bind="checked: isPublic(), click: function (){isPublic(!isPublic());}" />
-					</label>
-					<label for="make_public_access" data-bind="i18n: {'key': '%MODULENAME%/LABEL_WEB_ACCESS'}"></label>
-				</div>
 				<div class="row" data-bind="visible: isPublic()">
 					<label for="public_link" class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_WEB_LINK'}"></label>
 					<input id="public_link" class="value input" spellcheck="false" type="text" maxlength="200" data-bind="value: pubUrl(), click: function () {$element.select();}" readonly />
+					<a class="control delete" data-bind="click: () => updateCalendarPublic(false)"></a>
+				</div>
+				<div class="row" data-bind="visible: !isPublic()">
+					<label class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_WEB_LINK'}"></label>
+					<div style="display: inline-block; margin: -2.5px 0;">
+						<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_CREATE_LINK'}, click: () => updateCalendarPublic(true)"></span>
+					</div>
 				</div>
 			</div>		
 			<div class="buttons">
-				<span class="button" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CLOSE'}, visible: !isPublicChanged(), click: cancelPopup"></span>
-				<span class="button" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}, visible: isPublicChanged, click: cancelPopup"></span>
+				<span class="button" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CLOSE'}, click: cancelPopup"></span>
 			</div>
 		</div>
 	</div>

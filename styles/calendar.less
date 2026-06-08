@@ -982,9 +982,57 @@ fc-month-view .fc-content,
 		border-top: 1px solid #e2e2e2;
 		padding-top: 14px;
 
-		.row.web_access_switch {
-			margin-bottom: 10px;
+		.delete {
+			color: #7b7b7b;
+			display: inline-block;
+			float: right;
+			height: 20px;
+			width: 20px;
+			
+			.init-icon-font();
+			
+			&:hover {
+				color: darken(#7b7b7b, 10%);
+			}
+			
+			&:before {
+				content: "\e612";
+				display: inline-block;
+				font-size: 20px;
+				height: 100%;
+				vertical-align: middle;
+				width: 100%;
+			}
+		}
+
+		& > .row {
+			min-height: 24px;
+		}
+
+		.button {
+			border-radius: 4px;
+			cursor: pointer;
+			display: inline-block;
+			font: bold 10pt Helvetica,Tahoma,Arial,sans-serif;
+			padding: 5px 12px;
 			text-align: center;
+			
+			&.disabled {
+				cursor: default;
+				text-shadow: none !important;
+			}
+			
+			&:hover {
+				text-decoration: none;
+			}
+			
+			.transition(background 200ms ease 0s);
+			
+			.button_mixin(@theme-buttons-primary-background);
+			
+			&.secondary_button {
+				.button_mixin(@theme-buttons-secondary-background);
+			}
 		}
 		
 		label {
