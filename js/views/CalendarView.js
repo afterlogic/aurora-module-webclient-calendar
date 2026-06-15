@@ -1395,10 +1395,11 @@ CCalendarView.prototype.createEventToday = function (oCalendar) {
  * @param {Object} oEventData
  */
 CCalendarView.prototype.getParamsFromEventData = function (oEventData) {
-  var sBrowserTimezone = moment.tz.guess(),
-    sServerTimezone = UserSettings.timezone(),
-    oStart = moment.tz(oEventData.start.format('YYYY-MM-DD HH:mm:ss'), sServerTimezone || sBrowserTimezone),
-    oEnd = moment.tz(oEventData.end.format('YYYY-MM-DD HH:mm:ss'), sServerTimezone || sBrowserTimezone),
+  var sTimezone = UserSettings.timezone() || moment.tz.guess(),
+    // Use absolute timestamps from the UI; re-parsing wall-clock strings in another
+    // timezone shifts start/end when browser TZ differs from user settings TZ.
+    oStart = moment.isMoment(oEventData.start) ? oEventData.start.clone() : moment(oEventData.start),
+    oEnd = moment.isMoment(oEventData.end) ? oEventData.end.clone() : moment(oEventData.end),
     rrule = null
 
   if (oEventData.rrule) {
@@ -1429,8 +1430,8 @@ CCalendarView.prototype.getParamsFromEventData = function (oEventData) {
     excluded: oEventData.excluded,
     allEvents: oEventData.allEvents,
     modified: oEventData.modified ? 1 : 0,
-    start: oStart.format(),
-    end: oEnd.format(),
+    start: oStart.clone().tz(sTimezone).format(),
+    end: oEnd.clone().tz(sTimezone).format(),
     startTS: oStart.unix(),
     endTS: oEnd.unix(),
     rrule: rrule ? JSON.stringify(rrule) : null,
