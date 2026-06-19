@@ -332,7 +332,9 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
     userAccountsIsNotInAteendees = true,
     oCalendar = null,
     sCalendarOwner = '',
-    oToday = moment()
+    curentTimeZone = CalendarUtils.getCalendarTimeZone(),
+    oToday = moment().tz(curentTimeZone)
+  ;
   
   this.withDate(!!oParameters.Start && !!oParameters.End)
 
@@ -377,8 +379,8 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
   this.allDay(oParameters.AllDay)
 
   //we are overwriting variables because the date format is incorrect from the full calendar
-  oStartMomentDate = moment(oStartMomentDate.format('X'), 'X')
-  oEndMomentDate = moment(oEndMomentDate.format('X'), 'X')
+  oStartMomentDate = moment(oStartMomentDate.format('X'), 'X').tz(curentTimeZone)
+  oEndMomentDate = moment(oEndMomentDate.format('X'), 'X').tz(curentTimeZone)
 
   if (oStartMomentDate) {
     this.setStartDate(oStartMomentDate, true)

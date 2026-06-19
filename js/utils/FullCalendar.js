@@ -1,5 +1,9 @@
 'use strict';
 
+const CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js')
+
+const moment = require('moment')
+
 let currentDate = new Date();
 
 module.exports = {
@@ -31,10 +35,12 @@ module.exports = {
 		timeline.css('left', $('td .fc-axis').width() + 10);
 		timeline.show();
 
-		const now = new Date();
-		const curSeconds = (now.getHours() * 60 * 60) + (now.getMinutes() * 60) + now.getSeconds();
-		const percentOfDay = curSeconds / 86400; //24 * 60 * 60 = 86400, % of seconds in a day
-		const topLoc = Math.floor(parentDiv.height() * percentOfDay);
+		const currentTimezone = CalendarUtils.getCalendarTimeZone();
+
+		const now = moment().tz(currentTimezone);
+		const curSeconds = (now.hours() * 60 * 60) + (now.minutes() * 60) + now.seconds();
+		const percentOfDay = curSeconds / 86400;
+		const topLoc = Math.floor(parentDiv.height() * percentOfDay); // 24 * 60 * 60 = 86400, % of seconds in a day
 
 		timeline.css('top', `${topLoc}px`);
 	}

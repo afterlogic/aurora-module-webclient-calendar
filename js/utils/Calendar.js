@@ -3,11 +3,14 @@
 var
 	_ = require('underscore'),
 	$ = require('jquery'),
+	moment = require('moment'),
 
 	CalendarUtils = require('%PathToCoreWebclientModule%/js/utils/Calendar.js'),
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 
-	Settings = require('modules/%ModuleName%/js/Settings.js')
+	Settings = require('modules/%ModuleName%/js/Settings.js'),
+
+	UserSettings = require('%PathToCoreWebclientModule%/js/Settings.js')
 ;
 
 /**
@@ -71,5 +74,14 @@ CalendarUtils.getReminderFiendlyTitle = function (iMinutes)
 
 	return sText;
 };
+
+CalendarUtils.getCalendarTimeZone = function () {
+	let 
+		sBrowserTimezone = moment.tz.guess(),
+		sServerTimezone = UserSettings.timezone()
+	;
+
+	return sServerTimezone === '' ? sBrowserTimezone : sServerTimezone;
+}
 
 module.exports = CalendarUtils;

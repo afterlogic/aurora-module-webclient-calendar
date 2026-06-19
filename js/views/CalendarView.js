@@ -33,7 +33,8 @@ const EditCalendarPopup = require('modules/%ModuleName%/js/popups/EditCalendarPo
   Settings = require('modules/%ModuleName%/js/Settings.js'),
   CCalendarListModel = require('modules/%ModuleName%/js/models/CCalendarListModel.js'),
   CCalendarModel = require('modules/%ModuleName%/js/models/CCalendarModel.js'),
-  UrlUtils = require('%PathToCoreWebclientModule%/js/utils/Url.js')
+  UrlUtils = require('%PathToCoreWebclientModule%/js/utils/Url.js'),
+  CalendarUtils = require('modules/%ModuleName%/js/utils/Calendar.js')
   
 
 const bMobileDevice = false
@@ -368,6 +369,9 @@ CCalendarView.prototype.applyCalendarSettings = function () {
   this.fullcalendarOptions.defaultView = this.defaultViewName()
   this.fullcalendarOptions.lang = moment.locale()
 
+
+  this.fullcalendarOptions.timeZone = CalendarUtils.getCalendarTimeZone()
+
   this.applyFirstDay()
 
   const showWeekNumbers = Settings.ShowWeekNumbers && Settings.WeekStartsOn == 1;
@@ -605,6 +609,10 @@ CCalendarView.prototype.viewRenderCallback = function (oView, oElement) {
   }
 
   this.activateCustomScrollInDayAndWeekView()
+
+  if (oView.name.indexOf('agenda') === 0) {
+    FullCalendarUtils.setTimeline()
+  }
 }
 
 CCalendarView.prototype.collectBusyDays = function () {
@@ -1379,7 +1387,10 @@ CCalendarView.prototype.createEventInCurrentCalendar = function () {
  * @param {Object} oCalendar
  */
 CCalendarView.prototype.createEventToday = function (oCalendar) {
-  var oToday = moment()
+
+  const currentTimezone = CalendarUtils.getCalendarTimeZone();
+
+  var oToday = moment().tz(currentTimezone)
 
   if (oToday.minutes() > 30) {
     oToday.add(60 - oToday.minutes(), 'minutes')
@@ -1395,10 +1406,11 @@ CCalendarView.prototype.createEventToday = function (oCalendar) {
  * @param {Object} oEventData
  */
 CCalendarView.prototype.getParamsFromEventData = function (oEventData) {
-  var sBrowserTimezone = moment.tz.guess(),
-    sServerTimezone = UserSettings.timezone(),
-    oStart = moment.tz(oEventData.start.format('YYYY-MM-DD HH:mm:ss'), sServerTimezone || sBrowserTimezone),
-    oEnd = moment.tz(oEventData.end.format('YYYY-MM-DD HH:mm:ss'), sServerTimezone || sBrowserTimezone),
+  var sTimezone = CalendarUtils.getCalendarTimeZone(),
+
+    oStart = moment.tz(oEventData.start.format('YYYY-MM-DD HH:mm:ss'), sTimezone),
+    oEnd = moment.tz(oEventData.end.format('YYYY-MM-DD HH:mm:ss'), sTimezone),
+
     rrule = null
 
   if (oEventData.rrule) {
@@ -1890,6 +1902,7 @@ CCalendarView.prototype.restoreScroll = function (iScrollTop) {
   ) {
     this.domScrollWrapper.data('customscroll')['vertical'].set(iScrollTop)
   }
+
 }
 
 const calendarView = new CCalendarView()
