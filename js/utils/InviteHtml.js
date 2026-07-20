@@ -6,6 +6,7 @@ var
 	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
 	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+	UserSettings = require('%PathToCoreWebclientModule%/js/Settings.js'),
 
 	EditInviteHtmlPopup = require('modules/%ModuleName%/js/popups/EditInviteHtmlPopup.js'),
 
@@ -21,7 +22,8 @@ InviteHtmlUtils.prepareHtml = function (eventData, calendar, continueHandler, re
 {
 	const
 		attendee = eventData.attendees.length === 1 ? eventData.attendees[0].email : '',
-		dateFormat = eventData.allDay ? 'ddd, D. MMMM, YYYY' : 'ddd, D. MMMM, YYYY, h:mm',
+		timeFormat = (UserSettings.timeFormat() === Enums.TimeFormat.F24) ? 'HH:mm' : 'hh:mm A',
+		dateFormat = eventData.allDay ? 'ddd, D. MMMM, YYYY' : 'ddd, D. MMMM, YYYY, ' + timeFormat,
 		parameters = {
 			CalendarId: calendar.id,
 			Location: eventData.location,
