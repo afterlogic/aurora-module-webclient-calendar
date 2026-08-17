@@ -1,4 +1,4 @@
-<div class="popup calendar_popup create_calendar" style="display: none;">
+<div class="popup calendar_popup create_calendar" data-test-id="calendar-share-dialog" style="display: none;">
 	<div class="mask" data-bind="click: cancelPopup"></div>
 	<div class="popup_panel">
 		<span class="close" data-bind="click: cancelPopup"></span>
@@ -8,7 +8,7 @@
 			<div class="fieldset shares_personal">
 				<div class="row">
 					<label class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_CAN_SEE'}"></label>
-					<div class="input inputosaurus">
+					<div class="input inputosaurus" data-test-id="calendar-share-guests">
 						<div class="disable_mask" data-bind="visible: true"></div>
 						<div data-bind="customScrollbar: {x: false}">
 							<div class="scroll-inner">
@@ -50,7 +50,7 @@
 			</div>
 
 			<div class="buttons">
-				<span class="button" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}, click: onSaveClick"></span>
+				<span class="button" data-test-id="calendar-share-save" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}, click: onSaveClick"></span>
 			</div>
 		</div>
 	</div>

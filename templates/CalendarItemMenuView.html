@@ -1,4 +1,4 @@
-<div class="item" data-bind="css: {'expand': $parent.currentCalendarDropdown() === id}, style: {backgroundColor: color}">
+<div class="item" data-test-id="calendar-item-dropdown" data-bind="css: {'expand': $parent.currentCalendarDropdown() === id}, style: {backgroundColor: color}">
 	<span class="dropdown">
 		<span class="dropdown_helper">
 			<span class="dropdown_arrow"><span></span></span>
@@ -6,9 +6,9 @@
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_EDIT_CALENDAR'}, visible: isEditable() && (!isSharedToAll() || isOwner()), click: function (oItem) {$parent.openUpdateCalendarForm(oItem);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_IMPORT_CALENDAR'}, visible: isEditable() && !subscribed(), click: function (oItem) {$parent.openImportCalendarForm(oItem);}"></span>
 				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_GET_CALENDAR_LINK'}, visible: !subscribed(), click: function (oItem, eEvent) {$parent.openGetLinkCalendarForm(oItem, eEvent);}"></span>
-				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHARE_AND_PUBLISH'}, visible: (canShare() && bAllowShare && !subscribed()), click: function (oItem) {$parent.openShareCalendarForm(oItem);}"></span>
-				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_REMOVE_CALENDAR'}, visible: isOwner(), click: function () {$parent.deleteCalendar(id);}"></span>
-				<span class="item" data-bind="i18n: {'key': '%MODULENAME%/ACTION_UNSUBSCRIBE_CALENDAR'}, visible: !isOwner() && !isSharedToAll(), click: function () {$parent.deleteCalendar(id, true);}"></span>
+				<span class="item" data-test-id="calendar-menu-share" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHARE_AND_PUBLISH'}, visible: (canShare() && bAllowShare && !subscribed()), click: function (oItem) {$parent.openShareCalendarForm(oItem);}"></span>
+				<span class="item" data-test-id="calendar-menu-delete" data-bind="i18n: {'key': '%MODULENAME%/ACTION_REMOVE_CALENDAR'}, visible: isOwner(), click: function () {$parent.deleteCalendar(id);}"></span>
+				<span class="item" data-test-id="calendar-menu-unsubscribe" data-bind="i18n: {'key': '%MODULENAME%/ACTION_UNSUBSCRIBE_CALENDAR'}, visible: !isOwner() && !isSharedToAll(), click: function () {$parent.deleteCalendar(id, true);}"></span>
 				<span class="separator" data-bind="visible: (!isShared() || isOwner())"></span>
 				<span class="colors" data-bind="visible: isEditable(), foreach: $parent.colors">
 					<span class="item color_pick" data-bind="style: {backgroundColor: $data}, css: {'selected': $parent.color() === $data},

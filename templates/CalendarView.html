@@ -1,9 +1,9 @@
-<div class="screen CalendarLayout" style="display: none;">
+<div class="screen CalendarLayout" data-test-id="calendar-screen" style="display: none;">
 	<div class="panels" data-bind="splitterFlex: {storagePrefix: 'aurora_calendar_', sizes: [20, 80], resizeFunc: dayNamesResizeBinding}">
 		<div class="panel left_panel calendars_panel">
 			<div class="panel_content">
 				<div class="buttons big_single_button" data-bind="visible: !isPublic">
-					<span class="button" data-bind="click: createEventInCurrentCalendar"> 
+					<span class="button" data-test-id="calendar-create-event" data-bind="click: createEventInCurrentCalendar"> 
 						<span data-bind="i18n: {'key': '%MODULENAME%/ACTION_CREATE_EVENT'}"></span> 
 					</span>
 				</div>
@@ -12,7 +12,7 @@
 						<div class="scroll-inner">
 							<div class="items_list calendars">
 								<span class="section_title">
-									<span class="control" data-bind="click: openCreateCalendarForm, customTooltip: '%MODULENAME%/ACTION_CREATE_CALENDAR'"></span>
+									<span class="control" data-test-id="calendar-create-calendar" data-bind="click: openCreateCalendarForm, customTooltip: '%MODULENAME%/ACTION_CREATE_CALENDAR'"></span>
 									<span class="title personal" data-bind="visible: (calendars.ownCount() > 0)">
 										<span class="icon"></span>
 										<span class="text" data-bind="i18n: {'key': '%MODULENAME%/HEADING_MY_CALENDARS'}"></span>
@@ -62,13 +62,13 @@
 							<span class="icon"></span>
 						</span>
 						<span class="group range_select">
-							<span class="item" data-bind="click: function(){changeView('agendaDay');}, css: {'selected passive': selectedView() === 'agendaDay'}">
+							<span class="item" data-test-id="calendar-view-day" data-bind="click: function(){changeView('agendaDay');}, css: {'selected passive': selectedView() === 'agendaDay'}">
 								<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_DAY_VIEW'}"></span>
 							</span>
-							<span class="item" data-bind="click: function(){changeView('agendaWeek');}, css: {'selected passive': selectedView() === 'agendaWeek'}">
+							<span class="item" data-test-id="calendar-view-week" data-bind="click: function(){changeView('agendaWeek');}, css: {'selected passive': selectedView() === 'agendaWeek'}">
 								<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_WEEK_VIEW'}"></span>
 							</span>
-							<span class="item" data-bind="click: function(){changeView('month');}, css: {'selected passive': selectedView() === 'month'}">
+							<span class="item" data-test-id="calendar-view-month" data-bind="click: function(){changeView('month');}, css: {'selected passive': selectedView() === 'month'}">
 								<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_MONTH_VIEW'}"></span>
 							</span>
 							<span class="item" data-bind="click: function(){changeView('listMonth');}, css: {'selected passive': selectedView() === 'listMonth'}">
@@ -77,7 +77,7 @@
 						</span>
 
 						<span class="group date_select">
-							<span class="item" data-bind="click: displayToday">
+							<span class="item" data-test-id="calendar-today" data-bind="click: displayToday">
 								<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_TODAY'}"></span>
 							</span>
 							<span class="item prev" data-bind="click: displayPrev">
@@ -97,7 +97,7 @@
 				</div>
 				<div class="middle_bar" data-bind="css: {'view_month': visibleWeekdayHeader}">
 					<div class="panel_center">
-						<div data-bind="initDom: calendarGridDom" style="visibility: hidden;"></div>
+						<div data-test-id="calendar-grid" data-bind="initDom: calendarGridDom" style="visibility: hidden;"></div>
 						<div class="uploader_mask" data-bind="initDom: uploaderArea, css: {'active': bDragActiveComp}">
 							<div class="inner"></div>
 						</div>
