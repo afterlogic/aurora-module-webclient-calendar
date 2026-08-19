@@ -11,7 +11,16 @@ npm run test:e2e-desktop -- --setup "CalendarWebclient Chrome"
 Shared helpers: `modules/CoreWebclient/test/e2e/helpers/` (`AURORA_E2E_ROOT`).
 Domain helpers: `./helpers/` in this folder.
 
-## Known product / stand notes
+Filter Playwright UI / CLI by **file name**.
+
+| File | What it covers |
+|------|----------------|
+| `calendar.spec.js` | Open Calendar, Day / Week / Month / Today |
+| `calendar-events.spec.js` | Create / edit title / edit time / all-day / delete |
+| `calendar-share.spec.js` | Create calendar and open share |
+| `calendar-share-multiuser.spec.js` | PRIMARY shares → SECONDARY sees sidebar |
+
+## Stand / helpers
 
 - Knockout `click` on **New Event** does not receive a Playwright pointer click (jQuery handlers). The helper triggers `$(el).click()` like Files toolbar tests.
 - Share dialog: Inputosaurus hides the native guests `<input>`. Use the visible `textbox` in `calendar-share-dialog`, pick `.ui-autocomplete` when shown (like Files share), blur the heading, then Save.
