@@ -1,16 +1,16 @@
-<div class="appointment" data-bind="visible: !!ical(), with: ical">
+<div class="appointment" data-test-id="mail-ical-appointment" data-bind="visible: !!ical(), with: ical">
 	<div class="fields">
 		<div class="row" data-bind="visible: visibleRequestButtons() && lastModification()">
 			<div class="buttons"
 				 data-bind="css: {'touched': isAccepted() || isTentative() || isDeclined(), 'animation': animation}"
 			>
-				<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_ACCEPT_APPOINTMENT'},
+				<span class="button" data-test-id="mail-ical-accept" data-bind="i18n: {'key': '%MODULENAME%/ACTION_ACCEPT_APPOINTMENT'},
 					css: {'selected_button': isAccepted, 'disabled': isAppointmentActionInProgress() && !isAccepted()},
 					click: acceptAppointment"></span>
-				<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_TENTATIVE_APPOINTMENT'},
+				<span class="button" data-test-id="mail-ical-tentative" data-bind="i18n: {'key': '%MODULENAME%/ACTION_TENTATIVE_APPOINTMENT'},
 					css: {'selected_button': isTentative, 'disabled': isAppointmentActionInProgress() && !isTentative()},
 					click: tentativeAppointment"></span>
-				<span class="button" data-bind="i18n: {'key': '%MODULENAME%/ACTION_DECLINE_APPOINTMENT'},
+				<span class="button" data-test-id="mail-ical-decline" data-bind="i18n: {'key': '%MODULENAME%/ACTION_DECLINE_APPOINTMENT'},
 					css: {'selected_button': isDeclined, 'disabled': isAppointmentActionInProgress() && !isDeclined()},
 					click: declineAppointment"></span>
 			</div>

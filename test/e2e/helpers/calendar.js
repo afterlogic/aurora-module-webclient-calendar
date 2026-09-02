@@ -40,7 +40,9 @@ async function waitForEventOnGrid(page, title, timeout = T(30000)) {
 
 function eventDialog(page) {
   return page
-    .locator('[data-test-id="calendar-event-dialog"], .popup.calendar_event')
+    .locator(
+      '[data-test-id="calendar-event-dialog"]:visible, .popup.calendar_event:visible'
+    )
     .first()
 }
 
@@ -259,26 +261,49 @@ async function changeEventStartTime(page) {
   return { from, to }
 }
 
+async function fillCalendarName(page, name) {
+  const input = page.getByTestId('calendar-create-name')
+  await expect(input).toBeVisible({ timeout: T(15000) })
+  await input.click()
+  await input.fill('')
+  await input.pressSequentially(String(name), { delay: 15 })
+  await input.evaluate((el, n) => {
+    const ko = window.ko
+    const model = ko && ko.dataFor(el)
+    if (model && typeof model.calendarName === 'function') {
+      model.calendarName(n)
+    }
+  }, name)
+  await expect(input).toHaveValue(name, { timeout: T(5000) })
+}
+
+function calendarCreateDialog(page) {
+  return page.locator('[data-test-id="calendar-create-dialog"]:visible')
+}
+
+function calendarSidebarItem(page, name) {
+  const nameRe = new RegExp(escapeRegExp(name))
+  return page
+    .locator('.calendars_panel .items_list.calendars')
+    .getByTestId('calendar-item')
+    .filter({ hasText: nameRe })
+    .first()
+}
+
 async function createCalendar(page, name) {
   await clickReady(page.getByTestId('calendar-create-calendar'))
-  await expect(page.getByTestId('calendar-create-dialog')).toBeVisible({
-    timeout: T(15000),
-  })
-  await page.getByTestId('calendar-create-name').fill(name)
-  await clickReady(page.getByTestId('calendar-create-save'))
-  await expect(page.getByTestId('calendar-create-dialog')).toBeHidden({
-    timeout: T(30000),
-  })
-  const item = page.getByTestId('calendar-item').filter({ hasText: name }).first()
+  const dialog = calendarCreateDialog(page)
+  await expect(dialog).toBeVisible({ timeout: T(15000) })
+  await fillCalendarName(page, name)
+  await clickReady(dialog.getByTestId('calendar-create-save'))
+  await expect(dialog).toBeHidden({ timeout: T(30000) })
+  const item = calendarSidebarItem(page, name)
   await expect(item).toBeVisible({ timeout: T(30000) })
   return item
 }
 
 async function shareCalendarWithGuest(page, calendarName, email) {
-  const item = page
-    .getByTestId('calendar-item')
-    .filter({ hasText: calendarName })
-    .first()
+  const item = calendarSidebarItem(page, calendarName)
   await expect(item).toBeVisible({ timeout: T(30000) })
   await openCalendarItemMenu(page, item)
   const share = page.getByTestId('calendar-menu-share').locator('visible=true')
@@ -290,10 +315,7 @@ async function shareCalendarWithGuest(page, calendarName, email) {
 }
 
 async function deleteCalendarByName(page, calendarName) {
-  const item = page
-    .getByTestId('calendar-item')
-    .filter({ hasText: calendarName })
-    .first()
+  const item = calendarSidebarItem(page, calendarName)
   if ((await item.count()) === 0) {
     return
   }
@@ -350,6 +372,44 @@ async function setEventAllDay(page, value = true) {
   }
 }
 
+/**
+ * Add a guest/attendee in the event dialog (sends invitation on save when appointment).
+ * The side panel with #add_attender_input stays hidden until "Edit guests" is opened.
+ */
+async function addEventGuest(page, email) {
+  const dialog = eventDialog(page)
+
+  const guestsBtn = dialog.locator('.additional_buttons .item.guests').first()
+  await expect(guestsBtn).toBeVisible({ timeout: T(15000) })
+  await clickReady(guestsBtn)
+
+  const input = dialog.locator('#add_attender_input')
+  await expect(input).toBeVisible({ timeout: T(15000) })
+  await input.click()
+  await input.fill(email)
+
+  const emailRe = new RegExp(escapeRegExp(email), 'i')
+  const suggestion = page
+    .locator('.ui-autocomplete .ui-menu-item')
+    .filter({ hasText: emailRe })
+    .first()
+  const picked = await suggestion
+    .waitFor({ state: 'visible', timeout: T(15000) })
+    .then(() => true)
+    .catch(() => false)
+  if (picked) {
+    await clickReady(suggestion)
+  } else {
+    await input.press('Enter')
+  }
+
+  await expect(
+    dialog.locator('.row.attendees .attender, .row.attendees .name').filter({
+      hasText: emailRe,
+    }).first()
+  ).toBeVisible({ timeout: T(15000) })
+}
+
 module.exports = {
   openCalendar,
   eventOnGrid,
@@ -362,6 +422,7 @@ module.exports = {
   saveCalendarShareDialog,
   openCreateEvent,
   fillEventSubject,
+  addEventGuest,
   saveEvent,
   openEventByTitle,
   openEventDatesPanel,

@@ -16,6 +16,7 @@ const {
 const { clickReady } = sharedHelper('ready')
 const {
   openCalendar,
+  createCalendar,
   openCalendarItemMenu,
   addCalendarShareGuest,
   saveCalendarShareDialog,
@@ -32,20 +33,7 @@ test.describe('Desktop calendar share', () => {
     await gotoLoggedIn(page)
     await openCalendar(page)
 
-    await step('Create calendar', async () => {
-      await clickReady(page.getByTestId('calendar-create-calendar'))
-      await expect(page.getByTestId('calendar-create-dialog')).toBeVisible({
-        timeout: T(15000),
-      })
-      await page.getByTestId('calendar-create-name').fill(name)
-      await clickReady(page.getByTestId('calendar-create-save'))
-      await expect(page.getByTestId('calendar-create-dialog')).toBeHidden({
-        timeout: T(30000),
-      })
-    })
-
-    const item = page.getByTestId('calendar-item').filter({ hasText: name }).first()
-    await expect(item).toBeVisible({ timeout: T(30000) })
+    const item = await step('Create calendar', () => createCalendar(page, name))
 
     await step('Open share dialog from calendar menu', async () => {
       await openCalendarItemMenu(page, item)

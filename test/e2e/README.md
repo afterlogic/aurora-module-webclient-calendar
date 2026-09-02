@@ -19,6 +19,7 @@ Filter Playwright UI / CLI by **file name**.
 | `calendar-events.spec.js` | Create / edit title / edit time / all-day / delete |
 | `calendar-share.spec.js` | Create calendar and open share |
 | `calendar-share-multiuser.spec.js` | PRIMARY shares → SECONDARY sees sidebar |
+| `calendar-ical-invite.spec.js` | Create event with guest → accept invite from Inbox |
 
 ## Stand / helpers
 
