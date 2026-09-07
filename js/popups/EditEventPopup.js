@@ -442,17 +442,45 @@ CEditEventPopup.prototype.onOpen = function (oParameters) {
 
   userAccountsIsNotInAteendees = currentAttendee == '';
 
-  this.isMyEvent(
-    ((this.organizer() != '' && userPublicId === this.organizer()) || this.organizer() == '') &&
-      (userPublicId === oParameters.Owner || userPublicId === sCalendarOwner) || (this.appointment() && userAccountsIsNotInAteendees)
-  )
+  // New Tasks opened from the Tasks app must always start editable.
+  // Relying on owner/shared/subscribed metadata here is brittle and can leave
+  // the subject textarea hidden behind visible: isEditable().
+  if (!oParameters.ID && this.isTaskApp()) {
+    this.selectedCalendarIsEditable(true)
+    this.selectedCalendarIsSubscribed(false)
+    this.isMyEvent(true)
+    this.isEditable(true)
+    this.isEditableReminders(true)
+  } else if (!oParameters.ID) {
+    var bCalendarWritable =
+      this.selectedCalendarIsEditable() ||
+      (!!oCalendar && oCalendar.isEditable() && !oCalendar.subscribed())
+    if (bCalendarWritable && !this.selectedCalendarIsEditable()) {
+      this.selectedCalendarIsEditable(true)
+    }
+    this.isMyEvent(true)
+    this.editableSwitch(
+      this.selectedCalendarIsShared(),
+      this.selectedCalendarIsEditable(),
+      true,
+      this.selectedCalendarIsSubscribed()
+    )
+  } else {
+    this.isMyEvent(
+      ((this.organizer() != '' && userPublicId === this.organizer()) || this.organizer() == '') &&
+        (userPublicId === oParameters.Owner ||
+          userPublicId === sCalendarOwner ||
+          userPublicId === this.owner()) ||
+        (this.appointment() && userAccountsIsNotInAteendees)
+    )
 
-  this.editableSwitch(
-    this.selectedCalendarIsShared(),
-    this.selectedCalendarIsEditable(),
-    this.isMyEvent(),
-    this.selectedCalendarIsSubscribed()
-  )
+    this.editableSwitch(
+      this.selectedCalendarIsShared(),
+      this.selectedCalendarIsEditable(),
+      this.isMyEvent(),
+      this.selectedCalendarIsSubscribed()
+    )
+  }
 
   this.canEditAttendees(
     this.isEditable() && (userAccountsIsNotInAteendees && ((this.organizer() != '' && userPublicId === this.organizer()) || this.organizer() == '') || !userAccountsIsNotInAteendees)
