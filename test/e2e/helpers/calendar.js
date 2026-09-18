@@ -264,7 +264,8 @@ async function changeEventStartTime(page) {
 async function fillCalendarName(page, name) {
   const input = page.getByTestId('calendar-create-name')
   await expect(input).toBeVisible({ timeout: T(15000) })
-  await input.click()
+  // `.label.placeholder` overlays the input and intercepts pointer events.
+  await input.click({ force: true })
   await input.fill('')
   await input.pressSequentially(String(name), { delay: 15 })
   await input.evaluate((el, n) => {

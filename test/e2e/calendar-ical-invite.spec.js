@@ -27,15 +27,19 @@ const {
   waitForInboxList,
   waitForMessageInFolder,
   clickMessageListItem,
-  waitForOpenedMessageView,
   FOLDER_TYPES,
 } = moduleHelper('MailWebclient', 'mail')
 
 function icalAppointmentBlock(page) {
-  const view = page.getByTestId('mail-message-view')
-  return view
-    .getByTestId('mail-ical-appointment')
-    .or(view.locator('.appointment').first())
+  return page
+    .locator(
+      '.separate_layout_mode.separate_message_opened [data-test-id="mail-ical-appointment"], .separate_layout_mode.separate_message_opened .appointment'
+    )
+    .or(
+      page.locator(
+        '.message_viewer [data-test-id="mail-ical-appointment"], .message_viewer .appointment, [data-test-id="mail-message-view"] [data-test-id="mail-ical-appointment"]'
+      )
+    )
     .first()
 }
 
@@ -95,14 +99,16 @@ test.describe('Desktop calendar iCal invite from mail', () => {
           title,
           { timeout: 180000 }
         )
-        await clickMessageListItem(invitee.page, item)
-        await waitForOpenedMessageView(invitee.page)
+        await clickMessageListItem(invitee.page, item, { waitForView: false })
+        await expect(icalAppointmentBlock(invitee.page)).toBeVisible({
+          timeout: T(120000),
+        })
         await attachScreenshot(invitee.page, 'ical-invite-02-mail-open')
       })
 
       await step('Accept invitation in message', async () => {
         const block = icalAppointmentBlock(invitee.page)
-        await expect(block).toBeVisible({ timeout: T(60000) })
+        await expect(block).toBeVisible({ timeout: T(30000) })
         const accept = icalAcceptButton(invitee.page)
         test.skip(
           !(await accept.isVisible().catch(() => false)),
