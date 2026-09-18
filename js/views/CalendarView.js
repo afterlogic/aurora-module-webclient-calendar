@@ -188,15 +188,21 @@ function CCalendarView() {
     eventRender: function (oEv, oEl) {
       if (Settings.AddDescriptionToTitle) {
         var oTitle = oEl.find('.fc-title')
+        // Event fields can contain arbitrary HTML/CSS (subject isn't sanitized server-side
+        // at all, and description/location only have dangerous constructs like event handlers
+        // stripped, formatting is otherwise preserved for their own rich-text views) - escape
+        // all three here so this compact grid title can't be hijacked with injected markup or
+        // layout-breaking styles. FullCalendar itself escapes .subject by default; this
+        // overriding render path has to do the same for description and location.
         oTitle.html(
           '<span class="subject-title">' +
-            $.trim(oEv.subject.replace(/[\n\r]/g, ' ')) +
+            _.escape($.trim(oEv.subject.replace(/[\n\r]/g, ' '))) +
             '</span> ' +
             '<span class="desc-title">' +
-            $.trim(oEv.description.replace(/[\n\r]/g, ' ')) +
+            _.escape($.trim(oEv.description.replace(/[\n\r]/g, ' '))) +
             '</span> ' +
             '<span class="loc-title">' +
-            $.trim(oEv.location.replace(/[\n\r]/g, ' ')) +
+            _.escape($.trim(oEv.location.replace(/[\n\r]/g, ' '))) +
             '</span>'
         )
       }
