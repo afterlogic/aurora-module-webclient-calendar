@@ -127,9 +127,13 @@ async function addCalendarShareGuest(page, email) {
     await guests.press('Enter')
   }
 
-  await expect(
-    dialog.getByRole('listitem').filter({ hasText: emailRe }).first()
-  ).toBeVisible({ timeout: T(15000) })
+  // Autocomplete chips often show a display name; email is in title / status.
+  const chip = dialog
+    .locator(`li[title*="${email}" i]`)
+    .or(dialog.getByRole('listitem').filter({ hasText: emailRe }))
+    .or(page.getByRole('status').filter({ hasText: emailRe }))
+    .first()
+  await expect(chip).toBeVisible({ timeout: T(15000) })
 
   // parseOnBlur — sync guests() before Save.
   await dialog.locator('.popup_heading').click()
