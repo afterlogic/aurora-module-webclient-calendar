@@ -300,7 +300,20 @@ async function createCalendar(page, name) {
   const dialog = calendarCreateDialog(page)
   await expect(dialog).toBeVisible({ timeout: T(15000) })
   await fillCalendarName(page, name)
+  // Wait for the API answer first: a rejected CreateCalendar leaves the dialog
+  // open, which otherwise only shows up as a vague "dialog still visible".
+  const createResponse = page.waitForResponse(
+    (res) =>
+      res.request().method() === 'POST' &&
+      (res.request().postData() || '').includes('CreateCalendar'),
+    { timeout: T(60000) }
+  )
   await clickReady(dialog.getByTestId('calendar-create-save'))
+  const created = await (await createResponse).json().catch(() => null)
+  expect(
+    created?.Result,
+    `CreateCalendar failed: ErrorCode=${created?.ErrorCode} ${created?.ErrorMessage || ''}`
+  ).toBeTruthy()
   await expect(dialog).toBeHidden({ timeout: T(30000) })
   const item = calendarSidebarItem(page, name)
   await expect(item).toBeVisible({ timeout: T(30000) })
